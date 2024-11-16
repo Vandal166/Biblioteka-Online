@@ -1,0 +1,53 @@
+<?php
+    // Możesz załączyć tutaj sesje, połączenia z bazą danych itp.
+    // require_once('php/db.php');
+?>
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteka Online</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Nagłówek -->
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.php">Strona Główna</a></li>
+                <li><a href="php/rezerwacja.php">Rezerwacja Książek</a></li>
+                <li><a href="php/login.php">Zaloguj się</a></li>
+                <li><a href="php/register.php">Zarejestruj się</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Sekcja powitalna -->
+    <section id="welcome">
+        <h1>Witaj w Bibliotece Online!</h1>
+        <p>Znajdź i wypożycz książki online z naszej szerokiej oferty!</p>
+    </section>
+
+    <!-- Sekcja o nas -->
+    <section id="about">
+        <h2>O nas</h2>
+        <p>Biblioteka online, która umożliwia wygodne wypożyczanie książek. Sprawdź naszą bazę książek i zarezerwuj interesującą Cię pozycję!</p>
+    </section>
+
+    <!-- Sekcja rezerwacji -->
+    <section id="reservation">
+        <h2>Rezerwacja Książek</h2>
+        <p>Rezerwuj książki, które chcesz wypożyczyć, a my zajmiemy się resztą!</p>
+        <a href="php/rezerwacja.php" class="btn">Zarezerwuj teraz</a>
+    </section>
+
+    <!-- Stopka -->
+    <footer>
+        <p>&copy; 2024 Biblioteka Online | Wszystkie prawa zastrzeżone</p>
+    </footer>
+    
+    <script src="js/script.js"></script>
+</body>
+</html>
