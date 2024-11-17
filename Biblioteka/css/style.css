@@ -1,4 +1,3 @@
-/* Resetowanie domyślnych stylów */
 * {
     margin: 0;
     padding: 0;
@@ -11,18 +10,23 @@ body {
     line-height: 1.6;
     background-color: #f4f4f4;
     color: #333;
+    background: linear-gradient(to bottom, #ffffff, #85ea8a);
 }
 
 /* Nagłówek */
 header {
     background-color: #333;
     color: #fff;
-    padding: 10px 0;
+    padding: 10px 20px;
 }
 
 header nav ul {
+    color: #fff;
     list-style-type: none;
-    text-align: center;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: flex-end;
 }
 
 header nav ul li {
@@ -31,9 +35,14 @@ header nav ul li {
 }
 
 header nav ul li a {
-    color: #fff;
-    text-decoration: none;
+     text-decoration: none; /* Usuń podkreślenie */
+    color: #fff; /* Kolor tekstu */
     font-weight: bold;
+    font-family: Arial, sans-serif;
+}
+
+header nav ul li a:hover {
+    color: #007BFF; /* Kolor linku po najechaniu */
 }
 
 /* Sekcja powitalna */

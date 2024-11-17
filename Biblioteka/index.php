@@ -1,5 +1,4 @@
 <?php
-    // Możesz załączyć tutaj sesje, połączenia z bazą danych itp.
     // require_once('php/db.php');
 ?>
 
@@ -17,12 +16,11 @@
         <nav>
             <ul>
                 <li><a href="index.php">Strona Główna</a></li>
-                <li><a href="php/rezerwacja.php">Rezerwacja Książek</a></li>
+                <li><a href="php/reservation.php">Rezerwacja Książek</a></li>
                 <li><a href="php/login.php">Zaloguj się</a></li>
-                <li><a href="php/register.php">Zarejestruj się</a></li>
             </ul>
         </nav>
-    </header>
+    </header>   
 
     <!-- Sekcja powitalna -->
     <section id="welcome">
@@ -33,14 +31,14 @@
     <!-- Sekcja o nas -->
     <section id="about">
         <h2>O nas</h2>
-        <p>Biblioteka online, która umożliwia wygodne wypożyczanie książek. Sprawdź naszą bazę książek i zarezerwuj interesującą Cię pozycję!</p>
+        <p>Biblioteka online, która umożliwia wygodne wypożyczanie książek.<br> Sprawdź naszą bazę książek i zarezerwuj interesujący Cię egzemplarz!</p>
     </section>
 
     <!-- Sekcja rezerwacji -->
     <section id="reservation">
         <h2>Rezerwacja Książek</h2>
         <p>Rezerwuj książki, które chcesz wypożyczyć, a my zajmiemy się resztą!</p>
-        <a href="php/rezerwacja.php" class="btn">Zarezerwuj teraz</a>
+        <a href="php/reservation.php" class="btn">Zarezerwuj teraz</a>
     </section>
 
     <!-- Stopka -->
