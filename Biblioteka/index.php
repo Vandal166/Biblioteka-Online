@@ -1,5 +1,5 @@
 <?php
-    // require_once('php/db.php');
+    session_start();
 ?>
 
 <!DOCTYPE html>
@@ -17,14 +17,21 @@
             <ul>
                 <li><a href="index.php">Strona Główna</a></li>
                 <li><a href="php/reservation.php">Rezerwacja Książek</a></li>
-                <li><a href="php/login.php">Zaloguj się</a></li>
+                <?php if(isset($_SESSION['user_id'])): ?>
+                    <!-- if użytkownik jest zalogowany, wyświetl "Wyloguj" -->
+                    <li><a href="php/logout.php" id="logoutBtn">Wyloguj się</a></li>
+                <?php else: ?>
+                    <!-- if użytkownik nie jest zalogowany, wyświetl "Zaloguj się" -->
+                    <li><a href="php/login.php"">Zaloguj się</a></li>
+                <?php endif; ?>
             </ul>
         </nav>
     </header>   
 
     <!-- Sekcja powitalna -->
     <section id="welcome">
-        <h1>Witaj w Bibliotece Online!</h1>
+        <!-- TODO Witaj {login/imie} ?? -->
+        <h1>Witaj w Bibliotece Online!</h1> 
         <p>Znajdź i wypożycz książki online z naszej szerokiej oferty!</p>
     </section>
 

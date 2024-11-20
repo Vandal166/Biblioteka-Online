@@ -10,7 +10,7 @@ body {
     line-height: 1.6;
     background-color: #f4f4f4;
     color: #333;
-    background: linear-gradient(to bottom, #ffffff, #85ea8a);
+    /* background: linear-gradient(to bottom, #ffffff, #85ea8a); */
 }
 
 /* Nagłówek */
@@ -88,6 +88,15 @@ header nav ul li a:hover {
 
 #reservation .btn:hover {
     background-color: #45a049;
+}
+
+#logoutBtn {
+  background-color: #dc3545;
+  color: white;
+  padding: 5px 10px;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 5px;
 }
 
 /* Stopka */
