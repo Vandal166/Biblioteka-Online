@@ -22,7 +22,7 @@
                     <li><a href="php/logout.php" id="logoutBtn">Wyloguj się</a></li>
                 <?php else: ?>
                     <!-- if użytkownik nie jest zalogowany, wyświetl "Zaloguj się" -->
-                    <li><a href="php/login.php"">Zaloguj się</a></li>
+                    <li><a href="php/login.php">Zaloguj się</a></li>
                 <?php endif; ?>
             </ul>
         </nav>
@@ -30,8 +30,13 @@
 
     <!-- Sekcja powitalna -->
     <section id="welcome">
-        <!-- TODO Witaj {login/imie} ?? -->
+        
+        <?php if(isset($_SESSION['user_id'])): ?>
+            <h1>Witaj <?php echo $_SESSION['login'];?><br> w Bibliotece Online!</h1>
+        <?php else: ?>
         <h1>Witaj w Bibliotece Online!</h1> 
+        <?php endif; ?>
+
         <p>Znajdź i wypożycz książki online z naszej szerokiej oferty!</p>
     </section>
 

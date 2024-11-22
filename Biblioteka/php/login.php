@@ -1,5 +1,7 @@
 <?php
     session_start();
+    require_once('helpers.php');
+    redirect_if_logged_in();
 ?>
 
 <!DOCTYPE html>

@@ -2,11 +2,9 @@
 
 session_start();
 
-if(isset($_SESSION['user_id']))  //TODO jeśli użytkownik jest zalogowany to do strony głównej
-{
-    header("Location: ../index.php");
-    exit();
-}
+require_once('helpers.php');
+    redirect_if_logged_in();
+
 require_once('db_connection.php'); 
 
 
@@ -17,19 +15,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
     $password = trim($_POST['password']);
     
     
-    $sql = "SELECT * FROM czytelnik WHERE login = ?";
+    $sql = "SELECT * FROM czytelnik WHERE login = ? OR email = ?";
     $stmt = $conn->prepare($sql); 
     
     if ($stmt) 
     {
         
-        $stmt->bind_param('s', $login);
+        $stmt->bind_param('ss', $login, $login);
         $stmt->execute(); 
         $result = $stmt->get_result(); // pobranie wyników
         
         if ($result->num_rows > 0) 
         {
-            // znaleziono użytkowników o podanym loginie
+            // znaleziono użytkowników o podanym loginie/emailu
             $user = $result->fetch_assoc();
             
             
@@ -39,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                             
                 session_start();
                 $_SESSION['user_id'] = $user['ID'];
-                $_SESSION['login'] = $user['login'];
+                $_SESSION['login'] = $user['login']; 
                 
                 
                 header("Location: ../index.php");
