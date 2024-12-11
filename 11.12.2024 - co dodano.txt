@@ -1,0 +1,11 @@
+-Panel admina i panel bibliotekarza (panel bibliotekarza jak na razie nic nie robi)
+-CRUD dla tabel 'autor' i 'ksiazka'
+-folder 'admin' w folderze 'php'
+-Podzielenie formularzy i tabel w folderze 'admin' na dwa foldery
+-Nowe css dla admin
+-Nowy js dla admin
+-Panel admina wyświetli się tylko jeśli jesteś zalogowany jako admin
+-Eksportowałem 'biblioteka.sql' i zamieniłem ją z poprzednią w folderze 'sql'
+-Komunikaty jeśli coś poszło nie tak, albo id nie istniało
+
+Wystarczająco na czwartek
