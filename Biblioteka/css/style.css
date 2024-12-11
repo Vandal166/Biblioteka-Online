@@ -35,7 +35,7 @@ header nav ul li {
 }
 
 header nav ul li a {
-     text-decoration: none; /* Usuń podkreślenie */
+    text-decoration: none; /* Usuń podkreślenie */
     color: #fff; /* Kolor tekstu */
     font-weight: bold;
     font-family: Arial, sans-serif;

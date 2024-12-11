@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
     $sql = "INSERT INTO czytelnik (imie, nazwisko, nr_karty, telefon, email, login, haslo) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
     // zapobieganie SQL Injection poprzez prepare statement
-    $stmt = $conn->prepare($sql); // statement
+    $stmt = $conn->prepare($sql);
 
     if($stmt) 
     {

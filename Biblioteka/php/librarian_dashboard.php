@@ -1,31 +1,35 @@
 <?php
-    session_start();
+session_start();
+if (!isset($_SESSION['poziom_uprawnien']) || $_SESSION['poziom_uprawnien'] !== 'bibliotekarz') {
+    header("Location: index.php"); // Brak dostępu
+    exit();
+}
 ?>
-
 <!DOCTYPE html>
-<html lang="pl">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Biblioteka Online</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>Panel bibliotekarski</title>
+    <link rel="stylesheet" href="/Biblioteka/css/style.css">
 </head>
 <body>
-    <!-- Nagłówek -->
-    <header>
+<header>
         <nav>
             <ul>
                 <?php if(isset($_SESSION['poziom_uprawnien']) && $_SESSION['poziom_uprawnien'] === 'administrator'): ?>
                     <!-- if administrator, wyświetl guzik do panelu admina -->
-                    <li><a href="php/admin/tabele/autor_tabela.php" >Panel administracyjny</a></li>
+                    <li><a href="php/admin_dashboard.php" >Panel administracyjny</a></li>
                 <?php elseif(isset($_SESSION['poziom_uprawnien']) && $_SESSION['poziom_uprawnien'] === 'bibliotekarz'): ?>
                     <!-- if bibliotekarz, wyświetl guzik do panelu bibliotekarza -->
                     <li><a href="php/librarian_dashboard.php" >Panel bibliotekarski</a></li>
                 <?php endif; ?>
 
+
                 <li><a href="index.php">Strona Główna</a></li>
                 <li><a href="php/reservation.php">Rezerwacja Książek</a></li>
-                
+
+
                 <?php if(isset($_SESSION['user_id'])): ?>
                     <!-- if użytkownik jest zalogowany, wyświetl "Wyloguj" -->
                     <li><a href="php/logout.php" id="logoutBtn">Wyloguj się</a></li>
@@ -37,36 +41,13 @@
         </nav>
     </header>   
 
-    <!-- Sekcja powitalna -->
-    <section id="welcome">
-        
-        <?php if(isset($_SESSION['user_id'])): ?>
-            <h1>Witaj <?php echo $_SESSION['login'];?><br> w Bibliotece Online!</h1>
-        <?php else: ?>
-        <h1>Witaj w Bibliotece Online!</h1> 
-        <?php endif; ?>
+    <h1>Witaj, <?php echo $_SESSION['login']; ?>!</h1>
+    <p>To jest strona z perspektywy bibliotekarza.</p>
 
-        <p>Znajdź i wypożycz książki online z naszej szerokiej oferty!</p>
-    </section>
-
-    <!-- Sekcja o nas -->
-    <section id="about">
-        <h2>O nas</h2>
-        <p>Biblioteka online, która umożliwia wygodne wypożyczanie książek.<br> Sprawdź naszą bazę książek i zarezerwuj interesujący Cię egzemplarz!</p>
-    </section>
-
-    <!-- Sekcja rezerwacji -->
-    <section id="reservation">
-        <h2>Rezerwacja Książek</h2>
-        <p>Rezerwuj książki, które chcesz wypożyczyć, a my zajmiemy się resztą!</p>
-        <a href="php/reservation.php" class="btn">Zarezerwuj teraz</a>
-    </section>
-
-    <!-- Stopka -->
     <footer>
         <p>&copy; 2024 Biblioteka Online | Wszystkie prawa zastrzeżone</p>
     </footer>
     
-    <script src="js/script.js"></script>
+    <script src="/Biblioteka/js/librarian_dashboard_script.js"></script>
 </body>
 </html>

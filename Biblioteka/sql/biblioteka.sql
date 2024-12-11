@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 16, 2024 at 05:54 PM
+-- Generation Time: Dec 11, 2024 at 05:50 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -33,6 +33,19 @@ CREATE TABLE `autor` (
   `nazwisko` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `autor`
+--
+
+INSERT INTO `autor` (`ID`, `imie`, `nazwisko`) VALUES
+(44, 'Michał', 'Olejnik'),
+(45, 'Ola', 'Bola'),
+(59, 'Maria', 'Nowak'),
+(60, 'Jan', 'Kowalski'),
+(61, 'Aleksandra', 'Wiśniewska'),
+(62, 'Piotr', 'Zieliński'),
+(63, 'Anna', 'Kamińska');
+
 -- --------------------------------------------------------
 
 --
@@ -61,6 +74,14 @@ CREATE TABLE `czytelnik` (
   `login` varchar(50) NOT NULL,
   `haslo` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `czytelnik`
+--
+
+INSERT INTO `czytelnik` (`ID`, `imie`, `nazwisko`, `nr_karty`, `telefon`, `email`, `login`, `haslo`) VALUES
+(9, 'Katarzyna', 'Kaczmarek', '1655832354', '574869293', 'kat.kaczm@example.com', 'katczm', '$2y$10$eoifk2QlyMeF6VIdZA232uDzjN1.rtDDmLzHW9OskwZfjN75stJGK'),
+(10, 'Adam', 'Wiśniewski', '4581483908', '123585933', 'adam.wisn@onet.pl', 'admwis', '$2y$10$iC1V0IMwaAEXoGiLmvwT/.exG33hx96lXBu3Bfd7sNYqngMM9SL4i');
 
 -- --------------------------------------------------------
 
@@ -109,6 +130,16 @@ CREATE TABLE `ksiazka` (
   `tytul` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `ksiazka`
+--
+
+INSERT INTO `ksiazka` (`ID`, `tytul`) VALUES
+(24, 'Oczami kota – tajemnice nocy'),
+(25, 'Matematyka w praktyce'),
+(26, 'Dzień, który zmienił wszystko'),
+(27, 'Wszechświat: Początek i koniec..');
+
 -- --------------------------------------------------------
 
 --
@@ -119,11 +150,19 @@ CREATE TABLE `pracownik` (
   `ID` int(11) NOT NULL,
   `imie` varchar(50) NOT NULL,
   `nazwisko` varchar(50) NOT NULL,
-  `poziom_uprawnien` enum('administrator','bibliotekarz','uzytkownik') NOT NULL DEFAULT 'uzytkownik',
+  `poziom_uprawnien` enum('administrator','bibliotekarz','uzytkownik') NOT NULL DEFAULT 'bibliotekarz',
   `login` varchar(50) NOT NULL,
   `haslo` varchar(255) NOT NULL,
   `email` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `pracownik`
+--
+
+INSERT INTO `pracownik` (`ID`, `imie`, `nazwisko`, `poziom_uprawnien`, `login`, `haslo`, `email`) VALUES
+(1, 'Kamil', 'Wojtas', 'administrator', 'AdminW', '$2y$10$iQr7B5doUiH5ev7EbcNzR.tCQ9A.q1EAbi776IqltG6/xAybtSh2i', 'fajnyMail@mail.com'),
+(3, 'Jan', 'Kowalski', 'bibliotekarz', 'BibliW', '$2y$10$iQr7B5doUiH5ev7EbcNzR.tCQ9A.q1EAbi776IqltG6/xAybtSh2i', 'fajnyMail2@mail.com');
 
 -- --------------------------------------------------------
 
@@ -287,7 +326,7 @@ ALTER TABLE `wypozyczenie`
 -- AUTO_INCREMENT for table `autor`
 --
 ALTER TABLE `autor`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
 
 --
 -- AUTO_INCREMENT for table `autor_ksiazki`
@@ -299,7 +338,7 @@ ALTER TABLE `autor_ksiazki`
 -- AUTO_INCREMENT for table `czytelnik`
 --
 ALTER TABLE `czytelnik`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `egzemplarz`
@@ -323,13 +362,13 @@ ALTER TABLE `gatunek_ksiazki`
 -- AUTO_INCREMENT for table `ksiazka`
 --
 ALTER TABLE `ksiazka`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `pracownik`
 --
 ALTER TABLE `pracownik`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `rezerwacja`

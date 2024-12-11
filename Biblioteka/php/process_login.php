@@ -13,6 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
     
     $login = htmlspecialchars(trim($_POST['login']));
     $password = trim($_POST['password']);
+    $user = null;
     
     
     $sql = "SELECT * FROM czytelnik WHERE login = ? OR email = ?";
@@ -29,38 +30,65 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
         {
             // znaleziono użytkowników o podanym loginie/emailu
             $user = $result->fetch_assoc();
-            
-            
-            if (password_verify($password, $user['haslo'])) 
-            {
-                // OK logujemy
-                            
-                session_start();
-                $_SESSION['user_id'] = $user['ID'];
-                $_SESSION['login'] = $user['login']; 
-                
-                
-                header("Location: ../index.php");
-                exit();
-            } 
-            else 
-            {
-                // błędne hasło
-                $_SESSION['error'] = 'Nie udało się zalogować!';
-                header("Location: login.php"); // przekierowanie do login.php
-                exit();
-            }
-        } else 
-        {
-            // brak użytkownika w bazie danych
-            $_SESSION['error'] = 'Nie udało się zalogować!';
-            header("Location: login.php"); // przekierowanie do login.php
-            exit();
+            $role = 'czytelnik';
         }
         
         $stmt->close();
     }
-    
+
+    // Jeśli użytkownik nie został znaleziony w tabeli 'czytelnik', sprawdzamy tabelę 'pracownicy'
+    if (!$user) 
+    {
+        $sql_pracownik = "SELECT * FROM pracownik WHERE login = ? OR email = ?";
+        $stmt = $conn->prepare($sql_pracownik);
+
+        if ($stmt) 
+        {
+            $stmt->bind_param('ss', $login, $login);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            if ($result->num_rows > 0) 
+            {
+                $user = $result->fetch_assoc();
+                $role = 'pracownik';
+            }
+            $stmt->close();
+        }
+    }
+
+    // Jeśli użytkownik został znaleziony w jednej z tabel
+    if ($user) 
+    {
+        if (password_verify($password, $user['haslo'])) 
+        {
+            // Logowanie poprawne
+            $_SESSION['user_id'] = $user['ID'];
+            $_SESSION['login'] = $user['login'];
+            $_SESSION['role'] = $role; //Przechowanie informacji, czy to 'czytelnik', czy pracownik 
+            $_SESSION['poziom_uprawnien'] = $user['poziom_uprawnien']; //('bibliotekarz', lub 'administrator')
+
+            // Przekierowanie na strone glowna
+            header("Location: \Biblioteka\index.php");
+
+            exit();
+        } 
+        else 
+        {
+            // Błędne hasło
+            $_SESSION['error'] = 'Nie udało się zalogować! Błędne dane.';
+            header("Location: login.php");
+            exit();
+        }
+    } 
+    else 
+    {
+        // Brak użytkownika w bazie danych
+        $_SESSION['error'] = 'Nie udało się zalogować! Użytkownik nie istnieje.';
+        header("Location: login.php");
+        exit();
+    }
+
     $conn->close();
 }
 ?>

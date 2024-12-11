@@ -37,7 +37,6 @@
             <input type="password" name="password" placeholder="Hasło" required>
             <input type="password" name="confirm_password" placeholder="Potwierdź hasło" required>
 
-            <!-- TODO dodac akceptacje jakiegos regulaminu or smth ? -->
             <button type="submit">Zarejestruj się</button>
             <a href="../php/login.php">Masz już konto? Zaloguj się</a>
         </form>

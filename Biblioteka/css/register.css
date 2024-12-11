@@ -57,10 +57,10 @@ body {
     display: inline-block;
     margin-top: 15px;
     text-decoration: none;
-    color: #007BFF;
+    color: #28a745;
     font-size: 14px;
 }
 
 .register-box a:hover {
-    color: #0056b3;
+    color: #218838;
 }

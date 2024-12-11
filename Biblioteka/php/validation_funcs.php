@@ -132,4 +132,23 @@ function check_user_exists($conn, $email, $username)
     }
     return null;
 }
+
+function validate_book_title($title) {
+    
+    if (empty($title)) {
+        return "Tytuł książki nie może być pusty.";
+    }
+
+    if (strlen($title) > 255) {
+        return "Tytuł książki nie może przekraczać 255 znaków.";
+    }
+
+    // pozwalaj na litery, cyfry, spacej, i niektore znaki spec
+    if (!preg_match('/^[a-zA-Z0-9\s\p{L}\p{P}]+$/u', $title)) {
+        return "Tytuł książki zawiera niedozwolone znaki.";
+    }
+
+    // null no error
+    return null;
+}
 ?>
