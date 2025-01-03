@@ -15,32 +15,24 @@
 </head>
 <body>
     <div class="register-box">
-            <h2>Rejestracja</h2>
+        <h2>Rejestracja</h2>
 
-            <!-- komunikat gdy nie uda sie zarejestrowac -->
-        <?php if (isset($_SESSION['error'])): ?>
-            <div class="error-message" style="color: red; margin-bottom: 10px;">
-                <?php echo $_SESSION['error']; // wyswietlanie komunikat ?>
-            </div>
-            <?php unset($_SESSION['error']); // usuwanie komunikatu ?>
-        <?php endif; ?>
+        <?php display_messages('register'); ?>
 
-
-        <form action="../php/process_register.php" method="post">
+        <form action="../php/process_register.php" method="POST">
             <!-- Przywraca ostatnie wpisane dane przy błędzie(bez hasła) -->
             <input type="text" name="first_name" placeholder="Imię" value="<?php echo get_form_value('first_name'); ?>" required>
             <input type="text" name="last_name" placeholder="Nazwisko" value="<?php echo get_form_value('last_name'); ?>" required>
-            <input type="text" name="phone" placeholder="Telefon" value="<?php echo get_form_value('phone'); ?>" required>
+            <input type="text" name="phone" placeholder="Telefon" value="<?php echo get_form_value('phone'); ?>" maxlength="9" required>
             <input type="email" name="email" placeholder="Email" value="<?php echo get_form_value('email'); ?>" required>
             <input type="text" name="username" placeholder="Login" value="<?php echo get_form_value('username'); ?>" required>
 
-            <input type="password" name="password" placeholder="Hasło" required>
-            <input type="password" name="confirm_password" placeholder="Potwierdź hasło" required>
+            <input type="password" name="password" placeholder="Hasło" minlength="6" maxlength="255" required>
+            <input type="password" name="confirm_password" placeholder="Potwierdź hasło" minlength="6" maxlength="255" required>
 
             <button type="submit">Zarejestruj się</button>
             <a href="../php/login.php">Masz już konto? Zaloguj się</a>
         </form>
-        <!-- TODO Reset password feature?? -->
         <a href="../index.php" class="btn-back">Powrót</a>
     </div>
 </body>

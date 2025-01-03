@@ -69,13 +69,13 @@ header nav ul li a:hover {
 }
 
 /* Sekcja rezerwacji */
-#reservation {
+#reservation, #books {
     padding: 50px 20px;
     text-align: center;
     background-color: #fff;
 }
 
-#reservation .btn {
+#reservation .btn, #books .btn {
     display: inline-block;
     background-color: #4CAF50;
     color: white;
@@ -86,7 +86,7 @@ header nav ul li a:hover {
     margin-top: 20px;
 }
 
-#reservation .btn:hover {
+#reservation .btn:hover, #books .btn:hover {
     background-color: #45a049;
 }
 

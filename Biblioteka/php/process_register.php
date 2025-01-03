@@ -1,5 +1,4 @@
 <?php
-
 session_start();
 
 require_once('helpers.php');
@@ -27,11 +26,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
 
     // WALIDACJA DANYCH
-    $error = validate_user_data($first_name, $last_name, $phone, $email, $username, $password, $confirm_password, $conn);
+    $error = validate_user_data([
+        'name' => $first_name,
+        'surname' => $last_name,
+        'telefon' => $phone,
+        'email' => $email,
+        'login' => $username,
+        'password' => $password        
+    ]);
+    if ($error)     
+    {        
+        set_message('error', 'register', $error);
+        header("Location: register.php");
+        exit();
+    }
 
-    if ($error) 
+    $exists_error = check_user_data([
+        'telefon' => $phone,
+        'email' => $email,
+        'login' => $username        
+    ], $conn);
+    if($exists_error) 
     {
-        $_SESSION['error'] = $error;
+        set_message('error', 'register', $exists_error);
         header("Location: register.php");
         exit();
     }
@@ -42,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
     // Haszowanie hasła bcrypt
     $hashed_pass = password_hash($password, PASSWORD_DEFAULT); 
 
-    $card_number = check_card_number($conn);
+    $card_number = generate_card_number($conn);
     // Przygotowanie zapytania SQL
     $sql = "INSERT INTO czytelnik (imie, nazwisko, nr_karty, telefon, email, login, haslo) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
@@ -56,15 +73,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
         $stmt->bind_param('sssssss', $first_name, $last_name, $card_number, $phone, $email, $username, $hashed_pass);
 
         if($stmt->execute()) 
-        {
-            $_SESSION['success'] = 'Rejestracja zakończona sukcesem! Zaloguj się, aby kontynuować.';
-            unset($_SESSION['form_data']); // usuwanie danych z formularza po udanej rejestracji
+        {            
+            set_message('success', 'register', 'Rejestracja zakończona sukcesem! Zaloguj się, aby kontynuować.');
+            clear_form_data();
             header("Location: login.php");
             exit();
         } 
         else 
-        {
-            $_SESSION['error'] = 'Błąd podczas rejestracji. Spróbuj ponownie.';
+        {           
+            set_message('error', 'register', 'Błąd podczas rejestracji. Spróbuj ponownie.');
             header("Location: register.php");
             exit();
         }
@@ -73,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
     } 
     else 
     {
-        $_SESSION['error'] = 'Wystąpił nieoczekiwany błąd. Spróbuj ponownie.';
+        set_message('error', 'register', 'Błąd podczas rejestracji. Spróbuj ponownie.');
         header("Location: register.php");
         exit();
     }

@@ -1,63 +1,85 @@
 <?php
 
 // main funkcja walidująca dane użytkownika i zwracajaca od razu gdy znajdzie błąd
-function validate_user_data($first_name, $last_name, $phone, $email, $username, $password, $confirm_password, $conn) 
+// uzycie: $userdata = ['name' => 'Jan', 'surname' => $nazwisko, 'telefon' => '123456789'] itd. mozna dodac wiecej/mniej danych
+function validate_user_data($user_data) 
 {
-    // Sprawdzanie imienia
-    $error = validate_name($first_name);
+    $error = validate_name(['value' => $user_data['name']]);
     if ($error) 
         return $error;
 
-    // Sprawdzanie nazwiska
-    $error = validate_name($last_name);
-    if ($error) 
-        return $error;
-    
-    // Sprawdzanie telefonu
-    $error = validate_phone($phone, $conn);
-    if ($error) 
-        return $error;
-    
-    // Sprawdzanie emaila
-    $error = validate_email($email);
+    $error = validate_name(['value' => $user_data['surname']]);
     if ($error) 
         return $error;
 
-    // Sprawdzanie, czy użytkownik już istnieje
-    $error = check_user_exists($conn, $email, $username);
+    $error = validate_phone(['value' => $user_data['telefon']]);
     if ($error) 
         return $error;
-    
-    // Sprawdzanie hasła
-    $error = validate_password($password, $confirm_password);
+
+    $error = validate_email(['value' => $user_data['email']]);
+    if ($error) 
+        return $error;
+
+    $error = validate_login(['value' => $user_data['login']]);
+    if ($error) 
+        return $error;
+
+    $error = validate_password(['value' => $user_data['password']]);
     if ($error) 
         return $error;
 
     return null; // Brak błędów
 }
 
-//Funckja waliduajca poprawnosc imienia/nazwiska
-function validate_name($name) 
+function check_user_data($user_data, $conn)
 {
-    if (!preg_match('/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/', $name))  // sprawdza czy imie/nazwisko zawiera tylko litery
+    $error = check_if_exists(['conn' => $conn, 'table' => 'czytelnik', 'column' => 'telefon', 'value' => $user_data['telefon'], 'no_log' => true]);
+    if ($error) 
+        return 'Podany numer telefonu jest już zajęty!';
+
+    $error = check_if_exists(['conn' => $conn, 'table' => 'czytelnik', 'column' => 'login', 'value' => $user_data['login'], 'no_log' => true]);
+    if ($error) 
+        return 'Podany login jest już zajęty!';
+
+    $error = check_if_exists(['conn' => $conn, 'table' => 'czytelnik', 'column' => 'email', 'value' => $user_data['email'], 'no_log' => true]);
+    if ($error) 
+        return 'Podany email jest już zajęty!';
+
+    return null; // Brak błędów
+}
+
+//Funckja waliduajca poprawnosc imienia/nazwiska
+function validate_name($params) 
+{
+    if (!preg_match('/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/', $params['value'])) 
     {
         return 'Imię i nazwisko mogą zawierać tylko litery!';
     }
     return null;
 }
 
-// Funkcja walidująca poprawność adresu email
-function validate_email($email) 
+function validate_email($params) 
 {
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) 
+    if (!filter_var($params['value'], FILTER_VALIDATE_EMAIL)) 
     {
         return 'Podaj poprawny adres email!';
     }
     return null;
 }
 
-// Funkcja generująca unikalny numer karty
-function check_card_number($conn)
+function validate_login($params) 
+{
+    if (!preg_match('/^[a-zA-Z0-9]+$/', $params['value'])) 
+    {
+        return 'Login może zawierać tylko litery i cyfry!';
+    }
+
+    return null;
+}
+
+// Funkcja generująca unikalny numer karty, 
+// nie trzeba tworzyc funckji osobnej do walidacji nr_karty bo to nie jest input od uzytkownika
+function generate_card_number($conn)
 {
     do 
     {
@@ -73,62 +95,96 @@ function check_card_number($conn)
     return $card_number;
 }
 
-
 // Funkcja walidująca numer telefonu (9 cyfr)
-function validate_phone($phone, $conn) 
+function validate_phone($params) 
 {
-    if (!preg_match('/^\d{9}$/', $phone)) 
+    if (!preg_match('/^\d{9}$/', $params['value'])) 
     {
         return 'Numer telefonu musi zawierać 9 cyfr!';
-    }
-
-    $sql_check = "SELECT * FROM czytelnik WHERE telefon = ?";
-    $stmt_check = $conn->prepare($sql_check);
-    $stmt_check->bind_param('s', $phone);
-    $stmt_check->execute();
-    $result_check = $stmt_check->get_result();
-
-    if($result_check->num_rows > 0) // sprawdzanie, czy numer telefonu juz istnieje
-    {
-        return 'Użytkownik o podanym numerze telefonu już istnieje!';
-    }
+    }    
 
     return null;
 }
 
 // Funkcja walidująca długość hasła
-function validate_password($password, $confirm_password) 
+function validate_password($params) 
 {
-    if (strlen($password) < 6) 
+    // Sprawdzenie długości hasła
+    if (!preg_match('/^.{6,}$/', $params['value'])) 
     {
-        return 'Hasło musi mieć co najmniej 6 znaków!';
+        return 'Hasło musi zawierać co najmniej 6 znaków!';
     }
 
-    if(!validate_password_confirmation($password, $confirm_password))
+    // Sprawdzenie potwierdzenia hasła (jeśli jest przekazane)
+    if (isset($_POST['confirm_password']) && $params['value'] !== $_POST['confirm_password']) 
     {
-        return 'Hasła nie są takie same!'; 
+        return 'Hasła nie są takie same!';
     }
+
+    return null;
+}
+function validate_date($params) 
+{
+    if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $params['value'])) 
+    {
+        return 'Podaj poprawną datę!';
+    }
+
     return null;
 }
 
 // Funkcja walidująca, czy hasła są takie same
-function validate_password_confirmation($password, $confirm_password) : bool 
-{
-    return $password === $confirm_password; // === -> sprawdza wartość i typ
-}
+// function validate_password_confirmation($password, $confirm_password) : bool 
+// {
+//     return $password === $confirm_password; // === -> sprawdza wartość i typ
+// }
 
-// Funkcja do sprawdzenia, czy użytkownik z danym emailem lub loginem już istnieje
-function check_user_exists($conn, $email, $username) 
+
+// Funkcja sprawdzająca, czy użytkownik o podanym telefonie/logine/emailu już istnieje w tabeli 'table'
+// params - tablica z parametrami do walidacji np $params['table'] = 'pracownik', $params['column'] = 'login'
+function check_if_exists($params) 
 {
-    $sql_check = "SELECT * FROM czytelnik WHERE email = ? OR login = ?";
-    $stmt_check = $conn->prepare($sql_check);
-    $stmt_check->bind_param('ss', $email, $username);
+    if(!isset($params['table']) || !isset($params['column'])) 
+        return 'Nieprawidłowe parametry funkcji check_if_exists!';
+    
+    $sql_check = "SELECT * FROM " . $params['table'] . " WHERE " . $params['column'] . " = ?";
+    if (isset($params['owning_ID'])) 
+    {
+        $sql_check .= " AND ID != ?";
+    }
+    $stmt_check = $params['conn']->prepare($sql_check);
+    if (isset($params['owning_ID'])) 
+    {
+        $stmt_check->bind_param('si', $params['value'], $params['owning_ID']);
+    } 
+    else 
+    {
+        $stmt_check->bind_param('s', $params['value']);
+    }
     $stmt_check->execute();
     $result_check = $stmt_check->get_result();
 
     if ($result_check->num_rows > 0) 
     {
-        return 'Użytkownik o podanym emailu lub loginie już istnieje!';
+        if(!isset($params['no_log'])) // nie wyswietlamy gdy ustawiony jest 'no_log'
+            return 'Rekord o wartości ' . $params['value'] . ' już istnieje w tabeli ' . $params['table'] . '!';
+        
+        return 'Błąd w formularzu!';
+    }
+    return null;
+}
+
+function check_ID_exists($params) 
+{
+    $sql_check = "SELECT * FROM " . $params['table'] . " WHERE ID = ?";
+    $stmt_check = $params['conn']->prepare($sql_check);
+    $stmt_check->bind_param('i', $params['ID']);
+    $stmt_check->execute();
+    $result_check = $stmt_check->get_result();
+
+    if ($result_check->num_rows == 0) 
+    {
+        return 'Rekord o podanym ID nie istnieje w tabeli ' . $params['table'] . '!';
     }
     return null;
 }
@@ -149,6 +205,37 @@ function validate_book_title($title) {
     }
 
     // null no error
+    return null;
+}
+
+function validate_ISBN($params)
+{
+    if (!preg_match('/^\d{13}$/', $params['value']))
+        return "ISBN musi składać się z 13 cyfr.";
+    
+    return null;
+}
+
+function validate_edition_number($params)
+{
+    if (!preg_match('/^\d{20}$/', $params['value']))
+        return "Numer wydania musi składać się z 20 cyfr.";
+    
+    return null;
+}
+function validate_language($params)
+{
+    if (!preg_match('/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/', $params['value']))
+        return "Język musi składać się z liter.";
+    
+    return null;
+}
+function validate_page_count($params)
+{
+    // min. 1, max. 9999
+    if (!preg_match('/^[1-9]\d{0,3}$/', $params['value']))
+        return "Ilość stron musi składać się z 1-4 cyfr";
+    
     return null;
 }
 ?>

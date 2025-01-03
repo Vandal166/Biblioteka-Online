@@ -63,8 +63,9 @@ body
 {
     background-color: #4CAF50;
     height: 15vh;
-    display: flex;
+    display: flex;    
     justify-content: center;
+    align-items: stretch;
 }
 
 #panel ul 
@@ -80,6 +81,8 @@ body
 #panel li 
 {
     flex: 1;
+    display: flex;
+    justify-content: center;
 }
 
 #panel button 
@@ -136,6 +139,7 @@ body
     box-sizing: border-box;
     overflow-y: scroll;
     direction: rtl;
+    padding-top: 5px;
 }
 
 #tabela table 
@@ -185,7 +189,7 @@ body
     display: flex;
     justify-content: space-between;
     gap: 20px;
-    padding: 20px;
+    /* padding: 20px; */
     align-items: stretch;
     height: calc(100vh - 40px);
     overflow: hidden; 
@@ -233,6 +237,8 @@ body
     width: 100%;
     padding: 8px;
     box-sizing: border-box;
+    font-size: 20px;
+    font-weight: bold;
 }
 
 .podsekcja button 
@@ -248,4 +254,32 @@ body
 .podsekcja button:hover 
 {
     background-color: #45a049;
+}
+.podsekcja .checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.podsekcja .checkbox-container input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.podsekcja .checkbox-container label {
+    font-weight: bold;
+    cursor: pointer;
+
+}
+
+.podsekcja input[type="text"]#ISBN, input[type="text"]#numer_wydania, input[type="text"]#new_ISBN, input[type="text"]#new_numer_wydania {    
+    letter-spacing: 4px;
+    padding-right: 10px;
+}
+
+.form_name 
+{
+    text-align: center;
+    font-size: 28px;
 }

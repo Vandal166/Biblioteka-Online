@@ -1,112 +1,42 @@
-<?php
-session_start();
-if (!isset($_SESSION['poziom_uprawnien']) || $_SESSION['poziom_uprawnien'] !== 'administrator') {
-    header("Location: ../../../index.php"); // Brak dostępu
-    exit();
-}
-?>
-
-<!DOCTYPE html>
-<html lang="pl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel administracyjny</title>
-    <link rel="stylesheet" href="../../../css/style.css">
-    <link rel="stylesheet" href="../../../css/admin.css">
-</head>
-<body>
-    <header>
-            <nav>
-                <ul>
-                    <li><a href="/Biblioteka/index.php">Strona Główna</a></li>
-                    <li><a href="/Biblioteka/php/reservation.php">Rezerwacja Książek</a></li>
-                    <?php if(isset($_SESSION['user_id'])): ?>
-                        <!-- if użytkownik jest zalogowany, wyświetl "Wyloguj" -->
-                        <li><a href="/Biblioteka/php/logout.php" id="logoutBtn">Wyloguj się</a></li>
-                    <?php else: ?>
-                        <!-- if użytkownik nie jest zalogowany, wyświetl "Zaloguj się" -->
-                        <li><a href="/Biblioteka/php/login.php">Zaloguj się</a></li>
-                    <?php endif; ?>
-                </ul>
-            </nav>
-    </header>   
-
-    <section id="pasek">
-        <ul>
-            <li><a href="../formularze/autor_formularz.php"><button>Formularze</button></a></li>
-            <li><button disabled>Tabele</button></li>
-        </ul>
-    </section>
-
-    <section id="panel">
-        <ul>
-                   
-            <li><button disabled>Autor</button></li>
-            <li><button style="color: grey;">Autor-Książka</button></li>
-            <li><button style="color: grey;">Czytelnik</button></li>
-            <li><button style="color: grey;">Egzemplarz</button></li>
-            <li><button style="color: grey;">Gatunek</button></li>
-            <li><button style="color: grey;">Gatunek-Książka</button></li>
-            <li><a href="ksiazka_tabela.php"><button>Książka</button></a></li>
-            <li><button style="color: grey;">Pracownik</button></li>
-            <li><button style="color: grey;">Rezerwacja</button></li>
-            <li><button style="color: grey;">Wydanie</button></li>
-            <li><button style="color: grey;">Wydawnictwo</button></li>
-            <li><button style="color: grey;">Wypożyczenie</button></li>
-        </ul>
-    </section>
+<section id="tabela">
+    <?php
     
-    <section id="tabela">
-        <?php
-        require_once('./../../db_connection.php');
-        // Zapytanie SQL
-        $sql = "SELECT * FROM autor";
-        $result = $conn->query($sql);
+    // Zapytanie SQL
+    $sql = "SELECT * FROM autor";
+    $result = $conn->query($sql);
 
-        echo "<table>";
-        // Nagłówki tabeli
-        echo "<thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Imię</th>
-                    <th>Nazwisko</th>
-                </tr>
-            </thead>";
-        echo "<tbody>";
+    echo "<table>";
+    // Nagłówki tabeli
+    echo "<thead>
+            <tr>
+                <th>ID</th>
+                <th>Imię</th>
+                <th>Nazwisko</th>
+            </tr>
+        </thead>";
+    echo "<tbody>";
 
-        // Sprawdzenie, czy są dane
-        if ($result->num_rows > 0) 
+    // Sprawdzenie, czy są dane
+    if ($result->num_rows > 0) 
+    {
+        // Wyświetlanie danych
+        while ($row = $result->fetch_assoc()) 
         {
-            // Wyświetlanie danych
-            while ($row = $result->fetch_assoc()) 
-            {
-                echo "<tr>
-                        <td>" . $row["ID"] . "</td>
-                        <td>" . $row["imie"] . "</td>
-                        <td>" . $row["nazwisko"] . "</td>
-                    </tr>";
-            }
-        } 
-        else 
-        {
-            // Pusty wiersz z wiadomością
             echo "<tr>
-                    <td colspan='3' class='no-data'>Brak danych</td>
+                    <td>" . $row["ID"] . "</td>
+                    <td>" . $row["imie"] . "</td>
+                    <td>" . $row["nazwisko"] . "</td>
                 </tr>";
         }
-        echo "</tbody>";
-        echo "</table>";
-
-        // Zamknięcie połączenia
-        $conn->close();
-        ?>
-    </section>
-
-    <footer>
-        <p>&copy; 2024 Biblioteka Online | Wszystkie prawa zastrzeżone</p>
-    </footer>
-    
-    <script src="../../../js/admin.js"></script>
-</body>
-</html>
+    } 
+    else 
+    {
+        // Pusty wiersz z wiadomością
+        echo "<tr>
+                <td colspan='3' class='no-data'>Brak danych</td>
+            </tr>";
+    }
+    echo "</tbody>";
+    echo "</table>";
+    ?>
+</section>

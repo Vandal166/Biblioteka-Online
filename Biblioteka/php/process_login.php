@@ -1,16 +1,14 @@
 <?php
-
 session_start();
 
 require_once('helpers.php');
-    redirect_if_logged_in();
+redirect_if_logged_in();
 
 require_once('db_connection.php'); 
 
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') 
 {
-    
     $login = htmlspecialchars(trim($_POST['login']));
     $password = trim($_POST['password']);
     $user = null;
@@ -20,8 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
     $stmt = $conn->prepare($sql); 
     
     if ($stmt) 
-    {
-        
+    {        
         $stmt->bind_param('ss', $login, $login);
         $stmt->execute(); 
         $result = $stmt->get_result(); // pobranie wyników
@@ -75,16 +72,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
         } 
         else 
         {
-            // Błędne hasło
-            $_SESSION['error'] = 'Nie udało się zalogować! Błędne dane.';
+            // Błędne hasło            
+            set_message('error', 'login', 'Nie udało się zalogować! Błędne dane.');
             header("Location: login.php");
             exit();
         }
     } 
     else 
     {
-        // Brak użytkownika w bazie danych
-        $_SESSION['error'] = 'Nie udało się zalogować! Użytkownik nie istnieje.';
+        // Brak użytkownika w bazie danych       
+        set_message('error', 'login', 'Nie udało się zalogować! Użytkownik nie istnieje.');
         header("Location: login.php");
         exit();
     }
