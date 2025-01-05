@@ -10,6 +10,7 @@ require_once('db_connection.php');
 if ($_SERVER['REQUEST_METHOD'] == 'POST') 
 {
     $login = htmlspecialchars(trim($_POST['login']));
+    remember_form_data();
     $password = trim($_POST['password']);
     $user = null;
     

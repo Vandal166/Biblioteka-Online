@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sty 05, 2025 at 05:56 PM
+-- Generation Time: Sty 05, 2025 at 06:53 PM
 -- Wersja serwera: 10.4.32-MariaDB
 -- Wersja PHP: 8.2.12
 
@@ -63,6 +63,16 @@ CREATE TABLE `autor_ksiazki` (
   `ID_ksiazki` int(11) NOT NULL,
   `ID_autora` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `autor_ksiazki`
+--
+
+INSERT INTO `autor_ksiazki` (`ID`, `ID_ksiazki`, `ID_autora`) VALUES
+(10, 24, 59),
+(11, 26, 62),
+(12, 26, 64),
+(13, 27, 69);
 
 -- --------------------------------------------------------
 
@@ -201,7 +211,8 @@ INSERT INTO `pracownik` (`ID`, `imie`, `nazwisko`, `poziom_uprawnien`, `email`, 
 (1, 'Kamil', 'Wojtas', 'administrator', 'fajnyMail@mail.com', 'AdminW', '$2y$10$iQr7B5doUiH5ev7EbcNzR.tCQ9A.q1EAbi776IqltG6/xAybtSh2i'),
 (3, 'Jan', 'Kowalski', 'bibliotekarz', 'fajnyMail2@mail.com', 'BibliW', '$2y$10$iQr7B5doUiH5ev7EbcNzR.tCQ9A.q1EAbi776IqltG6/xAybtSh2i'),
 (4, 'Kamil', 'Rom', 'administrator', 'admin01@gmail.com', 'admin01', '$2y$10$f7KF.OrH80iYWr9IHNapbuBO95MovN1gqNJNIj9fEjkJfyIIiM.lC'),
-(5, 'Rgeger', 'Erge', 'uzytkownik', 'greghr@onert.pl', 'ergeherth', '$2y$10$rawQeHuh4YD0IW31T0WAPe3Kpyl2JT9/WpcDPhggqJfQHgmTOc6kS');
+(5, 'Rgeger', 'Erge', 'uzytkownik', 'greghr@onert.pl', 'ergeherth', '$2y$10$rawQeHuh4YD0IW31T0WAPe3Kpyl2JT9/WpcDPhggqJfQHgmTOc6kS'),
+(30, 'Biblio', 'Tekarz', 'bibliotekarz', 'bib@onet.pl', 'biblio', '$2y$10$yM4L.se53IPQuI6KpGL8kOFVXkULr6VkwMp6eOo3n69mBy28kPk1G');
 
 -- --------------------------------------------------------
 
@@ -432,7 +443,7 @@ ALTER TABLE `autor`
 -- AUTO_INCREMENT for table `autor_ksiazki`
 --
 ALTER TABLE `autor_ksiazki`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `czytelnik`
@@ -468,7 +479,7 @@ ALTER TABLE `ksiazka`
 -- AUTO_INCREMENT for table `pracownik`
 --
 ALTER TABLE `pracownik`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `reset_hasla`
