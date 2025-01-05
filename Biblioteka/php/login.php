@@ -23,7 +23,7 @@
         
         <form action="process_login.php" method="POST">
             <input type="hidden" name="formularz" value="login">
-            <input type="text" name="login" placeholder="Login/Email" required>
+            <input type="text" name="login" placeholder="Login/Email" value="<?php echo get_form_value('login'); ?>" required>
             <input type="password" name="password" placeholder="Hasło" minlength="6" maxlength="255" required>
             <button type="submit">Zaloguj się</button>
         </form>
