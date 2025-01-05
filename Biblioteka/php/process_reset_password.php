@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
     $login = htmlspecialchars(trim($_POST['login'])); //lub email
     remember_form_data(); // zapamietanie danych z formularza
 
-    $sql = "SELECT ID AS user_id, 'czytelnik' AS user_type, imie AS user_name, email FROM czytelnik WHERE login = ? OR email = ?";
+    $sql = "SELECT ID AS user_id, 'uzytkownik' AS privileges, imie AS user_name, email, 'type_czytelnik' AS user_type FROM czytelnik WHERE login = ? OR email = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param('ss', $login, $login);
     $stmt->execute();
@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
     if($result->num_rows == 0)
     {
         // Check in 'pracownik' table
-        $sql = "SELECT ID AS user_id, 'pracownik' AS user_type, imie AS user_name, email FROM pracownik WHERE login = ? OR email = ?";
+        $sql = "SELECT ID AS user_id, poziom_uprawnien AS privileges, imie AS user_name, email, 'type_pracownik' AS user_type FROM pracownik WHERE login = ? OR email = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param('ss', $login, $login);
         $stmt->execute();
@@ -44,23 +44,37 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
     $user = $result->fetch_assoc();
     $user_id = $user['user_id'];
     $user_type = $user['user_type'];
+    $privileges = $user['privileges'];
     $user_name = $user['user_name'];
     $user_email = $user['email'];
 
-    // Validate email address
     if (!filter_var($user_email, FILTER_VALIDATE_EMAIL)) {
         set_message('error', 'reset_password', 'Nieprawidłowy adres email.');
         header("Location: reset_password.php");
         exit();
     }
     
-    $token = bin2hex(random_bytes(32)); // token do resetowania hasła
-    $sql = "INSERT INTO reset_hasla (ID_uzytkownika, poziom_uprawnien, token) VALUES (?, ?, ?)";
+    $token = bin2hex(random_bytes(32)); // token do resetowania hasła (64 znaki)
+  
+    if($user_type == 'type_czytelnik')
+    {
+        $sql = "INSERT INTO reset_hasla (ID_czytelnik, poziom_uprawnien, token) VALUES (?, ?, ?)";
+    }
+    else if($user_type == 'type_pracownik')
+    {
+        $sql = "INSERT INTO reset_hasla (ID_pracownik, poziom_uprawnien, token) VALUES (?, ?, ?)";
+    }
+
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param('iss', $user_id, $user_type, $token);
-    $stmt->execute();
+    $stmt->bind_param('iss', $user_id, $privileges, $token);
+    if(!$stmt->execute())  
+    { 
+        header("Location: reset_password.php");
+        exit();
+    }
     $stmt->close();
 
+    
     $link = "http://localhost/Biblioteka/php/new_password.php?token=$token&name=" . urlencode($user_name);
     
     $mail = new PHPMailer(true);
@@ -84,7 +98,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
         $mail->send();
         set_message('success', 'reset_password', 'Link do resetowania hasła został wysłany na Twój adres email.');
-    } catch (Exception $e) {
+    } 
+    catch (Exception $e) 
+    {
         set_message('error', 'reset_password', "Wystąpił problem z wysłaniem emaila. Mailer Error: {$mail->ErrorInfo}");
     }
 
