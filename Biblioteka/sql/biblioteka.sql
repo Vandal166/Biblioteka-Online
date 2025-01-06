@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sty 05, 2025 at 06:53 PM
+-- Generation Time: Sty 06, 2025 at 08:04 PM
 -- Wersja serwera: 10.4.32-MariaDB
 -- Wersja PHP: 8.2.12
 
@@ -124,8 +124,11 @@ CREATE TABLE `egzemplarz` (
 
 INSERT INTO `egzemplarz` (`ID`, `ID_wydania`, `czy_dostepny`, `stan`) VALUES
 (3, 1, 1, 'dobry'),
-(4, 1, 0, 'gr'),
-(5, 1, 0, 'gr');
+(18, 3, 1, 'gr'),
+(19, 4, 1, 'gr'),
+(20, 8, 0, 'hrt'),
+(21, 26, 1, 'hrt'),
+(22, 28, 0, 'hhrtrth');
 
 -- --------------------------------------------------------
 
@@ -249,7 +252,8 @@ CREATE TABLE `rezerwacja` (
 
 INSERT INTO `rezerwacja` (`ID`, `ID_wydania`, `ID_czytelnika`, `data_rezerwacji`, `czy_wydana`) VALUES
 (1, 1, 9, '2024-11-27', 1),
-(2, 3, 10, '2024-12-08', 0);
+(2, 3, 10, '2024-12-08', 0),
+(15, 1, 9, '2025-01-08', 1);
 
 -- --------------------------------------------------------
 
@@ -358,6 +362,7 @@ ALTER TABLE `czytelnik`
 --
 ALTER TABLE `egzemplarz`
   ADD PRIMARY KEY (`ID`),
+  ADD UNIQUE KEY `ID_wydania` (`ID_wydania`),
   ADD KEY `fk_idwydania` (`ID_wydania`);
 
 --
@@ -455,7 +460,7 @@ ALTER TABLE `czytelnik`
 -- AUTO_INCREMENT for table `egzemplarz`
 --
 ALTER TABLE `egzemplarz`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `gatunek`
@@ -491,7 +496,7 @@ ALTER TABLE `reset_hasla`
 -- AUTO_INCREMENT for table `rezerwacja`
 --
 ALTER TABLE `rezerwacja`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `wydanie`

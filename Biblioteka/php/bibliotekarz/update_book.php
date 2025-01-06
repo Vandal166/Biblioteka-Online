@@ -8,35 +8,39 @@ if (!isset($_SESSION['poziom_uprawnien']) || $_SESSION['poziom_uprawnien'] !== '
     exit();
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) 
-{
-    $id = intval($_POST['id']);
-    $tytul = trim(htmlspecialchars($_POST['tytul']));
-    $imie = trim(htmlspecialchars($_POST['imie']));
-    $nazwisko = trim(htmlspecialchars($_POST['nazwisko']));
+$data = json_decode(file_get_contents('php://input'), true);
 
-    $error = validate_book_data([
-        'title' => $tytul,     
-        'author_name' => $imie,
-        'author_surname' => $nazwisko
-    ]);
+if ($data) {
+    $ksiazka_id = intval($data['ksiazka_id']);
+    $tytul = $data['tytul'];
+    $autor_id = intval($data['autor_id']);
+    $imie = $data['autor_imie'];
+    $nazwisko = $data['autor_nazwisko'];
+    $gatunek_id = intval($data['gatunek_id']);
+    $wydawnictwo_id = intval($data['wydawnictwo_id']);
+    $ISBN = $data['ISBN'];
+    $data_wydania = $data['data_wydania'];
+    $jezyk = $data['jezyk'];
+    $ilosc_stron = $data['ilosc_stron'];
+    $czy_elektronicznie = intval($data['czy_elektronicznie']);
+    $stan = $data['stan'];
+    $czy_dostepny = intval($data['czy_dostepny']);
 
-    if ($error) {
-        echo json_encode(['error' => $error]);
-        exit();
-    }
+    $conn->begin_transaction();
+    try {
+        $conn->query("UPDATE ksiazka SET tytul='$tytul' WHERE ID=$ksiazka_id");
+        $conn->query("UPDATE autor SET imie='$imie', nazwisko='$nazwisko' WHERE ID=$autor_id");
+        $conn->query("UPDATE gatunek SET nazwa='$gatunek' WHERE ID=$gatunek_id");
+        $conn->query("UPDATE wydanie SET ISBN='$ISBN', data_wydania='$data_wydania', jezyk='$jezyk', ilosc_stron='$ilosc_stron', czy_elektronicznie=$czy_elektronicznie WHERE ID=$wydawnictwo_id");
+        $conn->query("UPDATE egzemplarz SET stan='$stan', czy_dostepny=$czy_dostepny WHERE ID=$egzemplarz_id");
 
-    $query = "UPDATE ksiazka SET tytul = ?, imie = ?, nazwisko = ? WHERE ID = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("sssi", $tytul, $imie, $nazwisko, $id);
-
-    if ($stmt->execute()) {
+        $conn->commit();
         echo json_encode(['success' => true]);
-    } else {
-        echo json_encode(['error' => 'Błąd podczas aktualizacji']);
+    } catch (Exception $e) {
+        $conn->rollback();
+        echo json_encode(['error' => $e->getMessage()]);
     }
-    $stmt->close();
 } else {
-    echo json_encode(['error' => 'Nieprawidłowe żądanie']);
+    echo json_encode(['error' => 'Brak danych wejściowych']);
 }
 ?>

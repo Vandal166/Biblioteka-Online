@@ -10,22 +10,45 @@ if (!isset($_SESSION['poziom_uprawnien']) || $_SESSION['poziom_uprawnien'] !== '
 }
 
 // pobranie danych książek
-$query = "
-    SELECT         
-        ksiazka.ID,
+// $query = "
+//     SELECT         
+//         ksiazka.ID,
+//         ksiazka.tytul,
+//         autor.imie,
+//         autor.nazwisko,
+//         gatunek.nazwa AS gatunek,
+//         wydanie.ilosc_stron,
+//         egzemplarz.czy_dostepny
+//     FROM ksiazka
+//     LEFT JOIN autor_ksiazki ON ksiazka.ID = autor_ksiazki.ID_ksiazki
+//     LEFT JOIN autor ON autor_ksiazki.ID_autora = autor.ID
+//     LEFT JOIN gatunek_ksiazki ON ksiazka.ID = gatunek_ksiazki.ID_ksiazki
+//     LEFT JOIN gatunek ON gatunek_ksiazki.ID_gatunku = gatunek.ID
+//     LEFT JOIN wydanie ON ksiazka.ID = wydanie.ID_ksiazki
+//     LEFT JOIN egzemplarz ON wydanie.ID = egzemplarz.ID_wydania
+//     ORDER BY ksiazka.tytul";
+
+$query = "SELECT
+        ksiazka.ID AS ksiazka_ID,
         ksiazka.tytul,
-        autor.imie,
-        autor.nazwisko,
+        autor.imie AS autor_imie,
+        autor.nazwisko AS autor_nazwisko,
         gatunek.nazwa AS gatunek,
+        wydanie.ISBN,
+        wydanie.data_wydania,
+        wydanie.jezyk,
         wydanie.ilosc_stron,
-        egzemplarz.czy_dostepny
-    FROM ksiazka
+        wydanie.czy_elektronicznie,
+        egzemplarz.ID AS egzemplarz_ID,
+        egzemplarz.czy_dostepny,
+        egzemplarz.stan
+    FROM egzemplarz
+    LEFT JOIN wydanie ON egzemplarz.ID_wydania = wydanie.ID
+    LEFT JOIN ksiazka ON wydanie.ID_ksiazki = ksiazka.ID
     LEFT JOIN autor_ksiazki ON ksiazka.ID = autor_ksiazki.ID_ksiazki
     LEFT JOIN autor ON autor_ksiazki.ID_autora = autor.ID
     LEFT JOIN gatunek_ksiazki ON ksiazka.ID = gatunek_ksiazki.ID_ksiazki
     LEFT JOIN gatunek ON gatunek_ksiazki.ID_gatunku = gatunek.ID
-    LEFT JOIN wydanie ON ksiazka.ID = wydanie.ID_ksiazki
-    LEFT JOIN egzemplarz ON wydanie.ID = egzemplarz.ID_wydania
     ORDER BY ksiazka.tytul";
 
 $result = mysqli_query($conn, $query);
@@ -85,16 +108,17 @@ $result = mysqli_query($conn, $query);
             </thead>
             <tbody>
                 <?php while ($book = mysqli_fetch_assoc($result)) { ?>
-                    <tr id="book_<?php echo $book['ID']; ?>">                        
+                    <tr id="book_<?php echo $book['egzemplarz_ID']; ?>">                        
                     <td><?php echo htmlspecialchars($book['tytul']); ?></td>
-                    <td><?php echo htmlspecialchars($book['imie'] . ' ' . $book['nazwisko']); ?></td>
+                    <td><?php echo htmlspecialchars($book['autor_imie'] . ' ' . $book['autor_nazwisko']); ?></td>
                     <td><?php echo htmlspecialchars($book['gatunek']); ?></td>
                     <td><?php echo htmlspecialchars($book['ilosc_stron']); ?></td>
                     <td><?php echo $book['czy_dostepny'] ? 'Tak' : 'Nie'; ?></td>
+                    <!-- TODO: czy_dostepny zle wyswietla tak/nie -->
                     <td class="actions"> 
-                        <button onclick="openEditModal(<?php echo $book['ID']; ?>)">Szczegóły</button>
-                        <button onclick="editBook(<?php echo $book['ID']; ?>)">Edytuj</button>
-                        <a href="/Biblioteka/php/bibliotekarz/delete_book.php?id=<?php echo $book['ID']; ?>" onclick="return confirm('Czy na pewno chcesz usunąć tę książkę?');"><button>Usuń</button></a>
+                        <button onclick="openInfoModal(<?php echo $book['egzemplarz_ID']; ?>)">Szczegóły</button>
+                        <button onclick="openEditModal(<?php echo $book['egzemplarz_ID']; ?>)">Edytuj</button>
+                        <a href="/Biblioteka/php/bibliotekarz/delete_book.php?id=<?php echo $book['egzemplarz_ID']; ?>" onclick="return confirm('Czy na pewno chcesz usunąć tę książkę?');"><button>Usuń</button></a>
                     </td>                    
                 </tr>
                     <?php } ?>
@@ -105,12 +129,12 @@ $result = mysqli_query($conn, $query);
         
         <section class="formularz">
             <div class="podsekcja">
-            <!-- pop up do edycji książki -->                
-                <div id="editBookModal" class="modal">
+            <!-- pop up do infa książki -->                
+                <div id="infoBookModal" class="modal">
                     <div class="modal-content">
                         <span class="close-btn" onclick="closeModal()">&times;</span>
                         <h2>Szczegóły książki</h2>
-                        <form id="editBookForm">
+                        <form id="infoBookForm">
                             <input type="hidden" name="id" id="book_id">
                             <p><strong>Tytuł:</strong> <span id="book_title"></span></p>
                             <p><strong>Autor:</strong> <span id="book_author"></span></p>
@@ -129,15 +153,44 @@ $result = mysqli_query($conn, $query);
                         </form>
                     </div>
                 </div>
+
+                <div id="editBookModal" class="modal">
+                    <div class="modal-content">
+                        <span class="close-btn" onclick="closeModal()">&times;</span>
+                        <h2>Edytuj Książkę</h2>
+                        <form id="editBookForm">
+                            
+                            <label>Tytuł: <input id="edit_book_title" /></label>
+                            <label>Imię autora: <input id="edit_book_author_first" /></label>
+                            <label>Nazwisko autora: <input id="edit_book_author_last" /></label>
+                            <label>Gatunek: 
+                                <select id="edit_book_genre">
+                                    <?php
+                                    $genre_query = "SELECT ID, nazwa FROM gatunek";
+                                    $genre_result = mysqli_query($conn, $genre_query);
+                                    while ($genre = mysqli_fetch_assoc($genre_result)) {
+                                        echo '<option value="' . $genre['ID'] . '">' . htmlspecialchars($genre['nazwa']) . '</option>';
+                                    }
+                                    ?>
+                                </select>
+                            </label>                          
+                            <label>ISBN: <input id="edit_book_isbn" /></label>
+                            <label>Data wydania: <input id="edit_book_release_date" type="date" /></label>
+                            <label>Język: <input id="edit_book_language" /></label>
+                            <button type="button" onclick="saveBookChanges()">Zapisz</button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </section>
     <script>
         // Otwieranie modala i ładowanie danych książki
-            function openEditModal(bookId) {
+            function openInfoModal(bookId) {
                 fetch(`/Biblioteka/php/bibliotekarz/get_book.php?id=${bookId}`)
                     .then(response => response.json())
                     .then(data => {
-                        document.getElementById('book_id').value = data.ksiazka_id || '';
+                        // TODO: nie wysiwetla ISBN, date etc, sprawdzic get_book.php
+                        document.getElementById('book_id').value = data.egzemplarz_ID || '';
                         document.getElementById('book_title').innerText = data.tytul || 'Brak danych';
                         document.getElementById('book_author').innerText = `${data.autor_imie || ''} ${data.autor_nazwisko || ''}`;
                         document.getElementById('book_genre').innerText = data.gatunek || 'Brak danych';
@@ -152,35 +205,61 @@ $result = mysqli_query($conn, $query);
                         document.getElementById('book_condition').innerText = data.stan || 'Brak danych';
                         document.getElementById('book_availability').innerText = data.czy_dostepny ? 'Dostępna' : 'Niedostępna';
 
-                        document.getElementById('editBookModal').style.display = 'block';
+                        document.getElementById('infoBookModal').style.display = 'block';
                     })
                     .catch(error => console.error('Błąd:', error));
             }
 
+            function openEditModal(bookId) {
+                fetch(`/Biblioteka/php/bibliotekarz/get_book.php?id=${bookId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('edit_book_id').value = data.egzemplarz_ID;
+                        document.getElementById('edit_book_title').value = data.tytul;
+                        document.getElementById('edit_book_author_first').value = data.autor_imie;
+                        document.getElementById('edit_book_author_last').value = data.autor_nazwisko;
+                        document.getElementById('edit_book_genre').value = data.gatunek;
+                        document.getElementById('edit_book_isbn').value = data.ISBN;
+                        document.getElementById('edit_book_release_date').value = data.data_wydania;
+                        document.getElementById('edit_book_language').value = data.jezyk;
+                        document.getElementById('editBookModal').style.display = 'block';
+                    });
+            }
+
         function closeModal() {
+            //zamkniecie i wyczyszczenie formularza
+            document.getElementById('infoBookModal').style.display = 'none';
             document.getElementById('editBookModal').style.display = 'none';
         }
 
         // zachowanie po zapisaniu zmian
-        function saveBook() {
-            const formData = new FormData(document.getElementById('editBookForm'));
+        function saveBookChanges() {
+            // TODO: nie dziala ;C, wydanie_id jest aktualizowane dla pierwszego rekordu w bazie, a nie dla wybranej ksiazki
+        const data = {
+            ksiazka_id: document.getElementById('edit_book_id').value,
+            tytul: document.getElementById('edit_book_title').value,
+            autor_imie: document.getElementById('edit_book_author_first').value,
+            autor_nazwisko: document.getElementById('edit_book_author_last').value,
+            gatunek_id: document.getElementById('edit_book_genre').value,
+            ISBN: document.getElementById('edit_book_isbn').value,
+            data_wydania: document.getElementById('edit_book_release_date').value,
+            jezyk: document.getElementById('edit_book_language').value
+        };
 
-            fetch('/Biblioteka/php/bibliotekarz/update_book.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('Książka została zaktualizowana!');
-                    closeModal();
-                    location.reload();
-                } else {
-                    alert('Błąd: ' + data.error);
-                }
-            })
-            .catch(error => console.error('Błąd:', error));
-        }
+        fetch('/Biblioteka/php/bibliotekarz/update_book.php', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        }).then(response => response.json())
+          .then(data => {
+              if (data.success) {
+                  alert('Książka została zaktualizowana.');
+                  location.reload();
+              } else {
+                  alert('Wystąpił błąd: ' + data.error);
+              }
+          });
+    }
     </script>
 
     <footer>

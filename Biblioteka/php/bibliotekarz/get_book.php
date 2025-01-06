@@ -11,33 +11,57 @@ if (!isset($_SESSION['poziom_uprawnien']) || $_SESSION['poziom_uprawnien'] !== '
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])) 
 {
     $id = intval($_GET['id']);
-    $query = "
-        SELECT 
-            ksiazka.ID AS ksiazka_id,
-            ksiazka.tytul,
-            autor.imie AS autor_imie,
-            autor.nazwisko AS autor_nazwisko,
-            gatunek.nazwa AS gatunek,
-            wydawnictwo.nazwa AS wydawnictwo,
-            wydawnictwo.kraj AS wydawnictwo_kraj,
-            wydanie.ISBN,
-            wydanie.data_wydania,
-            wydanie.numer_wydania,
-            wydanie.jezyk,
-            wydanie.ilosc_stron,
-            wydanie.czy_elektronicznie,
-            egzemplarz.stan,
-            egzemplarz.czy_dostepny
-        FROM ksiazka
-        LEFT JOIN autor_ksiazki ON ksiazka.ID = autor_ksiazki.ID_ksiazki
-        LEFT JOIN autor ON autor_ksiazki.ID_autora = autor.ID
-        LEFT JOIN gatunek_ksiazki ON ksiazka.ID = gatunek_ksiazki.ID_ksiazki
-        LEFT JOIN gatunek ON gatunek_ksiazki.ID_gatunku = gatunek.ID
-        LEFT JOIN wydanie ON ksiazka.ID = wydanie.ID_ksiazki
-        LEFT JOIN wydawnictwo ON wydanie.ID_wydawnictwa = wydawnictwo.ID
-        LEFT JOIN egzemplarz ON wydanie.ID = egzemplarz.ID_wydania
-        WHERE ksiazka.ID = ?
-        LIMIT 1";
+    // $query = "
+    //     SELECT 
+    //         ksiazka.ID AS ksiazka_id,
+    //         ksiazka.tytul,
+    //         autor.imie AS autor_imie,
+    //         autor.nazwisko AS autor_nazwisko,
+    //         gatunek.nazwa AS gatunek,
+    //         wydawnictwo.nazwa AS wydawnictwo,
+    //         wydawnictwo.kraj AS wydawnictwo_kraj,
+    //         wydanie.ISBN,
+    //         wydanie.data_wydania,
+    //         wydanie.numer_wydania,
+    //         wydanie.jezyk,
+    //         wydanie.ilosc_stron,
+    //         wydanie.czy_elektronicznie,
+    //         egzemplarz.stan,
+    //         egzemplarz.czy_dostepny
+    //     FROM ksiazka
+    //     LEFT JOIN autor_ksiazki ON ksiazka.ID = autor_ksiazki.ID_ksiazki
+    //     LEFT JOIN autor ON autor_ksiazki.ID_autora = autor.ID
+    //     LEFT JOIN gatunek_ksiazki ON ksiazka.ID = gatunek_ksiazki.ID_ksiazki
+    //     LEFT JOIN gatunek ON gatunek_ksiazki.ID_gatunku = gatunek.ID
+    //     LEFT JOIN wydanie ON ksiazka.ID = wydanie.ID_ksiazki
+    //     LEFT JOIN wydawnictwo ON wydanie.ID_wydawnictwa = wydawnictwo.ID
+    //     LEFT JOIN egzemplarz ON wydanie.ID = egzemplarz.ID_wydania
+    //     WHERE ksiazka.ID = ?
+    //     LIMIT 1";
+
+    // TODO: brakuje numer_wydania kraj w query etc
+    $query = "SELECT
+        egzemplarz.ID AS egzemplarz_ID,
+        ksiazka.tytul,
+        autor.imie AS autor_imie,
+        autor.nazwisko AS autor_nazwisko,
+        gatunek.nazwa AS gatunek,
+        wydanie.ISBN,
+        wydanie.data_wydania,
+        wydanie.jezyk,
+        wydanie.ilosc_stron,
+        wydanie.czy_elektronicznie,
+        egzemplarz.czy_dostepny,
+        egzemplarz.stan
+    FROM egzemplarz
+    LEFT JOIN wydanie ON egzemplarz.ID_wydania = wydanie.ID
+    LEFT JOIN ksiazka ON wydanie.ID_ksiazki = ksiazka.ID
+    LEFT JOIN autor_ksiazki ON ksiazka.ID = autor_ksiazki.ID_ksiazki
+    LEFT JOIN autor ON autor_ksiazki.ID_autora = autor.ID
+    LEFT JOIN gatunek_ksiazki ON ksiazka.ID = gatunek_ksiazki.ID_ksiazki
+    LEFT JOIN gatunek ON gatunek_ksiazki.ID_gatunku = gatunek.ID
+    WHERE egzemplarz.ID = ?
+    LIMIT 1";
         
     $stmt = $conn->prepare($query);
     $stmt->bind_param("i", $id);
