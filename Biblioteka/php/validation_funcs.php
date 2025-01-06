@@ -189,6 +189,39 @@ function check_ID_exists($params)
     return null;
 }
 
+function validate_book_data($params)
+{
+    $error = validate_book_title(['value' => $params['title']]);
+    if ($error) 
+        return $error;
+
+    $error = validate_ISBN(['value' => $params['ISBN']]);
+    if ($error) 
+        return $error;
+
+    $error = validate_edition_number(['value' => $params['edition_number']]);
+    if ($error) 
+        return $error;
+
+    $error = validate_language(['value' => $params['language']]);
+    if ($error) 
+        return $error;
+
+    $error = validate_page_count(['value' => $params['page_count']]);
+    if ($error) 
+        return $error;
+
+    $error = validate_name(['value' => $params['author_name']]);
+    if ($error) 
+        return $error;
+
+    $error = validate_name(['value' => $params['author_surname']]);
+    if ($error) 
+        return $error;
+
+    return null; // Brak błędów
+}
+
 function validate_book_title($title) {
     
     if (empty($title)) {
