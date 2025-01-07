@@ -189,51 +189,18 @@ function check_ID_exists($params)
     return null;
 }
 
-function validate_book_data($params)
-{
-    $error = validate_book_title(['value' => $params['title']]);
-    if ($error) 
-        return $error;
+function validate_book_title($params) {
 
-    $error = validate_ISBN(['value' => $params['ISBN']]);
-    if ($error) 
-        return $error;
-
-    $error = validate_edition_number(['value' => $params['edition_number']]);
-    if ($error) 
-        return $error;
-
-    $error = validate_language(['value' => $params['language']]);
-    if ($error) 
-        return $error;
-
-    $error = validate_page_count(['value' => $params['page_count']]);
-    if ($error) 
-        return $error;
-
-    $error = validate_name(['value' => $params['author_name']]);
-    if ($error) 
-        return $error;
-
-    $error = validate_name(['value' => $params['author_surname']]);
-    if ($error) 
-        return $error;
-
-    return null; // Brak błędów
-}
-
-function validate_book_title($title) {
-    
-    if (empty($title)) {
+    if (empty($params['value'])) {
         return "Tytuł książki nie może być pusty.";
     }
 
-    if (strlen($title) > 255) {
+    if (strlen($params['value']) > 255) {
         return "Tytuł książki nie może przekraczać 255 znaków.";
     }
 
     // pozwalaj na litery, cyfry, spacej, i niektore znaki spec
-    if (!preg_match('/^[a-zA-Z0-9\s\p{L}\p{P}]+$/u', $title)) {
+    if (!preg_match('/^[a-zA-Z0-9\s\p{L}\p{P}]+$/u', $params['value'])) {
         return "Tytuł książki zawiera niedozwolone znaki.";
     }
 
@@ -271,4 +238,17 @@ function validate_page_count($params)
     
     return null;
 }
+
+function validate_image_path($params)
+{
+    $path = $params['value'];
+    if (empty($path)) {
+        return null; // Ścieżka może być opcjonalna
+    }
+    if (!preg_match('/\.(jpg|jpeg|png)$/i', $path)) {
+        return "Ścieżka musi wskazywać na plik w formacie JPG, JPEG lub PNG.";
+    }
+    return null;
+}
+
 ?>

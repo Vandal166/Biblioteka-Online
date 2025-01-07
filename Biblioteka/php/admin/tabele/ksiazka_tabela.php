@@ -12,6 +12,7 @@
             <tr>
                 <th>ID</th>
                 <th>Tytuł</th>
+                <th>Zdjęcie</th>
             </tr>
         </thead>";
     echo "<tbody>";
@@ -25,6 +26,7 @@
             echo "<tr>
                     <td>" . $row["ID"] . "</td>
                     <td>" . $row["tytul"] . "</td>
+                    <td>" . $row["zdjecie"] . "</td>
                 </tr>";
         }
     } 

@@ -87,6 +87,7 @@ body
 
 #panel button 
 {
+    padding: 3.69vh;
     height: 100%;
     width: 100%;
     background-color: #4CAF50;
@@ -282,4 +283,50 @@ body
 {
     text-align: center;
     font-size: 28px;
+}
+
+button.import-image {
+    width: 20%;
+    padding: 2px;
+    box-sizing: border-box;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+button.import-image {
+    margin-top: 5px;
+    background-color: #b3b3b3;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button.import-image:hover  {
+    background-color: #8f8f8f;
+}
+
+button.select-image {
+    width: 20%;
+    padding: 2px;
+    box-sizing: border-box;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+button.select-image {
+    margin-top: -10px;
+    background-color: #b3b3b3;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button.select-image:hover  {
+    background-color: #8f8f8f;
+}
+
+#file-input {
+    display: none;
 }

@@ -245,21 +245,23 @@ function handle_ksiazka_actions($action)
 {
     handle_crud_actions(
         'ksiazka',
-        ['tytul'],
+        ['tytul', 'zdjecie'],
         [
-            'tytul' => 'validate_book_title'
+            'tytul' => 'validate_book_title',
+            'zdjecie' => 'validate_image_path'
         ],
         'add'
     );
     handle_crud_actions('ksiazka', [], [], 'delete');
     handle_crud_actions(
         'ksiazka',
-        ['tytul'],
+        ['tytul', 'zdjecie'],
         [
-            'tytul' => 'validate_book_title'
+            'tytul' => 'validate_book_title',
+            'zdjecie' => 'validate_image_path'
         ],
         'edit'
-    );    
+    );
 }
 
 function handle_gatunek_actions($action)
@@ -448,12 +450,6 @@ function handle_egzemplarz_actions($action)
         ['ID_wydania', 'czy_dostepny', 'stan'],
         [
             'ID_wydania' => function($params) {
-                $params['table'] = 'egzemplarz';
-                $params['column'] = 'ID_wydania';
-                $error = check_if_exists($params);
-                if ($error)
-                    return $error;
-
                 $params['table'] = 'wydanie';
                 $params['ID'] = $params['value'];
                 return check_ID_exists($params);
@@ -469,12 +465,6 @@ function handle_egzemplarz_actions($action)
         ['ID_wydania', 'czy_dostepny', 'stan'],
         [
             'ID_wydania' => function($params) {
-                $params['table'] = 'egzemplarz';
-                $params['column'] = 'ID_wydania';
-                $error = check_if_exists($params);
-                if ($error)
-                    return $error;
-
                 $params['table'] = 'wydanie';
                 $params['ID'] = $params['value'];
                 return check_ID_exists($params);
