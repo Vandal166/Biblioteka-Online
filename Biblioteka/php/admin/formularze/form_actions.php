@@ -447,15 +447,10 @@ function handle_egzemplarz_actions($action)
         'egzemplarz',
         ['ID_wydania', 'czy_dostepny', 'stan'],
         [
-            'ID_wydania' => function($params) {
-                $params['table'] = 'egzemplarz';
-                $params['column'] = 'ID_wydania';
-                $error = check_if_exists($params);
-                if ($error)
-                    return $error;
-
+            'ID_wydania' => function($params) {                
                 $params['table'] = 'wydanie';
                 $params['ID'] = $params['value'];
+
                 return check_ID_exists($params);
             },
             'czy_dostepny' => null,
@@ -468,15 +463,10 @@ function handle_egzemplarz_actions($action)
         'egzemplarz',
         ['ID_wydania', 'czy_dostepny', 'stan'],
         [
-            'ID_wydania' => function($params) {
-                $params['table'] = 'egzemplarz';
-                $params['column'] = 'ID_wydania';
-                $error = check_if_exists($params);
-                if ($error)
-                    return $error;
-
+            'ID_wydania' => function($params) {                
                 $params['table'] = 'wydanie';
                 $params['ID'] = $params['value'];
+
                 return check_ID_exists($params);
             },
             'czy_dostepny' => null,
