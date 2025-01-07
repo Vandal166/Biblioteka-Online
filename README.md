@@ -1,7 +1,8 @@
 [Opis bazy - biblioteka online.pdf](https://github.com/user-attachments/files/18310665/Opis.bazy.-.biblioteka.online.pdf)
 
 
-Tworzenie symbolic-linka w Windowsie, gdy nasz projekt nie znajduje się bezpośrednio w htdocs/
+Tworzenie symbolic-linka w Windowsie, gdy nie chcemy bezpośrednio pracować w htdocs/
+
 Krok 1: Otwórz Wiersz poleceń jako administrator
 
     Kliknij na przycisk Start.
