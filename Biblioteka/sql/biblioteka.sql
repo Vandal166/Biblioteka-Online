@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sty 03, 2025 at 06:33 PM
+-- Generation Time: Sty 07, 2025 at 08:52 PM
 -- Wersja serwera: 10.4.32-MariaDB
 -- Wersja PHP: 8.2.12
 
@@ -43,14 +43,15 @@ INSERT INTO `autor` (`ID`, `imie`, `nazwisko`) VALUES
 (61, 'Aleksandra', 'Wiśniewska'),
 (62, 'Piotr', 'Zieliński'),
 (63, 'Anna', 'Kamińska'),
-(64, 'Test', 'Test'),
+(64, 'Piotr', 'Zieliński'),
 (65, 'Testt', 'Testst'),
 (68, 'Rthr', 'Er'),
-(69, 'erger', 'erg'),
+(69, 'Erger', 'Erg'),
 (70, 'erg', 'erg'),
 (71, 'wef', 'wef'),
 (72, 'test', 'owy'),
-(73, 'Test', 'Owy');
+(73, 'Test', 'Owy'),
+(81, 'Testt', 'Etsttt');
 
 -- --------------------------------------------------------
 
@@ -63,6 +64,17 @@ CREATE TABLE `autor_ksiazki` (
   `ID_ksiazki` int(11) NOT NULL,
   `ID_autora` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `autor_ksiazki`
+--
+
+INSERT INTO `autor_ksiazki` (`ID`, `ID_ksiazki`, `ID_autora`) VALUES
+(10, 24, 59),
+(11, 26, 62),
+(12, 26, 64),
+(13, 27, 69),
+(14, 34, 81);
 
 -- --------------------------------------------------------
 
@@ -92,7 +104,7 @@ INSERT INTO `czytelnik` (`ID`, `imie`, `nazwisko`, `nr_karty`, `telefon`, `email
 (25, 'Greeg', 'Herthrt', '7015471562', '234534634', 'ehrjrtj@onet.pl', 'ethjrtrtjwe12', '$2y$10$gwv6aX1oM4K/Wm2BnLZR/u5XlDqg/lWnAJl/4pjji.ZiI5U3NUt3O'),
 (30, 'Erg', 'Gere', '3483212614', '345345353', 'egrerg@onet.pl', 'gerger', '$2y$10$SEGSREtuv76h3Hg7SctEguBoXwNHf85SFkRb2X66dXbDp08PJv7oS'),
 (32, 'Gerger', 'Egrerg', '4117686075', '345345352', 'egrerg2@onet.pl', 'gerger2', '$2y$10$.5q44BGQHgC0qamITZ6EP.tW5FTidLbnSUc0X2wle00/bn.HQf3gW'),
-(33, 'Test', 'Test', '7446174120', '345232422', 'kamilroma8@gmail.com', 'kamil', '$2y$10$TKopYiujKZmdiMyIdZa9BeIZYypw6TnfiQ.100ORBLsCKvYGQkQPe'),
+(33, 'Test', 'Test', '7446174120', '345232422', 'kamilroma8@gmail.com', 'kamil', '$2y$10$0T/NGoMEcs9IRAeqw6B7DeOvJjTvOrdJMHy28t2cUW2P/hRMnvT8C'),
 (34, 'Rthrth', 'Erg', '3695423881', '453343634', 'rthrtyjrtjy2o@onet.pl', 'rtjrty234', '$2y$10$8j0m.YhjVYSy/GJWHBjWSe.XmOeveB5ynrvpYqqeRKIxle1nGl69e');
 
 -- --------------------------------------------------------
@@ -114,8 +126,11 @@ CREATE TABLE `egzemplarz` (
 
 INSERT INTO `egzemplarz` (`ID`, `ID_wydania`, `czy_dostepny`, `stan`) VALUES
 (3, 1, 1, 'dobry'),
-(4, 1, 0, 'gr'),
-(5, 1, 0, 'gr');
+(18, 3, 1, 'gr'),
+(19, 4, 1, 'gr'),
+(20, 8, 0, 'hrt'),
+(21, 26, 1, 'hrt'),
+(23, 5, 0, 'test');
 
 -- --------------------------------------------------------
 
@@ -155,7 +170,10 @@ CREATE TABLE `gatunek_ksiazki` (
 --
 
 INSERT INTO `gatunek_ksiazki` (`ID`, `ID_ksiazki`, `ID_gatunku`) VALUES
-(1, 24, 1);
+(1, 24, 1),
+(10, 27, 4),
+(11, 26, 3),
+(12, 34, 2);
 
 -- --------------------------------------------------------
 
@@ -175,7 +193,11 @@ CREATE TABLE `ksiazka` (
 INSERT INTO `ksiazka` (`ID`, `tytul`) VALUES
 (24, 'Oczami kota– tajemnice nocy'),
 (26, 'Dzień, który zmienił wszystko'),
-(27, 'Wszechświat: Początek i koniec..');
+(27, 'Wszechświat: Początek i koniec..'),
+(31, 'ererer'),
+(32, 'egeg'),
+(33, 'egeg#%#%#%'),
+(34, 'testttt');
 
 -- --------------------------------------------------------
 
@@ -201,7 +223,8 @@ INSERT INTO `pracownik` (`ID`, `imie`, `nazwisko`, `poziom_uprawnien`, `email`, 
 (1, 'Kamil', 'Wojtas', 'administrator', 'fajnyMail@mail.com', 'AdminW', '$2y$10$iQr7B5doUiH5ev7EbcNzR.tCQ9A.q1EAbi776IqltG6/xAybtSh2i'),
 (3, 'Jan', 'Kowalski', 'bibliotekarz', 'fajnyMail2@mail.com', 'BibliW', '$2y$10$iQr7B5doUiH5ev7EbcNzR.tCQ9A.q1EAbi776IqltG6/xAybtSh2i'),
 (4, 'Kamil', 'Rom', 'administrator', 'admin01@gmail.com', 'admin01', '$2y$10$f7KF.OrH80iYWr9IHNapbuBO95MovN1gqNJNIj9fEjkJfyIIiM.lC'),
-(5, 'Rgeger', 'Erge', 'uzytkownik', 'greghr@onert.pl', 'ergeherth', '$2y$10$rawQeHuh4YD0IW31T0WAPe3Kpyl2JT9/WpcDPhggqJfQHgmTOc6kS');
+(5, 'Rgeger', 'Erge', 'uzytkownik', 'greghr@onert.pl', 'ergeherth', '$2y$10$rawQeHuh4YD0IW31T0WAPe3Kpyl2JT9/WpcDPhggqJfQHgmTOc6kS'),
+(30, 'Biblio', 'Tekarz', 'bibliotekarz', 'bib@onet.pl', 'biblio', '$2y$10$yM4L.se53IPQuI6KpGL8kOFVXkULr6VkwMp6eOo3n69mBy28kPk1G');
 
 -- --------------------------------------------------------
 
@@ -211,43 +234,12 @@ INSERT INTO `pracownik` (`ID`, `imie`, `nazwisko`, `poziom_uprawnien`, `email`, 
 
 CREATE TABLE `reset_hasla` (
   `ID` int(11) NOT NULL,
-  `ID_uzytkownika` int(11) NOT NULL,
+  `ID_czytelnik` int(11) DEFAULT NULL,
+  `ID_pracownik` int(11) DEFAULT NULL,
   `poziom_uprawnien` enum('administrator','bibliotekarz','uzytkownik') NOT NULL,
-  `token` varchar(255) NOT NULL,
-  `data_wygenerowania` timestamp NOT NULL DEFAULT current_timestamp()
+  `token` varchar(64) NOT NULL,
+  `data_wygenerowania` timestamp NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `reset_hasla`
---
-
-INSERT INTO `reset_hasla` (`ID`, `ID_uzytkownika`, `poziom_uprawnien`, `token`, `data_wygenerowania`) VALUES
-(1, 30, '', '95923d180e3ddae4192cd77d2aae454693b3dedd448d9beaa58576120c04778c', '2025-01-03 15:36:14'),
-(2, 30, '', '60d925628fe4ee1846ecab4163a55f775614df87400c61a7a6954b9c4ed1be9e', '2025-01-03 15:40:40'),
-(3, 30, '', 'd94d9de73155561ab5ad9bdebcbde9eca34c5976a408e06f28c653d5708703d7', '2025-01-03 15:44:04'),
-(4, 30, '', 'c8fe0b75ce597cb213e391cb2d81bb6da46e065a2b96d6dcd052371cbc7f1f54', '2025-01-03 15:44:28'),
-(5, 30, '', 'afe9c942e5ff6d2fd6565fe6e4e6152f858b460961413db0d596656928968ff0', '2025-01-03 15:46:00'),
-(6, 30, '', '1d9f392c834179662b53e5e88191036848cb7651b3eb690f45eaeacf05b13f2b', '2025-01-03 15:46:29'),
-(7, 30, '', '2e167b3ed23870d964f84dcdc4b6b8642656b88aea352275de7739f57ed51f3d', '2025-01-03 15:48:12'),
-(8, 30, '', '3dc3a4de593db86a82ff6e3193d7b0e19df1a29cc7104d6682f1ce69a891d65f', '2025-01-03 15:50:51'),
-(9, 30, '', 'bc891beef0390110e944b23924f7ed7b6f498a91fd2b6ce632591cc46a59e116', '2025-01-03 15:51:55'),
-(10, 30, '', 'c176b7c7ab45854f4a55772d4b362f4534620eccb0447f9fb17ad27c9d70009b', '2025-01-03 15:53:53'),
-(11, 30, '', 'be01d4273899ae62dd6715290c2e76c72f48fcd645e5bbf4ddcaa258cca2395f', '2025-01-03 15:54:06'),
-(12, 30, '', 'd9805688c34ec44b304c3a4a1cd456619684ee5b691ed71c57563591d3889ca3', '2025-01-03 15:54:17'),
-(14, 30, '', '18e99cbc2e717c8208a414b8b42aa6024e20abc6a848bca621980ae1ecfff9aa', '2025-01-03 15:56:04'),
-(15, 30, '', 'b1eb05e7fe8d982faa7328065d9e44fac18e80998857efc850b7bee42e16a5e1', '2025-01-03 15:58:55'),
-(16, 30, '', 'b5b03b22c35531b671330bc041197384bfea92f9836095981a06e78e193acb73', '2025-01-03 15:58:57'),
-(17, 30, '', '7fcf24f25325b9b28a944cbd4f63e7978cb2abb0c7212c6ac692215fb27e62d1', '2025-01-03 15:59:31'),
-(18, 32, '', 'd5e263ef8622a558ab1e21d8f17a505cf4ad00f916702b36d0a7777b7317f0cd', '2025-01-03 16:21:07'),
-(19, 33, '', 'd5fd93d116a410bbd6551b40b07714f081f2069ed55f382086f03663af71bd0e', '2025-01-03 16:21:48'),
-(20, 33, '', '4fe1e41015a94767ed676e3d56f665b78c7d7aaca1e2bce71302bd785eea5b3a', '2025-01-03 16:24:56'),
-(21, 33, '', '1cee4b8bbfe15acef0e098c6bd22febd9196d6875d2add6e3e0b21cd9e3ff335', '2025-01-03 16:26:28'),
-(22, 33, '', 'd476bd470572509efdb9230a0f55981c77580adc90c59da4921d9ade3007be23', '2025-01-03 16:26:49'),
-(23, 33, '', '9de463f15347354f8a20f43ea51d9f39f198976b5136ea6a8c103ac883cf019c', '2025-01-03 16:27:16'),
-(24, 33, '', '58cdc9151e341e7702550f9063342aa6cce14db293aa6a8bf5d5e0c559aa2171', '2025-01-03 16:27:27'),
-(25, 33, '', '779f151fd2312f895620259746afda6e81f555d06d868cf0710ed459f18da954', '2025-01-03 16:42:25'),
-(27, 9, '', '0ceb994e6e607990f2e14c99469e02dc5fe287e7387d42d4532f45d5b7a488ac', '2025-01-03 16:49:01'),
-(28, 32, '', '9729e90f4593f9274a5d41d2391a602dd625988cda2c54a3de1826828a446573', '2025-01-03 16:49:09');
 
 -- --------------------------------------------------------
 
@@ -269,7 +261,8 @@ CREATE TABLE `rezerwacja` (
 
 INSERT INTO `rezerwacja` (`ID`, `ID_wydania`, `ID_czytelnika`, `data_rezerwacji`, `czy_wydana`) VALUES
 (1, 1, 9, '2024-11-27', 1),
-(2, 3, 10, '2024-12-08', 0);
+(2, 3, 10, '2024-12-08', 0),
+(15, 1, 9, '2025-01-08', 1);
 
 -- --------------------------------------------------------
 
@@ -298,9 +291,9 @@ INSERT INTO `wydanie` (`ID`, `ID_ksiazki`, `ID_wydawnictwa`, `ISBN`, `data_wydan
 (3, 24, 1, '1231234234522', '2024-12-06', '32453453535345332111', 'ertgh', '4353', 0),
 (4, 24, 1, '3333333333333', '2024-12-20', '43444444444444444444', 'regerg', '15', 1),
 (5, 24, 1, '2342423423422', '2025-01-06', '34444443242342342341', 'erghe', '643', 1),
-(8, 24, 1, '3245253452342', '2025-01-12', '43234645234242423343', 'rthrht', '352', 1),
+(8, 26, 1, '3245253452342', '2025-01-12', '43234645234242423343', 'rthrht', '352', 1),
 (26, 24, 1, '3453634623436', '2025-01-01', '43645457454745745222', 'rthrth', '234', 1),
-(28, 24, 1, '2342453453343', '2025-01-05', '23423453453535345345', 'rgeegr', '3434', 1);
+(31, 24, 1, '3453453632342', '3454-03-31', '45635234241234143333', 'rtegrhrt', '3453', 1);
 
 -- --------------------------------------------------------
 
@@ -412,7 +405,9 @@ ALTER TABLE `pracownik`
 -- Indeksy dla tabeli `reset_hasla`
 --
 ALTER TABLE `reset_hasla`
-  ADD PRIMARY KEY (`ID`);
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `ID_czytelnik` (`ID_czytelnik`),
+  ADD KEY `ID_pracownik` (`ID_pracownik`);
 
 --
 -- Indeksy dla tabeli `rezerwacja`
@@ -455,13 +450,13 @@ ALTER TABLE `wypozyczenie`
 -- AUTO_INCREMENT for table `autor`
 --
 ALTER TABLE `autor`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=82;
 
 --
 -- AUTO_INCREMENT for table `autor_ksiazki`
 --
 ALTER TABLE `autor_ksiazki`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `czytelnik`
@@ -473,49 +468,49 @@ ALTER TABLE `czytelnik`
 -- AUTO_INCREMENT for table `egzemplarz`
 --
 ALTER TABLE `egzemplarz`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `gatunek`
 --
 ALTER TABLE `gatunek`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `gatunek_ksiazki`
 --
 ALTER TABLE `gatunek_ksiazki`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `ksiazka`
 --
 ALTER TABLE `ksiazka`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `pracownik`
 --
 ALTER TABLE `pracownik`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `reset_hasla`
 --
 ALTER TABLE `reset_hasla`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `rezerwacja`
 --
 ALTER TABLE `rezerwacja`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `wydanie`
 --
 ALTER TABLE `wydanie`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `wydawnictwo`
@@ -552,6 +547,13 @@ ALTER TABLE `egzemplarz`
 ALTER TABLE `gatunek_ksiazki`
   ADD CONSTRAINT `fk_idgat` FOREIGN KEY (`ID_gatunku`) REFERENCES `gatunek` (`ID`) ON DELETE CASCADE,
   ADD CONSTRAINT `fk_idksiazk` FOREIGN KEY (`ID_ksiazki`) REFERENCES `ksiazka` (`ID`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `reset_hasla`
+--
+ALTER TABLE `reset_hasla`
+  ADD CONSTRAINT `reset_hasla_ibfk_1` FOREIGN KEY (`ID_czytelnik`) REFERENCES `czytelnik` (`ID`) ON DELETE CASCADE,
+  ADD CONSTRAINT `reset_hasla_ibfk_2` FOREIGN KEY (`ID_pracownik`) REFERENCES `pracownik` (`ID`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `rezerwacja`

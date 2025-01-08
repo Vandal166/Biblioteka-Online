@@ -20,7 +20,7 @@
                     <li><a href="php/admin/tabele/main_tabela.php?tabela=autor">Panel administracyjny</a></li>
                 <?php elseif(isset($_SESSION['poziom_uprawnien']) && $_SESSION['poziom_uprawnien'] === 'bibliotekarz'): ?>
                     <!-- if bibliotekarz, wyświetl guzik do panelu bibliotekarza -->
-                    <li><a href="php/librarian_dashboard.php" >Panel bibliotekarski</a></li>
+                    <li><a href="php/bibliotekarz/panel_bibliotekarski.php" >Panel bibliotekarski</a></li>
                 <?php endif; ?>
 
                 <li><a href="index.php">Strona Główna</a></li>
