@@ -193,7 +193,8 @@ function validate_book_data($params)
         'page_count' => 'validate_page_count',
         'author_name' => 'validate_name',
         'author_surname' => 'validate_name',
-        'release_date' => 'validate_date'
+        'release_date' => 'validate_date',
+        'image_path' => 'validate_image_path'
     ];
 
     foreach ($validation_functions as $key => $function) {
