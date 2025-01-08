@@ -34,7 +34,7 @@ if (isset($_GET['editID']) && is_numeric($_GET['editID']) && isset($_GET['queryT
     $queries = [
         'autor_edit' => "SELECT imie, nazwisko FROM autor WHERE ID = ?",
 
-        'ksiazka_edit' => "SELECT tytul FROM ksiazka WHERE ID = ?",
+        'ksiazka_edit' => "SELECT tytul, zdjecie FROM ksiazka WHERE ID = ?",
 
         'autor_ksiazki_edit' => "SELECT ID_autora, ID_ksiazki FROM autor_ksiazki WHERE ID = ?",
 

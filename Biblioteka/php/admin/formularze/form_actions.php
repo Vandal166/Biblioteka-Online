@@ -245,21 +245,23 @@ function handle_ksiazka_actions($action)
 {
     handle_crud_actions(
         'ksiazka',
-        ['tytul'],
+        ['tytul', 'zdjecie'],
         [
-            'tytul' => 'validate_book_title'
+            'tytul' => 'validate_book_title',
+            'zdjecie' => 'validate_image_path'
         ],
         'add'
     );
     handle_crud_actions('ksiazka', [], [], 'delete');
     handle_crud_actions(
         'ksiazka',
-        ['tytul'],
+        ['tytul', 'zdjecie'],
         [
-            'tytul' => 'validate_book_title'
+            'tytul' => 'validate_book_title',
+            'zdjecie' => 'validate_image_path'
         ],
         'edit'
-    );    
+    );
 }
 
 function handle_gatunek_actions($action)
@@ -447,7 +449,7 @@ function handle_egzemplarz_actions($action)
         'egzemplarz',
         ['ID_wydania', 'czy_dostepny', 'stan'],
         [
-            'ID_wydania' => function($params) {                
+            'ID_wydania' => function($params) {
                 $params['table'] = 'wydanie';
                 $params['ID'] = $params['value'];
 
@@ -463,7 +465,7 @@ function handle_egzemplarz_actions($action)
         'egzemplarz',
         ['ID_wydania', 'czy_dostepny', 'stan'],
         [
-            'ID_wydania' => function($params) {                
+            'ID_wydania' => function($params) {
                 $params['table'] = 'wydanie';
                 $params['ID'] = $params['value'];
 

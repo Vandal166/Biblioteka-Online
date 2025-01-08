@@ -6,8 +6,7 @@ redirect_if_logged_in();
 require_once('db_connection.php');
 require_once('validation_funcs.php');
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') 
-{
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $token = $_POST['token'];
     $new_password = trim($_POST['new_password']);
     $confirm_password = trim($_POST['confirm_password']);
@@ -25,57 +24,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
         exit();
     }
 
-    $sql = "SELECT ID_czytelnik, ID_pracownik, poziom_uprawnien, data_wygenerowania FROM reset_hasla WHERE token = ?";
+    $sql = "SELECT ID_uzytkownika, poziom_uprawnien FROM reset_hasla WHERE token = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param('s', $token);
     $stmt->execute();
     $result = $stmt->get_result();
     $stmt->close();
 
-    if ($result->num_rows == 0) 
-    {
+    if ($result->num_rows == 0) {
         set_message('error', 'new_password', 'Nieprawidłowy token.');
         header("Location: reset_password.php");
         exit();
     }
 
     $reset_data = $result->fetch_assoc();
-    $user_id = $reset_data['ID_czytelnik'] ?? $reset_data['ID_pracownik'];
+    $user_id = $reset_data['ID_uzytkownika'];
     $user_type = $reset_data['poziom_uprawnien'];
-    $token_creation_time = strtotime($reset_data['data_wygenerowania']);
-    $current_time = time();
 
-    // sprawdzenie czy token wygasł
-    if (($current_time - $token_creation_time) > 3600) // 1 godz
-    {
-        // wygasł usuniecie tokena z bazy
-        $sql = "DELETE FROM reset_hasla WHERE token = ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param('s', $token);
-        $stmt->execute();
-        $stmt->close();
-
-        set_message('error', 'new_password', 'Token wygasł. Spróbuj ponownie.');
-        header("Location: reset_password.php");
-        exit();
-    }
-
-    // zmiana hasła
     $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
 
-    if (!empty($reset_data['ID_pracownik'])) 
+    if ($user_type == 'administrator' || $user_type == 'bibliotekarz') 
     {
         $sql = "UPDATE pracownik SET haslo = ? WHERE ID = ?";
     } 
-    elseif (!empty($reset_data['ID_czytelnik'])) 
-    {
-        $sql = "UPDATE czytelnik SET haslo = ? WHERE ID = ?";
-    } 
     else 
     {
-        set_message('error', 'new_password', 'Nieprawidłowy typ użytkownika.');
-        header("Location: reset_password.php");
-        exit();
+        $sql = "UPDATE czytelnik SET haslo = ? WHERE ID = ?";
     }
 
     $stmt = $conn->prepare($sql);
@@ -83,7 +57,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
     $stmt->execute();
     $stmt->close();
 
-    // po zmianie hasła usuwamy token z bazy
     $sql = "DELETE FROM reset_hasla WHERE token = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param('s', $token);

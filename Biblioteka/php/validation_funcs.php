@@ -255,4 +255,17 @@ function validate_page_count($params)
     
     return null;
 }
+
+function validate_image_path($params)
+{
+    $path = $params['value'];
+    if (empty($path)) {
+        return null; // Ścieżka może być opcjonalna
+    }
+    if (!preg_match('/\.(jpg|jpeg|png)$/i', $path)) {
+        return "Ścieżka musi wskazywać na plik w formacie JPG, JPEG lub PNG.";
+    }
+    return null;
+}
+
 ?>

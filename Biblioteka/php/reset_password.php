@@ -18,7 +18,6 @@ redirect_if_logged_in();
         <h2>Zresetuj hasło</h2>
 
         <?php display_messages('reset_password'); ?>
-        <?php display_messages('new_password'); ?>
 
         <form action="process_reset_password.php" method="POST">
             <input type="hidden" name="formularz" value="reset_password">
