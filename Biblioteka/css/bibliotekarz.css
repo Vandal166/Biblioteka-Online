@@ -273,11 +273,18 @@ body
 
 }
 
-.podsekcja input[type="text"]#ISBN, input[type="text"]#numer_wydania, input[type="text"]#new_ISBN, input[type="text"]#new_numer_wydania {    
+.podsekcja input[type="text"]#ISBN, input[type="text"]#numer_wydania, input[type="text"]#new_ISBN, input[type="text"]#new_numer_wydania, input[type="text"]#edit_book_isbn {    
     letter-spacing: 4px;
     padding-right: 10px;
 }
 
+.podsekcja select {
+    padding: 4px;
+    font-size: 20px;
+    font-weight: bold;
+    width: 50%;
+    margin: 8px;
+}
 .form_name 
 {
     text-align: center;
@@ -331,4 +338,52 @@ body
     position: relative;
 }
 
- 
+ .popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.popup-content {
+    position: relative;
+    background: #fff;
+    border-radius: 5px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 20%;
+}
+
+.popup-content .close-btn {
+    position: absolute;
+    top: -5px;
+    right: 8px;
+    cursor: pointer;
+}
+
+.popup-buttons {
+    margin-top: 20px;
+}
+
+.popup-buttons button {
+    background-color: #4CAF50;
+    border: 2px solid transparent;
+    color: white;
+    padding: 10px 35px;
+    cursor: pointer;
+    border-radius: 12px;
+}
+
+
+.popup-buttons button:last-child {
+    background-color: red;
+    color: white;
+}

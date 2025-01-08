@@ -452,6 +452,7 @@ function handle_egzemplarz_actions($action)
             'ID_wydania' => function($params) {
                 $params['table'] = 'wydanie';
                 $params['ID'] = $params['value'];
+
                 return check_ID_exists($params);
             },
             'czy_dostepny' => null,
@@ -467,6 +468,7 @@ function handle_egzemplarz_actions($action)
             'ID_wydania' => function($params) {
                 $params['table'] = 'wydanie';
                 $params['ID'] = $params['value'];
+
                 return check_ID_exists($params);
             },
             'czy_dostepny' => null,

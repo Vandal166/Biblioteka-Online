@@ -1,32 +1,26 @@
 <?php
 
 // main funkcja walidująca dane użytkownika i zwracajaca od razu gdy znajdzie błąd
-// uzycie: $userdata = ['name' => 'Jan', 'surname' => $nazwisko, 'telefon' => '123456789'] itd. mozna dodac wiecej/mniej danych
+// uzycie: $userdata = ['name' => 'Jan', 'surname' => $nazwisko, 'telefon' => '123456789'] itd.
+// NIE TRZEBA PRZEKAZYWAC WSZYSTKICH PARAMETROW, tylko te ktore chcemy walidowac
 function validate_user_data($user_data) 
 {
-    $error = validate_name(['value' => $user_data['name']]);
-    if ($error) 
-        return $error;
+    $validation_functions = [
+        'name' => 'validate_name',
+        'surname' => 'validate_name',
+        'telefon' => 'validate_phone',
+        'email' => 'validate_email',
+        'login' => 'validate_login',
+        'password' => 'validate_password'
+    ];
 
-    $error = validate_name(['value' => $user_data['surname']]);
-    if ($error) 
-        return $error;
-
-    $error = validate_phone(['value' => $user_data['telefon']]);
-    if ($error) 
-        return $error;
-
-    $error = validate_email(['value' => $user_data['email']]);
-    if ($error) 
-        return $error;
-
-    $error = validate_login(['value' => $user_data['login']]);
-    if ($error) 
-        return $error;
-
-    $error = validate_password(['value' => $user_data['password']]);
-    if ($error) 
-        return $error;
+    foreach ($validation_functions as $key => $function) {
+        if (isset($user_data[$key])) {
+            $error = $function(['value' => $user_data[$key]]);
+            if ($error) 
+                return $error;
+        }
+    }
 
     return null; // Brak błędów
 }
@@ -189,8 +183,31 @@ function check_ID_exists($params)
     return null;
 }
 
-function validate_book_title($params) {
+function validate_book_data($params)
+{
+    $validation_functions = [
+        'title' => 'validate_book_title',
+        'ISBN' => 'validate_ISBN',
+        'edition_number' => 'validate_edition_number',
+        'language' => 'validate_language',
+        'page_count' => 'validate_page_count',
+        'author_name' => 'validate_name',
+        'author_surname' => 'validate_name',
+        'release_date' => 'validate_date'
+    ];
 
+    foreach ($validation_functions as $key => $function) {
+        if (isset($params[$key])) {
+            $error = $function(['value' => $params[$key]]);
+            if ($error) 
+                return $error;
+        }
+    }
+
+    return null; // Brak błędów
+}
+function validate_book_title($params) {
+    
     if (empty($params['value'])) {
         return "Tytuł książki nie może być pusty.";
     }
