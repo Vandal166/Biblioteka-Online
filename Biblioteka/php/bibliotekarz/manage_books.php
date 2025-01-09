@@ -11,7 +11,7 @@ if (!isset($_SESSION['poziom_uprawnien']) || $_SESSION['poziom_uprawnien'] !== '
 
 require_once(BASE_PATH . 'php/helpers.php');
 
-// pobranie danych książek
+// pobranie danych książek dla wyswietlenia w tabeli
 $query = "SELECT
         wydanie.ID AS wydanie_ID,
         ksiazka.ID AS ksiazka_ID,
@@ -50,7 +50,7 @@ $result = mysqli_query($conn, $query);
     <base href="/Biblioteka/"> <!-- bazowa sciezka dla odnośników -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/bibliotekarz.css">
-    <script src="js/sorttable.js" defer></script>
+    <script src="js/sorttable.js" defer></script> <!-- skrypt do sortowania tabeli -->
 </head>
 <body>
     <header>
@@ -88,6 +88,7 @@ $result = mysqli_query($conn, $query);
                 <th>Tytuł</th>
                 <th>Autor</th>
                 <th>Gatunek</th>
+                <th>Język</th>
                 <th>Ilość stron</th>
                 <th>Dostępność</th>
                 <th class="sorttable_nosort">Akcje</th>
@@ -99,6 +100,7 @@ $result = mysqli_query($conn, $query);
                     <td><?php echo htmlspecialchars($book['tytul']) ?: 'Brak'; ?></td>
                     <td><?php echo htmlspecialchars($book['autor_imie'] . ' ' . $book['autor_nazwisko']) ?: 'Brak'; ?></td>
                     <td><?php echo htmlspecialchars($book['gatunek']) ?: 'Brak'; ?></td>
+                    <td><?php echo htmlspecialchars($book['jezyk']) ?: 'Brak'; ?></td>
                     <td><?php echo htmlspecialchars($book['ilosc_stron']) ?: 'Brak'; ?></td>
                     <td><?php echo $book['czy_dostepny'] ? 'Tak' : 'Nie'; ?></td>
                     
@@ -189,7 +191,7 @@ $result = mysqli_query($conn, $query);
                                 <button type="button" class="select-image override-style" id="select-2">Wybierz</button>
 
                                 <input type="file" id="file-input" name="file" accept=".png, .jpg, .jpeg"></input>
-                                <button type="button" class="import-image override-style" id="import-2" style="margin-left: 40px;">Importuj</button>             
+                                <button type="button" class="import-image override-style" id="import-2">Importuj</button>             
                             </div>
 
                             <label>Nowe Imię autora: <input id="edit_book_author_first" /></label>
@@ -307,7 +309,7 @@ $result = mysqli_query($conn, $query);
                                 <button type="button" class="select-image override-style" id="select-1">Wybierz</button>
                                 
                                 <input type="file" id="file-input" name="file" accept=".png, .jpg, .jpeg"></input>
-                                <button type="button" class="import-image override-style" id="import-1" style="margin-left: 40px;">Importuj</button>
+                                <button type="button" class="import-image override-style" id="import-1">Importuj</button>
                             </div>
                                            
                             <div class="error-message" style="color: red; text-align: center"></div>
@@ -317,378 +319,23 @@ $result = mysqli_query($conn, $query);
                 </div>
             </div>
         </section>
-    <script>            
-    //TODO: dodac to do .js bo sie młyn robi
-    //TODO: dodac to do .js bo sie młyn robi
-    //TODO: dodac to do .js bo sie młyn robi
-    //TODO: dodac to do .js bo sie młyn robi
-
-    // Przyciski z klasy select-image mają działać jak otwieracze wybru plików
-        document.querySelectorAll('.import-image').forEach(button => 
-        {
-            button.addEventListener('click', function () 
-            {
-                const fileInput = document.getElementById('file-input');
-
-                // Określ target input na podstawie ID przycisku
-                let targetInputId;
-                if (this.id === 'import-1') 
-                {
-                    targetInputId = 'zdjecie'; // Pole tekstowe dla pierwszego przycisku
-                } 
-                else if (this.id === 'import-2') 
-                {
-                    targetInputId = 'new_zdjecie'; // Pole tekstowe dla drugiego przycisku
-                }
-
-                if (!targetInputId) 
-                {
-                    console.error('Nie znaleziono odpowiedniego pola docelowego dla tego przycisku.');
-                    return;
-                }
-
-                // Otwórz okno wyboru pliku
-                fileInput.click();
-
-                // Nasłuchiwanie na wybór pliku
-                fileInput.onchange = async function () 
-                {
-                    if (fileInput.files.length > 0) 
-                    {
-                        const file = fileInput.files[0];
-
-                        // Sprawdzenie rozszerzenia pliku
-                        const allowedExtensions = ['image/png', 'image/jpeg'];
-                        if (!allowedExtensions.includes(file.type)) 
-                        {
-                            alert('Dozwolone są tylko pliki PNG, JPG lub JPEG.');
-                            return;
-                        }
-
-                        // Prześlij plik na serwer
-                        const formData = new FormData();
-                        formData.append('file', file);
-
-                        try 
-                        {
-                            const response = await fetch('/Biblioteka/php/upload.php', 
-                            {
-                                method: 'POST',
-                                body: formData
-                            });
-
-                            const result = await response.json();
-
-                            if (result.success) 
-                            {
-                                // Wstaw ścieżkę do pola
-                                document.getElementById(targetInputId).value = result.path;
-                                //alert('Plik przesłany pomyślnie!');
-                            } 
-                            else 
-                            {
-                                console.error('Błąd przesyłania pliku: ', result.message);
-                                alert('Błąd podczas przesyłania pliku, sprawdź konsolę.');
-                            }
-                        } 
-                        catch (error) 
-                        {
-                            console.error('Błąd przesyłania pliku:', error);
-                            alert('Wystąpił błąd podczas przesyłania pliku.');
-                        }
-
-                        // Wyczyść wybór pliku
-                        fileInput.value = '';
-                    }
-                };
-            });
-        });
-
-        // Wypełnianie listy plików w <select>
-        async function loadImageList(selectElementId) 
-        {
-            try 
-            {
-                const response = await fetch('/Biblioteka/php/get-images.php'); // Skrypt PHP zwracający listę plików
-                const result = await response.json();
-
-                if (result.success) 
-                {
-                    const selectElement = document.getElementById(selectElementId);
-                    selectElement.innerHTML = '<option value="" disabled selected>-- Wybierz zdjęcie --</option>'; // Wyczyść istniejące opcje
-
-                    result.files.forEach(file => 
-                    {
-                        const option = document.createElement('option');
-                        option.value = `Biblioteka/images/${file}`;
-                        option.textContent = file;
-                        selectElement.appendChild(option);
-                    });
-                } 
-                else 
-                {
-                    alert('Błąd podczas pobierania listy plików.');
-                }
-            } 
-            catch (error) 
-            {
-                console.error('Błąd podczas pobierania listy plików:', error);
-                alert('Wystąpił błąd podczas pobierania listy plików, sprawdź konsolę.');
-            }
-        }
-
-        // Obsługa przypisywania ścieżki do odpowiedniego pola tekstowego
-        document.querySelectorAll('.select-image').forEach(button => 
-        {
-            button.addEventListener('click', function () 
-            {
-                let targetInputId, selectElementId;
-
-                if (this.id === 'select-1') 
-                {
-                    targetInputId = 'zdjecie';
-                    selectElementId = 'image-select-add';
-                } 
-                else if (this.id === 'select-2') 
-                {
-                    targetInputId = 'new_zdjecie';
-                    selectElementId = 'image-select-edit';
-                }
-
-                if (!targetInputId || !selectElementId) 
-                {
-                    console.error('Nie znaleziono odpowiedniego pola docelowego lub listy wyboru dla tego przycisku.');
-                    return;
-                }
-
-                const selectedFile = document.getElementById(selectElementId).value;
-                if (!selectedFile) 
-                {
-                    alert('Proszę wybrać zdjęcie z listy.');
-                    return;
-                }
-
-                document.getElementById(targetInputId).value = selectedFile;
-                //alert('Przypisano zdjęcie: ' + selectedFile);
-            });
-        });
-        // Otwieranie modala i ładowanie danych książki
-            function openInfoModal(bookID) {
-                fetch(`/Biblioteka/php/bibliotekarz/get_book.php?id=${bookID}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        
-                        document.getElementById('book_id').value = data.wydanie_ID || '';
-                        document.getElementById('book_title').innerText = data.ksiazka_tytul || 'Brak danych';
-                        document.getElementById('book_author').innerText = `${data.autor_imie || ''} ${data.autor_nazwisko || ''}`;
-                        document.getElementById('book_genre').innerText = data.gatunek || 'Brak danych';
-                        document.getElementById('book_publisher').innerText = data.wydawnictwo || 'Brak danych';
-                        document.getElementById('book_publisher_country').innerText = data.wydawnictwo_kraj || 'Brak danych';
-                        document.getElementById('book_isbn').innerText = data.wydanie_ISBN || 'Brak danych';
-                        document.getElementById('book_release_date').innerText = data.wydanie_data_wydania || 'Brak danych';
-                        document.getElementById('book_edition').innerText = data.wydanie_numer_wydania || 'Brak danych';
-                        document.getElementById('book_language').innerText = data.wydanie_jezyk || 'Brak danych';
-                        document.getElementById('book_pages').innerText = data.ilosc_stron || 'Brak danych';
-                        document.getElementById('book_ebook').innerText = data.czy_elektronicznie ? 'Tak' : 'Nie';
-                        document.getElementById('book_condition').innerText = data.stan || 'Brak danych';
-                        document.getElementById('book_availability').innerText = data.czy_dostepny !== null ? (data.czy_dostepny ? 'Dostępna' : 'Niedostępna') : 'Brak danych'; // czyli nie ma infa o dostepnosci w egzemlarzu
-                        const bookImage = document.getElementById('book_image');
-                        if (data.ksiazka_zdjecie) 
-                        {
-                            let imagePath = data.ksiazka_zdjecie;
-
-                            // Spr, czy ścieżka zaczyna się od "Biblioteka/"
-                            if (!imagePath.startsWith('/')) {
-                                imagePath = '/' + imagePath;
-                            }
-
-                            // Poprawiona ścieżka
-                            bookImage.src = imagePath;
-                            bookImage.style.display = 'block';
-                        } 
-                        else {
-                            bookImage.style.display = 'none';
-                        }
-                        document.getElementById('infoBookModal').style.display = 'block';
-                    })
-                    .catch(error => console.error('Błąd:', error));
-            }
-
-            //modal dodawania
-            function openAddBookModal() {
-                document.getElementById('addBookModal').style.display = 'block';
-            }            
-    
-            // modal edycji
-            function openEditModal(bookID) {
-                fetch(`/Biblioteka/php/bibliotekarz/get_book.php?id=${bookID}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        
-                        document.getElementById('edit_book_id').value = data.wydanie_ID;
-                        document.getElementById('edit_book_title').value = data.ksiazka_tytul;
-                        document.getElementById('new_zdjecie').value = data.ksiazka_zdjecie;
-                        document.getElementById('edit_book_author_first').value = data.autor_imie;
-                        document.getElementById('edit_book_author_last').value = data.autor_nazwisko;
-                        const genreDropdown = document.getElementById('edit_book_genre');
-                        const selectedGenre = data.gatunek_ID;
-                        if(selectedGenre) {
-                            Array.from(genreDropdown.options).forEach(option => {
-                                option.selected = option.value === selectedGenre.toString();
-                            });
-                        }
-                        document.getElementById('edit_book_isbn').value = data.wydanie_ISBN;
-                        document.getElementById('edit_book_release_date').value = data.wydanie_data_wydania;
-                        document.getElementById('edit_book_edition').value = data.wydanie_numer_wydania;
-                        document.getElementById('edit_book_language').value = data.wydanie_jezyk;
-                        document.getElementById('edit_book_pages').value = data.ilosc_stron;
-                        document.getElementById('edit_book_ebook').checked = data.wydanie_czy_elektronicznie ? 1 : 0;
-
-                        document.getElementById('editBookModal').style.display = 'block';
-                        document.getElementById('editBookForm').querySelector('.error-message').style.display = 'none';
-                    });
-            }
-
-            // modal usuwania
-            function openDeleteModal(bookID) {
-               
-                fetch(`/Biblioteka/php/bibliotekarz/get_book.php?id=${bookID}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.ksiazka_tytul != null) {
-                            const deleteModal = document.getElementById('deleteBookModal');
-                            document.getElementById('deleteBookTitle').innerText = data.ksiazka_tytul;  
-                            document.getElementById('deleteBookPages').innerText = data.ilosc_stron; 
-                            deleteModal.style.display = 'flex';  
-                            window.currentBookID = bookID;  
-                        }
-                    })
-                    .catch(error => console.error('Błąd:', error));
-            }
-
-
-            function closeModal() {
-                //zamkniecie i wyczyszczenie formularza
-                document.getElementById('infoBookModal').style.display = 'none';
-                document.getElementById('successPopup').style.display = 'none';
-                document.getElementById('addBookModal').style.display = 'none';
-                document.getElementById('deleteBookModal').style.display = 'none';
-                document.getElementById('editBookModal').style.display = 'none';
-            }
-
-            // nasłuchiwanie na załadowanie strony
-            document.addEventListener('DOMContentLoaded', () => {
-                <?php if (isset($_SESSION['success_message'])): ?>
-                    showGlobalSuccessMessage("<?= htmlspecialchars($_SESSION['success_message']); ?>");
-                    <?php unset($_SESSION['success_message']); ?>
-                <?php endif; ?>
-                loadImageList('image-select-add');
-                loadImageList('image-select-edit');
-            });
-
-            // Funkcja wyświetlająca globalny pop-up sukcesu
-            function showGlobalSuccessMessage(message) {
-                const popup = document.getElementById('successPopup');
-                const messageContainer = document.getElementById('successPopupMessage');
-                messageContainer.textContent = message;
-                popup.style.display = 'flex';
-            }
-
-            // zapisanie zmian po edycji
-            function saveBookChanges() 
-            {
-                //TODO: dodac edycje zdj
-                const data = {
-                    wydanie_ID: document.getElementById('edit_book_id').value,
-                    ksiazka_tytul: document.getElementById('edit_book_title').value,
-                    ksiazka_zdjecie: document.getElementById('new_zdjecie').value,
-                    autor_imie: document.getElementById('edit_book_author_first').value,
-                    autor_nazwisko: document.getElementById('edit_book_author_last').value,
-                    gatunek_ID: document.getElementById('edit_book_genre').value,
-                    wydanie_ISBN: document.getElementById('edit_book_isbn').value,
-                    wydanie_data_wydania: document.getElementById('edit_book_release_date').value,
-                    wydanie_numer_wydania: document.getElementById('edit_book_edition').value,
-                    wydanie_jezyk: document.getElementById('edit_book_language').value,
-                    wydanie_ilosc_stron: document.getElementById('edit_book_pages').value,
-                    wydanie_czy_elektronicznie: document.getElementById('edit_book_ebook').checked ? 1 : 0
-                };
-
-                fetch('/Biblioteka/php/bibliotekarz/update_book.php', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify(data)
-                }).then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        closeModal();
-                        location.reload();
-                    } 
-                    else 
-                    {                 
-                        const errorContainer = document.querySelector('#editBookForm .error-message');
-                        if (errorContainer) {
-                            errorContainer.textContent = data.error;
-                            errorContainer.style.display = 'block';
-                        }
-                    }
-                });  
-            }
-
-            //dodawnaie ksiazki
-            function addNewBook() 
-            {
-                const data = {
-                    ksiazka_tytul: document.getElementById('bookTitle').value,
-                    autor_imie: document.getElementById('authorFirstName').value,
-                    autor_nazwisko: document.getElementById('authorLastName').value,
-                    gatunek: document.getElementById('genre').value,
-                    wydawnictwo: document.getElementById('publisher').value,                    
-                    wydanie_ISBN: document.getElementById('bookISBN').value,
-                    wydanie_data_wydania: document.getElementById('releaseDate').value,
-                    wydanie_numer_wydania: document.getElementById('editionNumber').value,
-                    wydanie_jezyk: document.getElementById('language').value,
-                    wydanie_ilosc_stron: document.getElementById('pages').value,
-                    wydanie_czy_elektronicznie: document.getElementById('isElectronic').checked ? 1 : 0,
-                    zdjecie: document.getElementById('zdjecie').value
-                };
-
-                fetch('/Biblioteka/php/bibliotekarz/add_book.php', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify(data)
-                }).then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        closeModal();
-                        location.reload();
-                    } 
-                    else 
-                    {                 
-                        const errorContainer = document.querySelector('#addBookForm .error-message');
-                        if (errorContainer) {
-                            errorContainer.textContent = data.error;
-                            errorContainer.style.display = 'block';
-                        }
-                    }
-                });  
-            }
-            // usuawanie książki
-            function deleteBook() 
-            {
-                const bookID = window.currentBookID;
-                fetch(`/Biblioteka/php/bibliotekarz/delete_book.php?id=${bookID}`, { 
-                    method: 'POST' 
-                }).then(response => response.json())
-                    .then(data => {
-                        if (data.success) {                            
-                            location.reload();
-                        } else {                            
-                            console.error(data.error);
-                        }
-                    });
-            }
-        
+    <script>      
+    // nasłuchiwanie na załadowanie strony
+    document.addEventListener('DOMContentLoaded', () => {
+        <?php if (isset($_SESSION['success_message'])): ?>
+            showGlobalSuccessMessage("<?= htmlspecialchars($_SESSION['success_message']); ?>");
+            <?php unset($_SESSION['success_message']); ?>
+        <?php endif; ?>
+        loadImageList('image-select-add');
+        loadImageList('image-select-edit');
+    });            
     </script>
+
+    <!-- skrypt do modali(pop-up) -->
+    <script src="js/bibliotekarz/manage_books.js" defer></script>    
+
+    <!-- skrypt do ladowania zdjec -->
+    <script src="js/image_mgr.js" defer></script>
 
     <footer>
         <p>&copy; 2024 Biblioteka Online | Wszystkie prawa zastrzeżone</p>

@@ -45,11 +45,10 @@ if ($data) {
         echo json_encode(['success' => false, 'error' => $error]);
         exit();
     }
-    //TODO: fix, po updacie danych ale nie zmienienie np. imiona/nazwiska autora wstawia nowego autora o tych samych danych
-
+    
     $conn->begin_transaction();
     try {
-        // Aktualizacja lub wstawienie tytułu książki        
+        // wstawienie nowej ksiazki lub aktualizacja istniejacej     
         $stmt = $conn->prepare("
             INSERT INTO ksiazka (ID, tytul, zdjecie)
             VALUES ((SELECT ID_ksiazki FROM wydanie WHERE ID = ?), ?, ?)
@@ -58,26 +57,71 @@ if ($data) {
         $stmt->bind_param("iss", $wydanie_id, $tytul, $zdjecie);
         $stmt->execute();
 
-        // Aktualizacja lub wstawienie autora
-        $stmt = $conn->prepare("
-            INSERT INTO autor (imie, nazwisko)
-            VALUES (?, ?)
-            ON DUPLICATE KEY UPDATE imie = VALUES(imie), nazwisko = VALUES(nazwisko)
+        // Pobranie autora powiązanego z książką (przez ID_ksiazki)
+        $stmt = $conn->prepare("SELECT autor.ID 
+            FROM autor 
+            JOIN autor_ksiazki ON autor.ID = autor_ksiazki.ID_autora 
+            JOIN wydanie ON autor_ksiazki.ID_ksiazki = wydanie.ID_ksiazki 
+            WHERE wydanie.ID = ?
         ");
-        $stmt->bind_param("ss", $autor_imie, $autor_nazwisko);
+        $stmt->bind_param("i", $wydanie_id);
         $stmt->execute();
-        $autor_id = $conn->insert_id;
+        $stmt->bind_result($autor_id);
+        $stmt->store_result();
 
-        // Aktualizacja lub wstawienie autora książki
+        if ($stmt->fetch()) {
+            // Jeśli autor został znaleziony, aktualizujemy jego dane
+            $stmt = $conn->prepare("
+                UPDATE autor 
+                SET imie = ?, nazwisko = ? 
+                WHERE ID = ?
+            ");
+            $stmt->bind_param("ssi", $autor_imie, $autor_nazwisko, $autor_id);
+            $stmt->execute();
+        } 
+        else 
+        {
+            // Jeśli nie znaleziono powiązanego autora, wstawiamy nowego ALE o roznych danych tj. imie/nazwisko
+            $stmt = $conn->prepare("SELECT ID FROM autor WHERE imie = ? AND nazwisko = ?");
+            $stmt->bind_param("ss", $autor_imie, $autor_nazwisko);
+            $stmt->execute();
+            $stmt->store_result();
+
+            if ($stmt->num_rows === 0) {
+                $stmt = $conn->prepare("INSERT INTO autor (imie, nazwisko) VALUES (?, ?)");
+                $stmt->bind_param("ss", $autor_imie, $autor_nazwisko);
+                $stmt->execute();
+                $autor_id = $conn->insert_id;
+            }
+            else // znaleziono autora o takich samych danych wiec zapisujemy jego ID
+            {
+                $stmt->bind_result($autor_id);
+                $stmt->fetch();
+            }            
+        }
+        $stmt->close();
+
+        
+        // Sprawdzenie, czy powiązanie już istnieje
         $stmt = $conn->prepare("
-            INSERT INTO autor_ksiazki (ID_ksiazki, ID_autora)
-            VALUES ((SELECT ID_ksiazki FROM wydanie WHERE ID = ?), ?)
-            ON DUPLICATE KEY UPDATE ID_autora = VALUES(ID_autora)
+            SELECT 1 FROM autor_ksiazki WHERE ID_ksiazki = (SELECT ID_ksiazki FROM wydanie WHERE ID = ?) AND ID_autora = ?
         ");
         $stmt->bind_param("ii", $wydanie_id, $autor_id);
-        $stmt->execute();        
+        $stmt->execute();
+        $stmt->store_result();
 
-        // Aktualizacja gatunku
+        if ($stmt->num_rows === 0) {
+            // Wstawienie nowego powiązania, jeśli nie istnieje
+            $stmt = $conn->prepare("
+                INSERT INTO autor_ksiazki (ID_ksiazki, ID_autora)
+                VALUES ((SELECT ID_ksiazki FROM wydanie WHERE ID = ?), ?)
+            ");
+            $stmt->bind_param("ii", $wydanie_id, $autor_id);
+            $stmt->execute();
+        }
+
+
+        // Aktualizacja gatunku_ksiazki
         $stmt = $conn->prepare("
             UPDATE gatunek_ksiazki
             SET ID_gatunku = ?

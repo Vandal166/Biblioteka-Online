@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sty 09, 2025 at 03:22 PM
+-- Generation Time: Sty 09, 2025 at 06:12 PM
 -- Wersja serwera: 10.4.32-MariaDB
 -- Wersja PHP: 8.2.12
 
@@ -43,12 +43,7 @@ INSERT INTO `autor` (`ID`, `imie`, `nazwisko`) VALUES
 (61, 'Aleksandra', 'Wiśniewska'),
 (62, 'Piotr', 'Zieliński'),
 (63, 'Anna', 'Kamińska'),
-(64, 'Piotr', 'Zieliński'),
-(130, 'Rtherf', 'Hertherte'),
-(131, 'Gwerwerg', 'Wefwfe'),
-(132, 'Wefwegt', 'Rther'),
-(133, 'Erfgerg', 'Erherth'),
-(136, 'Maria', 'Nowak');
+(64, 'Piotr', 'Zie');
 
 -- --------------------------------------------------------
 
@@ -71,9 +66,8 @@ INSERT INTO `autor_ksiazki` (`ID`, `ID_ksiazki`, `ID_autora`) VALUES
 (11, 26, 62),
 (12, 26, 64),
 (15, 34, 59),
-(27, 69, 132),
-(28, 70, 133),
-(31, 34, 136);
+(45, 70, 59),
+(46, 69, 59);
 
 -- --------------------------------------------------------
 
@@ -199,7 +193,7 @@ INSERT INTO `ksiazka` (`ID`, `tytul`, `zdjecie`) VALUES
 (25, 'Matematyka w praktyce', 'Biblioteka/images/677d904301b57-Kjermejt.jpg'),
 (26, 'Dzień, który zmienił wszystko', 'Biblioteka/images/677d925558f3d-Sipper.png'),
 (27, 'Wszechświat: Początek i koniec..', 'Biblioteka/images/677d977214c90-Afrotitan.png'),
-(34, 'Dziady :C', 'Biblioteka/images/677d925558f3d-Sipper.png'),
+(34, 'Dziady :C', 'Biblioteka/images/677d904301b57-Kjermejt.jpg'),
 (69, 'gererh', 'Biblioteka/images/677eca5baa173-2.png'),
 (70, 'ghtrr', 'Biblioteka/images/677eca5baa173-2.png');
 
@@ -299,8 +293,8 @@ INSERT INTO `wydanie` (`ID`, `ID_ksiazki`, `ID_wydawnictwa`, `ISBN`, `data_wydan
 (26, 24, 1, '3453634623436', '2025-01-01', '43645457454745745222', 'rthrth', '234', 1),
 (31, 24, 1, '3453453632342', '3454-03-31', '45635234241234143333', 'rtegrhrt', '3453', 1),
 (44, 69, 3, '3456457456353', '2025-01-24', '78678678456345345234', 'jtyktyuj', '456', 0),
-(45, 70, 1, '4536457568568', '2025-01-10', '85678566546346345345', 'trhrt', '56', 1),
-(46, 34, 3, '5475686767543', '2025-01-03', '54756856834535363463', 'guwno', '3', 0);
+(45, 70, 1, '4536457568568', '2025-01-10', '85678566546346345345', 'trhrt', '56', 0),
+(46, 34, 3, '5475686767542', '2025-01-03', '54756856834535363463', 'guwno', '3', 0);
 
 -- --------------------------------------------------------
 
@@ -459,13 +453,13 @@ ALTER TABLE `wypozyczenie`
 -- AUTO_INCREMENT for table `autor`
 --
 ALTER TABLE `autor`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=137;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=155;
 
 --
 -- AUTO_INCREMENT for table `autor_ksiazki`
 --
 ALTER TABLE `autor_ksiazki`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
 -- AUTO_INCREMENT for table `czytelnik`
@@ -495,7 +489,7 @@ ALTER TABLE `gatunek_ksiazki`
 -- AUTO_INCREMENT for table `ksiazka`
 --
 ALTER TABLE `ksiazka`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
 
 --
 -- AUTO_INCREMENT for table `pracownik`

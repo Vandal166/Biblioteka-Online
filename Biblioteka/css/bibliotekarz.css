@@ -253,7 +253,7 @@ body
 
 .podsekcja button.override-style 
 {
-    width: 25%;
+    width: 18%;
     padding: 8px;
     box-sizing: border-box;
     font-size: 20px;
@@ -349,6 +349,8 @@ input[type="text"]#new_ISBN, input[type="text"]#new_numer_wydania, input[type="t
     padding: 20px;
     width: 50%;
     border-radius: 5px;
+    max-height: 85vh;
+    overflow-y: auto;
 }
 
 .close-btn {
