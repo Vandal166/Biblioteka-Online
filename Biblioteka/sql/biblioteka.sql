@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sty 07, 2025 at 08:52 PM
+-- Generation Time: Sty 09, 2025 at 10:25 AM
 -- Wersja serwera: 10.4.32-MariaDB
 -- Wersja PHP: 8.2.12
 
@@ -183,21 +183,22 @@ INSERT INTO `gatunek_ksiazki` (`ID`, `ID_ksiazki`, `ID_gatunku`) VALUES
 
 CREATE TABLE `ksiazka` (
   `ID` int(11) NOT NULL,
-  `tytul` varchar(50) NOT NULL
+  `tytul` varchar(50) NOT NULL,
+  `zdjecie` varchar(255) DEFAULT ''
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `ksiazka`
 --
 
-INSERT INTO `ksiazka` (`ID`, `tytul`) VALUES
-(24, 'Oczami kota– tajemnice nocy'),
-(26, 'Dzień, który zmienił wszystko'),
-(27, 'Wszechświat: Początek i koniec..'),
-(31, 'ererer'),
-(32, 'egeg'),
-(33, 'egeg#%#%#%'),
-(34, 'testttt');
+INSERT INTO `ksiazka` (`ID`, `tytul`, `zdjecie`) VALUES
+(24, 'Oczami kota– tajemnice nocy', 'Biblioteka/images/677d925558f3d-Sipper.png'),
+(26, 'Dzień, który zmienił wszystko', ''),
+(27, 'Wszechświat: Początek i koniec..', ''),
+(31, 'ererer', ''),
+(32, 'egeg', ''),
+(33, 'egeg#%#%#%', ''),
+(34, 'testttt', '');
 
 -- --------------------------------------------------------
 
