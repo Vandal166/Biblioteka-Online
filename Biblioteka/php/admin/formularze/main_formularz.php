@@ -112,9 +112,8 @@ if (!$formularz)
                 'wydanie' => 'Wydanie',
                 'wydawnictwo' => 'Wydawnictwo',
                 'wypozyczenie' => 'Wypożyczenie'
-            ];
+            ];            
             
-            //TODO: naprawic, zle skaluje sie
             foreach ($formularze as $key => $value) {                
                  echo '<li>
                 <form action="php/admin/formularze/main_formularz.php" method="POST">
