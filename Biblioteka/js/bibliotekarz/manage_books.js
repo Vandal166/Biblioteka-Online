@@ -1,6 +1,6 @@
 // Otwieranie modala i ładowanie danych książki
 function openInfoModal(bookID) {
-    fetch(`/Biblioteka/php/bibliotekarz/get_book.php?id=${bookID}`)
+    fetch(`/Biblioteka/php/bibliotekarz/book_mgmt/get_book.php?id=${bookID}`)
         .then(response => response.json())
         .then(data => {
             
@@ -51,7 +51,7 @@ function openAddBookModal() {
 
 // modal edycji
 function openEditModal(bookID) {
-    fetch(`/Biblioteka/php/bibliotekarz/get_book.php?id=${bookID}`)
+    fetch(`/Biblioteka/php/bibliotekarz/book_mgmt/get_book.php?id=${bookID}`)
         .then(response => response.json())
         .then(data => {
             
@@ -84,7 +84,7 @@ function openEditModal(bookID) {
 // modal usuwania
 function openDeleteModal(bookID) {
 
-    fetch(`/Biblioteka/php/bibliotekarz/get_book.php?id=${bookID}`)
+    fetch(`/Biblioteka/php/bibliotekarz/book_mgmt/get_book.php?id=${bookID}`)
         .then(response => response.json())
         .then(data => {
             if (data.ksiazka_tytul != null) {
@@ -135,7 +135,7 @@ function saveBookChanges()
         wydanie_czy_elektronicznie: document.getElementById('edit_book_ebook').checked ? 1 : 0
     };
 
-    fetch('/Biblioteka/php/bibliotekarz/update_book.php', {
+    fetch('/Biblioteka/php/bibliotekarz/book_mgmt/update_book.php', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(data)
@@ -174,7 +174,7 @@ function addNewBook()
         zdjecie: document.getElementById('zdjecie').value
     };
 
-    fetch('/Biblioteka/php/bibliotekarz/add_book.php', {
+    fetch('/Biblioteka/php/bibliotekarz/book_mgmt/add_book.php', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(data)
@@ -198,7 +198,7 @@ function addNewBook()
 function deleteBook() 
 {
     const bookID = window.currentBookID;
-    fetch(`/Biblioteka/php/bibliotekarz/delete_book.php?id=${bookID}`, { 
+    fetch(`/Biblioteka/php/bibliotekarz/book_mgmt/delete_book.php?id=${bookID}`, { 
         method: 'POST' 
     }).then(response => response.json())
         .then(data => {

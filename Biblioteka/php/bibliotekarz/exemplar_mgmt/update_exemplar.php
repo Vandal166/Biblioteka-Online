@@ -14,55 +14,47 @@ require_once(BASE_PATH . 'php/helpers.php');
 $data = json_decode(file_get_contents('php://input'), true);
 
 if ($data) {
-    $wydanie_id = intval($data['wydanie_ID']);
-    $gatunek_id = intval($data['gatunek_ID']);
     
-    $stan = htmlspecialchars(trim($data['egzemplarz_stan']));
+    $egzemplarz_ID = intval($data['egzemplarz_ID']);
+    $stan = htmlspecialchars(trim($data['stan']));
     $numer_wydania = htmlspecialchars(trim($data['wydanie_numer_wydania']));
     $czy_dostepny = isset($data['egzemplarz_czy_dostepny']) && $data['egzemplarz_czy_dostepny'] == 1 ? 1 : 0;
 
 
-    // walidajca
-    $error = validate_book_data([        
-        'edition_number' => $numer_wydania
-    ]);
-    
-    if ($error) 
-    {
-        echo json_encode(['success' => false, 'error' => $error]);
-        exit();
-    }
     
     $conn->begin_transaction();
     try {
 
         //spr czy istnieje wydanie o podanym ID
-        $stmt = $conn->prepare("SELECT ID FROM wydanie WHERE ID = ?");
-        $stmt->bind_param("i", $wydanie_id);
+        $stmt = $conn->prepare("SELECT ID_wydania FROM egzemplarz WHERE ID = ?");
+        $stmt->bind_param("i", $egzemplarz_ID);
         $stmt->execute();
         $result = $stmt->get_result();
         if ($result->num_rows === 0) {
-            throw new Exception('Wydanie o podanym ID nie istnieje');
+            throw new Exception('Egzemplarz o podanym ID nie istnieje');
         }
+        $row = $result->fetch_assoc();
+        $wydanie_ID = $row['ID_wydania'];
+        
 
-        //TODO: check manage_exemplar.php line 206
-        // Aktualizacja numeru wydania
-        $stmt = $conn->prepare("
-            UPDATE wydanie
-            SET numer_wydania = ?
-            WHERE ID = ?
-        ");
-        $stmt->bind_param("si", $numer_wydania, $wydanie_id);
+        // bierzemy ID wydania na podstawie numeru wydania
+        $stmt = $conn->prepare("SELECT ID FROM wydanie WHERE numer_wydania = ?");
+        $stmt->bind_param("s", $numer_wydania);
         $stmt->execute();
-
-
+        $result = $stmt->get_result();
+        if ($result->num_rows === 0) {
+            throw new Exception('Wydanie o podanym numerze nie istnieje');
+        }
+        $row = $result->fetch_assoc();
+        $wydanie_ID = $row['ID'];
+        
         // Aktualizacja egzemplarza
         $stmt = $conn->prepare("
             UPDATE egzemplarz
-            SET czy_dostepny = ?, stan = ?
-            WHERE ID_wydania = ?
+            SET ID_wydania = ?, czy_dostepny = ?, stan = ?
+            WHERE ID = ?
         ");
-        $stmt->bind_param("isi", $czy_dostepny, $stan, $wydanie_id);
+        $stmt->bind_param("iisi", $wydanie_ID, $czy_dostepny, $stan, $egzemplarz_ID);
         $stmt->execute();
 
         $conn->commit();

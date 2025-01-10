@@ -1,10 +1,10 @@
 // Otwieranie modala i ładowanie danych książki
 function openInfoModal(bookID) {
-    fetch(`/Biblioteka/php/bibliotekarz/get_book.php?id=${bookID}`)
+    fetch(`/Biblioteka/php/bibliotekarz/exemplar_mgmt/get_exemplar.php?id=${bookID}`)
         .then(response => response.json())
         .then(data => {
             
-            document.getElementById('book_id').value = data.wydanie_ID || '';
+            document.getElementById('book_id').value = data.egzemplarz_ID || '';
             document.getElementById('book_title').innerText = data.ksiazka_tytul || 'Brak danych';
             document.getElementById('book_author').innerText = `${data.autor_imie || ''} ${data.autor_nazwisko || ''}`;
             document.getElementById('book_genre').innerText = data.gatunek || 'Brak danych';
@@ -51,11 +51,11 @@ function openAddBookModal() {
 
 // modal edycji
 function openEditModal(bookID) {
-    fetch(`/Biblioteka/php/bibliotekarz/get_book.php?id=${bookID}`)
+    fetch(`/Biblioteka/php/bibliotekarz/exemplar_mgmt/get_exemplar.php?id=${bookID}`)
         .then(response => response.json())
         .then(data => {
-            console.log(data);
-            document.getElementById('edit_book_id').value = data.wydanie_ID;
+            
+            document.getElementById('edit_book_id').value = data.egzemplarz_ID;
             document.getElementById('edit_book_title').innerText = data.ksiazka_tytul;
             const bookImage = document.getElementById('edit_book_image');
             if (data.ksiazka_zdjecie) 
@@ -82,8 +82,32 @@ function openEditModal(bookID) {
             document.getElementById('edit_book_pages').innerText = data.ilosc_stron || 'Brak danych';
             document.getElementById('edit_isAvailable').checked = data.czy_dostepny ? 1 : 0;
             document.getElementById('edit_book_condition').value = data.stan;
-            document.getElementById('edit_book_edition').value = data.wydanie_numer_wydania;
+            //document.getElementById('edit_book_edition').value = data.wydanie_numer_wydania;
+            // Fetch the list of wydanie records and populate the select element
+            fetch('php/bibliotekarz/exemplar_mgmt/fetch_wydanie_list.php')
+                .then(response => response.json())
+                .then(listData => {
+                    const selectElement = document.getElementById('edit_editionNumberSelect');
+                    selectElement.innerHTML = ''; // Clear existing options
+                    listData.forEach(item => {
+                        const option = document.createElement('option');
+                        option.value = item.numer_wydania;
+                        option.textContent = `${item.tytul} - ${item.autor_imie} ${item.autor_nazwisko}`;
+                        selectElement.appendChild(option);
+                    });
 
+                    // Set the selected option
+                    const options = selectElement.options;
+                    for (let i = 0; i < options.length; i++) {
+                        if (options[i].value === data.wydanie_numer_wydania) {
+                            options[i].selected = true;
+                            break;
+                        }
+                    }
+
+                    selectElement.style.display = 'block';
+                    document.getElementById('edit_editionNumberInput').style.display = 'none';
+                });
             document.getElementById('editBookModal').style.display = 'block';
             document.getElementById('editBookForm').querySelector('.error-message').style.display = 'none';
             // wylaczenie scrolla na stronie ale dozwolone w modalu
@@ -94,13 +118,13 @@ function openEditModal(bookID) {
 // modal usuwania
 function openDeleteModal(bookID) {
 
-    fetch(`/Biblioteka/php/bibliotekarz/get_book.php?id=${bookID}`)
+    fetch(`/Biblioteka/php/bibliotekarz/exemplar_mgmt/get_exemplar.php?id=${bookID}`)
         .then(response => response.json())
         .then(data => {
             if (data.ksiazka_tytul != null) {
                 const deleteModal = document.getElementById('deleteBookModal');
                 document.getElementById('deleteBookTitle').innerText = data.ksiazka_tytul;  
-                document.getElementById('deleteBookPages').innerText = data.ilosc_stron; 
+                document.getElementById('deleteBookCondition').innerText = data.stan; 
                 deleteModal.style.display = 'flex';  
                 window.currentBookID = bookID;  
             }
@@ -129,25 +153,17 @@ function showGlobalSuccessMessage(message) {
 
 // zapisanie zmian po edycji
 function saveBookChanges() 
-{    
-    const data = {
-        wydanie_ID: document.getElementById('edit_book_id').value,
-        ksiazka_tytul: document.getElementById('edit_book_title').value,
-        ksiazka_zdjecie: document.getElementById('new_zdjecie').value,
-        autor_imie: document.getElementById('edit_book_author_first').value,
-        autor_nazwisko: document.getElementById('edit_book_author_last').value,
-        gatunek_ID: document.getElementById('edit_book_genre').value,
-        wydanie_ISBN: document.getElementById('edit_book_isbn').value,
-        wydanie_data_wydania: document.getElementById('edit_book_release_date').value,
-        wydanie_numer_wydania: document.getElementById('edit_book_edition').value,
-        wydanie_jezyk: document.getElementById('edit_book_language').value,
-        wydanie_ilosc_stron: document.getElementById('edit_book_pages').value,
-        wydanie_czy_elektronicznie: document.getElementById('edit_book_ebook').checked ? 1 : 0,
-        egzemlarz_stan: document.getElementById('edit_book_condition').value,
+{   // zmienne z lewej to nazwy z 'data' z fetcha, czyli z bazy danych
+    // console.log(data) zeby zobaczyc jak dane sa zapisane w zmiennej 
+    // i uniknac bledu 'undefined array key'
+    const data = {        
+        egzemplarz_ID: document.getElementById('edit_book_id').value,
+        wydanie_numer_wydania: document.getElementById('edit_editionNumberSelect').value || document.getElementById('edit_editionNumberInput').value,
+        stan: document.getElementById('edit_book_condition').value,
         egzemplarz_czy_dostepny: document.getElementById('edit_isAvailable').checked ? 1 : 0
     };
 
-    fetch('/Biblioteka/php/bibliotekarz/update_exemplar.php', {
+    fetch('/Biblioteka/php/bibliotekarz/exemplar_mgmt/update_exemplar.php', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(data)
@@ -167,26 +183,14 @@ function saveBookChanges()
         }
     });  
 }
-
-//dodawnaie ksiazki
-function addNewBook() 
-{
+function addNewExemplar() {
     const data = {
-        ksiazka_tytul: document.getElementById('bookTitle').value,
-        autor_imie: document.getElementById('authorFirstName').value,
-        autor_nazwisko: document.getElementById('authorLastName').value,
-        gatunek: document.getElementById('genre').value,
-        wydawnictwo: document.getElementById('publisher').value,                    
-        wydanie_ISBN: document.getElementById('bookISBN').value,
-        wydanie_data_wydania: document.getElementById('releaseDate').value,
-        wydanie_numer_wydania: document.getElementById('editionNumber').value,
-        wydanie_jezyk: document.getElementById('language').value,
-        wydanie_ilosc_stron: document.getElementById('pages').value,
-        wydanie_czy_elektronicznie: document.getElementById('isElectronic').checked ? 1 : 0,
-        zdjecie: document.getElementById('zdjecie').value
+        wydanie_numer_wydania: document.getElementById('editionNumberSelect').value || document.getElementById('editionNumberInput').value,
+        egzemplarz_stan: document.getElementById('add_book_condition').value,
+        egzemplarz_czy_dostepny: document.getElementById('add_isAvailable').checked ? 1 : 0
     };
 
-    fetch('/Biblioteka/php/bibliotekarz/add_book.php', {
+    fetch('/Biblioteka/php/bibliotekarz/exemplar_mgmt/add_exemplar.php', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(data)
@@ -195,22 +199,20 @@ function addNewBook()
         if (data.success) {
             closeModal();
             location.reload();
-        } 
-        else 
-        {                 
+        } else {
             const errorContainer = document.querySelector('#addBookForm .error-message');
             if (errorContainer) {
                 errorContainer.textContent = data.error;
                 errorContainer.style.display = 'block';
             }
         }
-    });  
+    }).catch(error => console.error('Błąd:', error));
 }
 // usuawanie książki
 function deleteBook() 
 {
-    const bookID = window.currentBookID;
-    fetch(`/Biblioteka/php/bibliotekarz/delete_book.php?id=${bookID}`, { 
+    const exemplarID = window.currentBookID;
+    fetch(`/Biblioteka/php/bibliotekarz/exemplar_mgmt/delete_exemplar.php?id=${exemplarID}`, { 
         method: 'POST' 
     }).then(response => response.json())
         .then(data => {
@@ -221,3 +223,129 @@ function deleteBook()
             }
         });
 }
+
+function fetchEditionData(editionNumber) {
+    if (editionNumber) { // Jeśli ID nie jest puste
+        fetch(`php/bibliotekarz/exemplar_mgmt/fetch_wydanie.php?editionNumber=${editionNumber}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('editModalDetails').style.display = 'block';
+                    // Ustawienie wartości pól formularza
+                    document.getElementById('edit_book_title').textContent = data.data.tytul;
+                    document.getElementById('edit_book_author').textContent = data.data.autor_imie + ' ' + data.data.autor_nazwisko;
+                    document.getElementById('edit_book_genre').textContent = data.data.gatunek;
+                    document.getElementById('edit_book_isbn').textContent = data.data.ISBN;
+                    document.getElementById('edit_book_release_date').textContent = data.data.data_wydania;
+                    document.getElementById('edit_book_language').textContent = data.data.jezyk;
+                    document.getElementById('edit_book_pages').textContent = data.data.ilosc_stron;
+                    const bookImage = document.getElementById('edit_book_image');
+                    if (data.data.zdjecie) {
+                        let imagePath = data.data.zdjecie;
+
+                        // Spr, czy ścieżka zaczyna się od "Biblioteka/"
+                        if (!imagePath.startsWith('/')) {
+                            imagePath = '/' + imagePath;
+                        }
+
+                        // Poprawiona ścieżka
+                        bookImage.src = imagePath;
+                        bookImage.style.display = 'block';
+                    } else {
+                        bookImage.style.display = 'none';
+                    }
+
+                    
+                } else {
+                    // czyszczenie pola formularza w przypadku błędu
+                    document.getElementById('edit_book_title').textContent = '';
+                    document.getElementById('edit_book_author').textContent = '';
+                    document.getElementById('edit_book_genre').textContent = '';
+                    document.getElementById('edit_book_isbn').textContent = '';
+                    document.getElementById('edit_book_release_date').textContent = '';
+                    document.getElementById('edit_book_language').textContent = '';
+                    document.getElementById('edit_book_pages').textContent = '';
+                    document.getElementById('edit_book_image').style.display = 'none';
+                    document.getElementById('editModalDetails').style.display = 'none';
+
+                    console.warn(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Błąd podczas pobierania danych:', error);
+            });
+    } else {
+        // Jeśli ID jest puste, czyścimy pola formularza
+        document.getElementById('edit_book_title').textContent = '';
+        document.getElementById('edit_book_author').textContent = '';
+        document.getElementById('edit_book_genre').textContent = '';
+        document.getElementById('edit_book_isbn').textContent = '';
+        document.getElementById('edit_book_release_date').textContent = '';
+        document.getElementById('edit_book_language').textContent = '';
+        document.getElementById('edit_book_pages').textContent = '';
+        document.getElementById('edit_book_image').style.display = 'none';    
+        document.getElementById('editModalDetails').style.display = 'none';
+    }
+}  
+
+function fetchAdditionData(editionNumber) {
+    if (editionNumber) { // Jeśli ID nie jest puste
+        fetch(`php/bibliotekarz/exemplar_mgmt/fetch_wydanie.php?editionNumber=${editionNumber}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('addModalDetails').style.display = 'block';
+                    // Ustawienie wartości pól formularza
+                    document.getElementById('add_book_title').textContent = data.data.tytul;
+                    document.getElementById('add_book_author').textContent = data.data.autor_imie + ' ' + data.data.autor_nazwisko;
+                    document.getElementById('add_book_genre').textContent = data.data.gatunek;
+                    document.getElementById('add_book_isbn').textContent = data.data.ISBN;
+                    document.getElementById('add_book_release_date').textContent = data.data.data_wydania;
+                    document.getElementById('add_book_language').textContent = data.data.jezyk;
+                    document.getElementById('add_book_pages').textContent = data.data.ilosc_stron;
+                    const bookImage = document.getElementById('add_book_image');
+                    if (data.data.zdjecie) {
+                        let imagePath = data.data.zdjecie;
+
+                        // Spr, czy ścieżka zaczyna się od "Biblioteka/"
+                        if (!imagePath.startsWith('/')) {
+                            imagePath = '/' + imagePath;
+                        }
+
+                        // Poprawiona ścieżka
+                        bookImage.src = imagePath;
+                        bookImage.style.display = 'block';
+                    } else {
+                        bookImage.style.display = 'none';
+                    }
+                } else {
+                    // czyszczenie pola formularza w przypadku błędu
+                    document.getElementById('add_book_title').textContent = '';
+                    document.getElementById('add_book_author').textContent = '';
+                    document.getElementById('add_book_genre').textContent = '';
+                    document.getElementById('add_book_isbn').textContent = '';
+                    document.getElementById('add_book_release_date').textContent = '';
+                    document.getElementById('add_book_language').textContent = '';
+                    document.getElementById('add_book_pages').textContent = '';
+                    document.getElementById('add_book_image').style.display = 'none';
+                    document.getElementById('addModalDetails').style.display = 'none';
+
+                    console.warn(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Błąd podczas pobierania danych:', error);
+            });
+    } else {
+        // Jeśli ID jest puste, czyścimy pola formularza
+        document.getElementById('add_book_title').textContent = '';
+        document.getElementById('add_book_author').textContent = '';
+        document.getElementById('add_book_genre').textContent = '';
+        document.getElementById('add_book_isbn').textContent = '';
+        document.getElementById('add_book_release_date').textContent = '';
+        document.getElementById('add_book_language').textContent = '';
+        document.getElementById('add_book_pages').textContent = '';
+        document.getElementById('add_book_image').style.display = 'none';    
+        document.getElementById('addModalDetails').style.display = 'none';
+    }
+}  
