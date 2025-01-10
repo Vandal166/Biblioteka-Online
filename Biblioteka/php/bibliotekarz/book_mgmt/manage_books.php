@@ -71,8 +71,8 @@ $result = mysqli_query($conn, $query);
 
     <section id="panel">              
             <ul>          
-                <li><a href="/Biblioteka/php/bibliotekarz/manage_books.php"><button disabled>Zarządzaj Książkami</button></a></li>
-                <li><a href="/Biblioteka/php/bibliotekarz/manage_exemplars.php"><button>Zarządzaj Egzemplarzami</button></a></li>
+                <li><a href="/Biblioteka/php/bibliotekarz/book_mgmt/manage_books.php"><button disabled>Zarządzaj Książkami</button></a></li>
+                <li><a href="/Biblioteka/php/bibliotekarz/exemplar_mgmt/manage_exemplars.php"><button>Zarządzaj Egzemplarzami</button></a></li>
                 <li><a href="/Biblioteka/php/bibliotekarz/manage_borrowings.php"><button>Zarządzaj Wypożyczeniami</button></a></li>
                 <li><a href="/Biblioteka/php/bibliotekarz/manage_users.php"><button>Zarządzaj Czytelnikami</button></a></li>
                 <li><a href="/Biblioteka/php/bibliotekarz/reservation.php"><button>Rezerwacja Książek</button></a></li>
@@ -131,7 +131,7 @@ $result = mysqli_query($conn, $query);
             <div class="popup-content">
                 <span class="close-btn" onclick="closeModal()">&times;</span>
                 <h2 style="font-size: 18px;">Czy na pewno chcesz usunąć książkę:</h2>
-                <h2 id="deleteBookTitle" style="font-size: 18px; display: inline;"></h2>
+                <i><h2 id="deleteBookTitle" style="font-size: 18px; display: inline;"></h2></i>
                 [<p id="deleteBookPages" style="font-size: 16px; display: inline;"></p> stron]
 
                 <div class="popup-buttons">

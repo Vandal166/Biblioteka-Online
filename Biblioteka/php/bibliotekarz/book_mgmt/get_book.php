@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id']))
     if ($result->num_rows > 0) {
         echo json_encode($result->fetch_assoc());
     } else {
-        echo json_encode(['error' => 'Książka nie istnieje']);
+        echo json_encode(['error' => 'Książka o ID: ' . $id . ' nie istnieje']);
     }
     $stmt->close();
 } else {
