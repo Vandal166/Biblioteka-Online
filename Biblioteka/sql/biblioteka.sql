@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sty 10, 2025 at 08:17 PM
+-- Generation Time: Sty 11, 2025 at 06:38 PM
 -- Wersja serwera: 10.4.32-MariaDB
 -- Wersja PHP: 8.2.12
 
@@ -335,6 +335,16 @@ CREATE TABLE `wypozyczenie` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
+-- Dumping data for table `wypozyczenie`
+--
+
+INSERT INTO `wypozyczenie` (`ID`, `ID_czytelnika`, `ID_egzemplarza`, `ID_pracownika`, `data_wypozyczenia`, `termin_oddania`, `data_oddania`) VALUES
+(17, 9, 18, 30, '2025-01-29', '2025-01-31', NULL),
+(18, 33, 21, 30, '2025-01-18', '2025-01-18', '2025-01-11'),
+(19, 14, 21, 30, '2025-01-05', '2025-01-03', NULL),
+(20, 10, 27, 30, '2025-01-16', '2025-01-12', NULL);
+
+--
 -- Indeksy dla zrzutów tabel
 --
 
@@ -505,7 +515,7 @@ ALTER TABLE `rezerwacja`
 -- AUTO_INCREMENT for table `wydanie`
 --
 ALTER TABLE `wydanie`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
 -- AUTO_INCREMENT for table `wydawnictwo`
@@ -517,7 +527,7 @@ ALTER TABLE `wydawnictwo`
 -- AUTO_INCREMENT for table `wypozyczenie`
 --
 ALTER TABLE `wypozyczenie`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- Constraints for dumped tables

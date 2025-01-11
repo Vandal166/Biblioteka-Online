@@ -38,7 +38,7 @@
                     <td>" . $row["numer_wydania"] . "</td>                        
                     <td>" . $row["jezyk"] . "</td>
                     <td>" . $row["ilosc_stron"] . "</td>
-                    <td>" . $row["czy_elektronicznie"] . "</td>
+                    <td>" . ($row["czy_elektronicznie"] ? 'Tak' : 'Nie') . "</td>
                 </tr>";
         }
     } 
