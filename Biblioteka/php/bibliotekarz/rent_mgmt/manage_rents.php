@@ -14,9 +14,21 @@ require_once(BASE_PATH . 'php/helpers.php');
 // pobranie danych egzemplarza dla wyswietlenia w tabeli
 
 $query = "SELECT 
+    wypozyczenie.ID AS wypozyczenie_ID,
+    wypozyczenie.data_wypozyczenia,
+    wypozyczenie.termin_oddania,
+    wypozyczenie.data_oddania,
+    czytelnik.ID AS czytelnik_ID,
+    czytelnik.imie AS czytelnik_imie,
+    czytelnik.nazwisko AS czytelnik_nazwisko,
+    czytelnik.email AS czytelnik_email,
+    czytelnik.nr_karty AS czytelnik_nr_karty,
     egzemplarz.ID AS egzemplarz_ID,
     egzemplarz.czy_dostepny,
     egzemplarz.stan,
+    pracownik.ID AS pracownik_ID,
+    pracownik.imie AS pracownik_imie,
+    pracownik.nazwisko AS pracownik_nazwisko,
     wydanie.ID AS wydanie_ID,
     wydanie.ISBN,
     wydanie.numer_wydania AS wydanie_nr_wydania,
@@ -28,7 +40,10 @@ $query = "SELECT
     autor.nazwisko AS autor_nazwisko,
     gatunek.nazwa AS gatunek
 FROM 
-    egzemplarz
+    wypozyczenie
+    JOIN egzemplarz ON wypozyczenie.ID_egzemplarza = egzemplarz.ID
+    JOIN czytelnik ON wypozyczenie.ID_czytelnika = czytelnik.ID
+    JOIN pracownik ON wypozyczenie.ID_pracownika = pracownik.ID
     JOIN wydanie ON egzemplarz.ID_wydania = wydanie.ID
     JOIN ksiazka ON wydanie.ID_ksiazki = ksiazka.ID
     JOIN wydawnictwo ON wydanie.ID_wydawnictwa = wydawnictwo.ID
@@ -36,7 +51,7 @@ FROM
     JOIN autor ON autor_ksiazki.ID_autora = autor.ID
     JOIN gatunek_ksiazki ON ksiazka.ID = gatunek_ksiazki.ID_ksiazki
     JOIN gatunek ON gatunek_ksiazki.ID_gatunku = gatunek.ID
-    ORDER BY ksiazka.tytul";
+    ORDER BY czytelnik.imie";
 
 $result = mysqli_query($conn, $query);
 ?>
@@ -46,7 +61,7 @@ $result = mysqli_query($conn, $query);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zarządzaj Egzemplarzami</title> 
+    <title>Zarządzaj Wypożyczeniami</title> 
     <base href="/Biblioteka/"> <!-- bazowa sciezka dla odnośników -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/bibliotekarz.css">
@@ -72,8 +87,8 @@ $result = mysqli_query($conn, $query);
     <section id="panel">              
             <ul>          
                 <li><a href="/Biblioteka/php/bibliotekarz/book_mgmt/manage_books.php"><button>Zarządzaj Książkami</button></a></li>
-                <li><a href="/Biblioteka/php/bibliotekarz/exemplar_mgmt/manage_exemplars.php"><button disabled>Zarządzaj Egzemplarzami</button></a></li>
-                <li><a href="/Biblioteka/php/bibliotekarz/rent_mgmt/manage_rents.php"><button>Zarządzaj Wypożyczeniami</button></a></li>
+                <li><a href="/Biblioteka/php/bibliotekarz/exemplar_mgmt/manage_exemplars.php"><button>Zarządzaj Egzemplarzami</button></a></li>
+                <li><a href="/Biblioteka/php/bibliotekarz/rent_mgmt/manage_rents.php"><button disabled>Zarządzaj Wypożyczeniami</button></a></li>
                 <li><a href="/Biblioteka/php/bibliotekarz/manage_users.php"><button>Zarządzaj Czytelnikami</button></a></li>
                 <li><a href="/Biblioteka/php/bibliotekarz/reservation.php"><button>Rezerwacja Książek</button></a></li>
                 <li><a href="/Biblioteka/php/bibliotekarz/reports.php"><button>Raporty</button></a></li>
@@ -84,36 +99,34 @@ $result = mysqli_query($conn, $query);
     <section id="tabela">
         <table class="sortable">
             <thead>
+<!-- czytelnik:imie nazwisko; egzemplarz:wydanie->ksiazka.tytul,czy_dostepny,stan; pracownik:imie,nazwisko; wypozyczenie:data_wypozyczenia,termin_oddania,data_oddania; -->
             <tr>                
-                <th>Tytuł</th>
-                <th>Autor</th>
-                <th>Gatunek</th>
-                <th>Język</th>
-                <th>Wydawnictwo</th>
-                <th>Numer wydania</th>
-                <th>Ilość stron</th>
+                <th>Czytelnik</th>
+                <th>Tytul</th>
+                <th>Czy dostępny</th>
                 <th>Stan</th>
-                <th>Dostępny</th>
+                <th>Pracownik</th>
+                <th>Data wypożyczenia</th>
+                <th>Termin oddania</th>
+                <th>Data oddania</th>
                 <th class="sorttable_nosort">Akcje</th>
             </tr>
             </thead>
             <tbody>
                 <?php while ($book = mysqli_fetch_assoc($result)) { ?>
-                    <tr id="book_<?php echo $book['egzemplarz_ID']; ?>">   
+                    <tr id="book_<?php echo $book['wypozyczenie_ID']; ?>">   
+                    <td><?php echo htmlspecialchars($book['czytelnik_imie'] . ' ' . $book['czytelnik_nazwisko']) ?: 'Brak'; ?></td>
                     <td><?php echo htmlspecialchars($book['tytul']) ?: 'Brak'; ?></td>
-                    <td><?php echo htmlspecialchars($book['autor_imie'] . ' ' . $book['autor_nazwisko']) ?: 'Brak'; ?></td>
-                    <td><?php echo htmlspecialchars($book['gatunek']) ?: 'Brak'; ?></td>
-                    <td><?php echo htmlspecialchars($book['jezyk']) ?: 'Brak'; ?></td>
-                    <td><?php echo htmlspecialchars($book['wydawnictwo']) ?: 'Brak'; ?></td>
-                    <td><?php echo htmlspecialchars($book['wydanie_nr_wydania']) ?: 'Brak'; ?></td>
-                    <td><?php echo htmlspecialchars($book['ilosc_stron']) ?: 'Brak'; ?></td>
-                    <td><?php echo htmlspecialchars($book['stan']) ?: 'Brak'; ?></td>
                     <td><?php echo $book['czy_dostepny'] ? 'Tak' : 'Nie'; ?></td>
-                    
+                    <td><?php echo htmlspecialchars($book['stan']) ?: 'Brak'; ?></td>
+                    <td><?php echo htmlspecialchars($book['pracownik_imie'] . ' ' . $book['pracownik_nazwisko']) ?: 'Brak'; ?></td>
+                    <td><?php echo htmlspecialchars($book['data_wypozyczenia']) ?: 'Brak'; ?></td>
+                    <td><?php echo htmlspecialchars($book['termin_oddania']) ?: 'Brak'; ?></td>
+                    <td><?php echo htmlspecialchars($book['data_oddania']) ?: 'Brak'; ?></td>                    
                     <td class="actions"> 
-                        <button onclick="openInfoModal(<?php echo $book['egzemplarz_ID']; ?>)">Szczegóły</button>
-                        <button onclick="openEditModal(<?php echo $book['egzemplarz_ID']; ?>)">Edytuj</button>
-                        <button onclick="openDeleteModal(<?php echo $book['egzemplarz_ID']; ?>)">Usuń</button>                        
+                        <button onclick="openInfoModal(<?php echo $book['wypozyczenie_ID']; ?>)">Szczegóły</button>
+                        <button onclick="openEditModal(<?php echo $book['wypozyczenie_ID']; ?>)">Edytuj</button>
+                        <button onclick="openDeleteModal(<?php echo $book['wypozyczenie_ID']; ?>)">Usuń</button>                        
                     </td>                    
                 </tr>
                     <?php } ?>
@@ -136,9 +149,9 @@ $result = mysqli_query($conn, $query);
         <div id="deleteBookModal" class="popup" style="display: none;">
             <div class="popup-content">
                 <span class="close-btn" onclick="closeModal()">&times;</span>
-                <h2 style="font-size: 18px;">Czy na pewno chcesz usunąć egzemplarz:</h2>
+                <h2 style="font-size: 18px;">Czy na pewno chcesz usunąć wypożyczenie czytelnika:</h2>
+                <p id="deleteBookReader" style="font-size: 16px; display: inline;"></p>
                 <i><h2 id="deleteBookTitle" style="font-size: 18px; display: inline;"></h2></i>
-                <p id="deleteBookCondition" style="font-size: 16px; display: inline;"></p>
 
                 <div class="popup-buttons">
                     <button onclick="deleteBook()">Tak</button>
@@ -150,25 +163,31 @@ $result = mysqli_query($conn, $query);
 
         <section class="formularz">
             <div class="podsekcja">
-            <!-- pop up do infa egz -->                
+            <!-- pop up do infa wyp -->                
                 <div id="infoBookModal" class="modal">
                     <div class="modal-content">
                         <span class="close-btn" onclick="closeModal()">&times;</span>
-                        <h2>Szczegóły książki</h2>
+                        <h2>Szczegóły wypożyczenia</h2>
                         <form id="infoBookForm">
                             <input type="hidden" name="id" id="book_id">
                             <p><strong>Tytuł:</strong> <span id="book_title"></span></p>
                             <p><strong>Zdjęcie:</strong> <img id="book_image" src="" alt="Zdjęcie książki" style="max-width: 200px; max-height: 200px; display: none;"></p>
                             <p><strong>Autor:</strong> <span id="book_author"></span></p>
-                            <p><strong>Gatunek:</strong> <span id="book_genre"></span></p>
-                            <p><strong>Wydawnictwo:</strong> <span id="book_publisher"></span></p>
-                            <p><strong>Kraj wydawnictwa:</strong> <span id="book_publisher_country"></span></p>
+                            <!-- <p><strong>Gatunek:</strong> <span id="book_genre"></span></p> -->
+                            <!-- <p><strong>Wydawnictwo:</strong> <span id="book_publisher"></span></p> -->
+                            <!-- <p><strong>Kraj wydawnictwa:</strong> <span id="book_publisher_country"></span></p> -->
                             <p><strong>ISBN:</strong> <span id="book_isbn"></span></p>
-                            <p><strong>Data wydania:</strong> <span id="book_release_date"></span></p>
+                            <!-- <p><strong>Data wydania:</strong> <span id="book_release_date"></span></p> -->
                             <p><strong>Numer wydania:</strong> <span id="book_edition"></span></p>
                             <p><strong>Język:</strong> <span id="book_language"></span></p>
                             <p><strong>Ilość stron:</strong> <span id="book_pages"></span></p>
-                            <p><strong>Elektroniczna:</strong> <span id="book_ebook"></span></p>
+                            <p><strong>Wypożyczone przez:</strong> <span id="book_reader"></span></p> <!-- czytelnik.imie/nazwisko -->
+                            <p><strong>Numer karty:</strong> <span id="book_card_number"></span></p>
+                            <p><strong>Udzielone przez:</strong> <span id="book_librarian"></span></p> <!-- pracownik.imie/nazwisko -->
+                            <p><strong>Data wypożyczenia:</strong> <span id="book_rent_date"></span></p>
+                            <p><strong>Termin oddania:</strong> <span id="book_due_date"></span></p>
+                            <p><strong>Data oddania:</strong> <span id="book_return_date"></span></p> <!-- can be null -->
+                            <!-- <p><strong>Elektroniczna:</strong> <span id="book_ebook"></span></p> -->
                             <p><strong>Stan egzemplarza:</strong> <span id="book_condition"></span></p>
                             <p><strong>Dostępność:</strong> <span id="book_availability"></span></p>
                             <button type="button" onclick="closeModal()">Zamknij</button>
@@ -179,12 +198,19 @@ $result = mysqli_query($conn, $query);
                 <div id="editBookModal" class="modal">
                     <div class="modal-content">
                         <span class="close-btn" onclick="closeModal()">&times;</span>
-                        <h2>Edytuj Egzemplarz</h2>
+                        <h2>Edytuj Wypożyczenie</h2>
                         <form id="editBookForm">
-                            <input type="hidden" name="id" id="edit_book_id">
-                            <i style="text-align: center; font-size: 30px;"><label id="edit_book_title" ></label></i>
+                        <input type="hidden" name="id" id="edit_renting_id">
                         
-                        <div class="book-details-container" id="editModalDetails" style="display: none;">
+                        <div class="reader-details-container" id="editModalReaderDetails">
+                            <p><strong>Imię:</strong> <span id="edit_reader_name"></span></p>
+                            <p><strong>Nazwisko:</strong> <span id="edit_reader_surname"></span></p>
+                            <p><strong>Numer karty:</strong> <span id="edit_reader_card_number"></span></p>
+                            <p><strong>Email:</strong> <span id="edit_reader_email"></span></p>
+                        </div>
+
+                        <i style="text-align: center; font-size: 30px;"><label id="edit_book_title" ></label></i>
+                        <div class="book-details-container" id="editModalDetails">
                             <p><strong>Zdjęcie:</strong> <img id="edit_book_image" src="" alt="Zdjęcie książki" style="max-width: 200px; max-height: 200px; display: none;"></p>
                             <p><strong>Autor:</strong> <span id="edit_book_author"></span></p>
                             <p><strong>Gatunek:</strong> <span id="edit_book_genre"></span></p>                        
@@ -196,20 +222,10 @@ $result = mysqli_query($conn, $query);
                             
                             <hr style="border: 0; height: 1.5px; background: linear-gradient(to right, #fff, #000, #fff); margin: 20px 0;">
 
-                            <div class="checkbox-container">
-                                <label for="edit_isAvailable">Czy dostępny:</label>            
-                                <input type="hidden" name="edit_isAvailable" value="0">
-                                <input type="checkbox" id="edit_isAvailable" name="edit_isAvailable" value="1">
-                            </div>
-
-                            <label for="edit_book_condition">Stan:</label>
-                            <input type="text" id="edit_book_condition" name="edit_book_condition">
-
-                            <!-- dynamiczne fetchowanie danych po podaniu nr_wydania -->
-                            <label for="edit_editionNumber" style="padding-left: 10px;font-size: 20px;">Istniejace wydanie:</label>
-                            <select id="edit_editionNumberSelect" name="edit_editionNumber" style="display: none;" required></select>
-                            <input type="text" id="edit_editionNumberInput" name="edit_editionNumber" placeholder="Wpisz istniejący numer wydania" maxlength="20" required>
-
+                            <label for="edit_due_date">Termin zwrotu:</label>
+                            <input type="date" id="edit_due_date" name="edit_due_date" required>
+                            <label for="edit_return_date">Data zwrotu:</label>
+                            <input type="date" id="edit_return_date" name="edit_return_date">
 
                             <div class="error-message" style="color: red; text-align: center"></div>
                             <button type="button" onclick="saveBookChanges()">Zapisz</button>
@@ -221,15 +237,27 @@ $result = mysqli_query($conn, $query);
                 <div id="addBookModal" class="modal">
                     <div class="modal-content">
                         <span class="close-btn" onclick="closeModal()">&times;</span>
-                        <h2>Dodaj nowy egzemplarz</h2>
+                        <h2>Dodaj nowe wypożyczenie</h2>
                         <form id="addBookForm">
                             
-                            <!-- dynamiczne fetchowanie danych po podaniu nr_wydania -->
-                            <label for="editionNumber" style="padding-left: 10px;font-size: 20px;">Istniejace wydanie:</label>
-                            <select id="editionNumberSelect" name="editionNumber" style="display: none;" required>
-                                <option value="" selected disabled>-- Wybierz wydanie --</option>
+                            <!-- dynamiczne fetchowanie danych po podaniu nr_karty(bibliotekarz moze zobaczyc nr_karty w 'Zarzadzaniu czytelnikiem')-->
+                            <label for="cardNumber" style="padding-left: 10px;font-size: 20px;">Czytelnik wypożyczający:</label>
+                            <select id="cardNumSelect" name="cardNumber" style="display: none;" required>
+                                <option value="" selected disabled>-- Wybierz czytelnika --</option>
                             </select>
-                            <input type="text" id="editionNumberInput" name="editionNumber" placeholder="Wpisz istniejący numer wydania" maxlength="20" required>
+                            <input type="text" id="cardNumInput" name="cardNumber" placeholder="Wpisz numer karty czytelnika" maxlength="10" required>
+                            <div class="reader-details-container" id="addModalReaderDetails" style="display: none;">
+                                <p><strong>Imię:</strong> <span id="add_reader_name"></span></p>
+                                <p><strong>Nazwisko:</strong> <span id="add_reader_surname"></span></p>
+                                <p><strong>Numer karty:</strong> <span id="add_reader_card_number"></span></p>
+                                <p><strong>Email:</strong> <span id="add_reader_email"></span></p>
+                            </div>
+
+                            <label for="exemplarID" style="padding-left: 10px;font-size: 20px;">Egzemplarz wypożyczany:</label>
+                            <select id="exemplarSelect" name="exemplarID" style="display: none;" required>
+                                <option value="" selected disabled>-- Wybierz egzemplarz --</option>
+                            </select>
+                            <input type="text" id="exemplarInput" name="exemplarID" placeholder="Wpisz numer wydania" maxlength="20" required>
 
                             <i style="text-align: center; font-size: 30px;"><label id="add_book_title" ></label></i>
                             <div class="book-details-container" id="addModalDetails" style="display: none;">
@@ -244,17 +272,16 @@ $result = mysqli_query($conn, $query);
 
                             <!-- dodawanie -->
                             <hr style="border: 0; height: 1.5px; background: linear-gradient(to right, #fff, #000, #fff); margin: 20px 0;">
+                            <!-- current ID of pracownik(bibliotekarz) ktory nadaje wypozyczenie -->
+                            <input type="hidden" name="add_librarian_ID" id="add_librarian_ID" value="<?php echo $_SESSION['user_id']; ?>">
 
-                            <div class="checkbox-container">
-                                <label for="add_isAvailable">Czy dostępny:</label>            
-                                <input type="hidden" name="add_isAvailable" value="0">
-                                <input type="checkbox" id="add_isAvailable" name="add_isAvailable" value="1">
-                            </div>
+                            <label for="add_rent_date">Data wypożyczenia:</label>
+                            <input type="date" id="add_rent_date" name="add_rent_date" required>
+                            <label for="add_due_date">Termin oddania:</label>
+                            <input type="date" id="add_due_date" name="add_due_date" required>
 
-                            <label for="add_book_condition">Stan:</label>
-                            <input type="text" id="add_book_condition" name="add_book_condition">
                             <div class="error-message" style="color: red; text-align: center"></div>
-                            <button type="button" onclick="addNewExemplar()">Dodaj egzemplarz</button>
+                            <button type="button" onclick="addNewRenting()">Dodaj wypożyczenie</button>
                         </form>
                     </div>
                 </div>
@@ -268,59 +295,54 @@ $result = mysqli_query($conn, $query);
             <?php unset($_SESSION['success_message']); ?>
         <?php endif; ?>
 
-        fetch('php/bibliotekarz/exemplar_mgmt/fetch_wydanie_count.php')
+        fetch('php/bibliotekarz/rent_mgmt/fetch_czytelnik_count.php')
         .then(response => response.json())
         .then(data => {
-            if (data.count <= 15) // jesli jest mniej niz 15 wydan w bazie to wyswietlamy selecta, inaczej input 
+            if (data.count <= 15) // jesli jest mniej niz 15 wyp. w bazie to wyswietlamy selecta, inaczej input  
             {
             // fetchowanie listy wydań i wypełnienie selecta
-            fetch('php/bibliotekarz/exemplar_mgmt/fetch_wydanie_list.php')
-                .then(response => response.json())
-                .then(listData => {
-                const selectElement = document.getElementById('edit_editionNumberSelect');
-                listData.forEach(item => {
-                    const option = document.createElement('option');
-                    option.value = item.numer_wydania;
-                    option.textContent = `${item.tytul} - ${item.autor_imie} ${item.autor_nazwisko}`;
-                    selectElement.appendChild(option);
-                });
-                selectElement.style.display = 'block';
-                document.getElementById('edit_editionNumberInput').style.display = 'none';
-                
-                // fetchowanie dla pierwszego wydania z listy
-                if (listData.length > 0) {
-                    fetchEditionData(listData[0].numer_wydania);
-                }
-
-                // listener dla selecta
-                selectElement.addEventListener('change', function() {
-                    const editionNumber = this.value;
-                    fetchEditionData(editionNumber);
-                });
-                });
+                fetch('php/bibliotekarz/rent_mgmt/fetch_czytelnik_list.php')
+                    .then(response => response.json())
+                    .then(listData => {
+                        const selectElement = document.getElementById('cardNumSelect');
+                        listData.forEach(item => {
+                            const option = document.createElement('option');
+                            option.value = item.czytelnik_nr_karty;
+                            option.textContent = `${item.czytelnik_imie} ${item.czytelnik_nazwisko} - ${item.czytelnik_nr_karty}`;
+                            selectElement.appendChild(option);
+                        });
+                        selectElement.style.display = 'block';
+                        document.getElementById('cardNumInput').style.display = 'none';
+                        
+                        //  listener dla selecta
+                        selectElement.addEventListener('change', function() {
+                            const cardNumber = this.value;
+                            fetchAdditionReaderData(cardNumber);
+                        });
+                    });
             } else {
-            document.getElementById('edit_editionNumberSelect').style.display = 'none';
-            document.getElementById('edit_editionNumberInput').style.display = 'block';
+                document.getElementById('cardNumSelect').style.display = 'none';
+                document.getElementById('cardNumInput').style.display = 'block';
 
-            // listener dla inputa
-            document.getElementById('edit_editionNumberInput').addEventListener('input', function() {
-                const editionNumber = this.value;
-                fetchEditionData(editionNumber);
-            });
+                //  listener dla inputa
+                document.getElementById('cardNumInput').addEventListener('input', function() {
+                    const cardNumber = this.value;
+                    fetchAdditionReaderData(cardNumber);
+                });
             }
         })
         .catch(error => console.error('Błąd:', error));
 
-        fetch('php/bibliotekarz/exemplar_mgmt/fetch_wydanie_count.php')
+         fetch('php/bibliotekarz/rent_mgmt/fetch_wydanie_count.php')
         .then(response => response.json())
         .then(data => {
             if (data.count <= 15) // jesli jest mniej niz 15 wydan w bazie to wyswietlamy selecta, inaczej input  
             {
             // fetchowanie listy wydań i wypełnienie selecta
-                fetch('php/bibliotekarz/exemplar_mgmt/fetch_wydanie_list.php')
+                fetch('php/bibliotekarz/rent_mgmt/fetch_wydanie_list.php')
                     .then(response => response.json())
                     .then(listData => {
-                        const selectElement = document.getElementById('editionNumberSelect');
+                        const selectElement = document.getElementById('exemplarSelect');
                         listData.forEach(item => {
                             const option = document.createElement('option');
                             option.value = item.numer_wydania;
@@ -328,7 +350,7 @@ $result = mysqli_query($conn, $query);
                             selectElement.appendChild(option);
                         });
                         selectElement.style.display = 'block';
-                        document.getElementById('editionNumberInput').style.display = 'none';
+                        document.getElementById('exemplarInput').style.display = 'none';
                         
                         //  listener dla selecta
                         selectElement.addEventListener('change', function() {
@@ -337,11 +359,11 @@ $result = mysqli_query($conn, $query);
                         });
                     });
             } else {
-                document.getElementById('editionNumberSelect').style.display = 'none';
-                document.getElementById('editionNumberInput').style.display = 'block';
+                document.getElementById('exemplarSelect').style.display = 'none';
+                document.getElementById('exemplarInput').style.display = 'block';
 
                 //  listener dla inputa
-                document.getElementById('editionNumberInput').addEventListener('input', function() {
+                document.getElementById('exemplarInput').addEventListener('input', function() {
                     const editionNumber = this.value;
                     fetchAdditionData(editionNumber);
                 });
@@ -353,7 +375,7 @@ $result = mysqli_query($conn, $query);
 
     <!-- skrypt do modali(pop-up) -->
     
-    <script src="js/bibliotekarz/manage_exemplars.js" defer></script>    
+    <script src="js/bibliotekarz/manage_rents.js" defer></script>    
 
     <!-- skrypt do ladowania zdjec -->
     <script src="js/image_mgr.js" defer></script>
