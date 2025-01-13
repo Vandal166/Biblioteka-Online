@@ -74,7 +74,7 @@ $result = mysqli_query($conn, $query);
                 <li><a href="/Biblioteka/php/bibliotekarz/book_mgmt/manage_books.php"><button>Zarządzaj Książkami</button></a></li>
                 <li><a href="/Biblioteka/php/bibliotekarz/exemplar_mgmt/manage_exemplars.php"><button disabled>Zarządzaj Egzemplarzami</button></a></li>
                 <li><a href="/Biblioteka/php/bibliotekarz/rent_mgmt/manage_rents.php"><button>Zarządzaj Wypożyczeniami</button></a></li>
-                <li><a href="/Biblioteka/php/bibliotekarz/manage_users.php"><button>Zarządzaj Czytelnikami</button></a></li>
+                <li><a href="/Biblioteka/php/bibliotekarz/reader_mgmt/manage_readers.php"><button>Zarządzaj Czytelnikami</button></a></li>
                 <li><a href="/Biblioteka/php/bibliotekarz/reservation.php"><button>Rezerwacja Książek</button></a></li>
                 <li><a href="/Biblioteka/php/bibliotekarz/reports.php"><button>Raporty</button></a></li>
             </ul>
@@ -268,6 +268,13 @@ $result = mysqli_query($conn, $query);
             <?php unset($_SESSION['success_message']); ?>
         <?php endif; ?>
 
+        // smooth scroll danych<td> po sortowaniu
+        const table = document.querySelector('.sortable'); 
+        table.addEventListener('click', function() 
+        {
+            table.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+        
         fetch('php/bibliotekarz/exemplar_mgmt/fetch_wydanie_count.php')
         .then(response => response.json())
         .then(data => {

@@ -364,6 +364,13 @@ input[type="text"]#new_ISBN, input[type="text"]#new_numer_wydania, input[type="t
     position: relative;
 }
 
+#tabela .sortable thead tr
+{
+    position: sticky;
+    top: 0;
+    background-color: #45a049;
+}
+
  .popup {
     position: fixed;
     top: 0;

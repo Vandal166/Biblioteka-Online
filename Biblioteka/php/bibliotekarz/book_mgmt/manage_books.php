@@ -38,6 +38,7 @@ $query = "SELECT
     LEFT JOIN gatunek ON gatunek_ksiazki.ID_gatunku = gatunek.ID
     LEFT JOIN wydawnictwo ON wydanie.ID_wydawnictwa = wydawnictwo.ID
     ORDER BY ksiazka.tytul";
+
 $result = mysqli_query($conn, $query);
 ?>
 
@@ -74,7 +75,7 @@ $result = mysqli_query($conn, $query);
                 <li><a href="/Biblioteka/php/bibliotekarz/book_mgmt/manage_books.php"><button disabled>Zarządzaj Książkami</button></a></li>
                 <li><a href="/Biblioteka/php/bibliotekarz/exemplar_mgmt/manage_exemplars.php"><button>Zarządzaj Egzemplarzami</button></a></li>
                 <li><a href="/Biblioteka/php/bibliotekarz/rent_mgmt/manage_rents.php"><button>Zarządzaj Wypożyczeniami</button></a></li>
-                <li><a href="/Biblioteka/php/bibliotekarz/manage_users.php"><button>Zarządzaj Czytelnikami</button></a></li>
+                <li><a href="/Biblioteka/php/bibliotekarz/reader_mgmt/manage_readers.php"><button>Zarządzaj Czytelnikami</button></a></li>
                 <li><a href="/Biblioteka/php/bibliotekarz/reservation.php"><button>Rezerwacja Książek</button></a></li>
                 <li><a href="/Biblioteka/php/bibliotekarz/reports.php"><button>Raporty</button></a></li>
             </ul>
@@ -328,6 +329,12 @@ $result = mysqli_query($conn, $query);
         <?php endif; ?>
         loadImageList('image-select-add');
         loadImageList('image-select-edit');
+        // smooth scroll danych<td> po sortowaniu
+        const table = document.querySelector('.sortable'); 
+        table.addEventListener('click', function() 
+        {
+            table.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
     });            
     </script>
 
