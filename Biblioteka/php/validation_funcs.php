@@ -269,4 +269,21 @@ function validate_image_path($params)
     return null;
 }
 
+function validate_pdf_path($params)
+{
+    $path = $params['value'];
+
+    if (empty($path)) 
+    {
+        return null;
+    }
+
+    if (!preg_match('/\.pdf$/i', $path)) 
+    {
+        return "Ścieżka musi wskazywać na plik w formacie PDF.";
+    }
+
+    return null;
+}
+
 ?>

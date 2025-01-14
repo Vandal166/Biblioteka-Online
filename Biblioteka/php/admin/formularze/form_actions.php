@@ -34,15 +34,10 @@ function handle_crud_actions($table, $fields, $validations, $action, $primaryKey
             // Przechwytywanie i walidacja pól
             $data = [];
             foreach ($fields as $field) {
-                if (strpos($field, 'czy_') === 0) // sprawdzanie czy pole jest checkboxem zaczynajacym sie od 'czy_'
-                {
-                    $data[$field] = isset($_POST[$field]) && $_POST[$field] == '1' ? 1 : 0;                    
-                } else 
-                {
-                    // std
-                    $data[$field] = isset($_POST[$field]) ? htmlspecialchars(trim($_POST[$field])) : null;
-                }           
-                                    
+
+                // std
+                $data[$field] = isset($_POST[$field]) ? htmlspecialchars(trim($_POST[$field])) : null;    
+                                
                 // imiona i nazwiska z dużej litery
                 if (in_array($field, ['imie', 'nazwisko'])) {
                     $data[$field] = ucfirst(strtolower($data[$field]));
@@ -560,7 +555,7 @@ function handle_wydanie_actions($action)
 {
     handle_crud_actions(
         'wydanie',
-        ['ID_ksiazki', 'ID_wydawnictwa', 'ISBN', 'data_wydania', 'numer_wydania', 'jezyk', 'ilosc_stron', 'czy_elektronicznie'],
+        ['ID_ksiazki', 'ID_wydawnictwa', 'ISBN', 'data_wydania', 'numer_wydania', 'jezyk', 'ilosc_stron', 'pdf'],
         [
             'ID_ksiazki' => function($params) {
                 $params['table'] = 'ksiazka';
@@ -593,13 +588,16 @@ function handle_wydanie_actions($action)
             },
             'jezyk' => 'validate_language',
             'ilosc_stron' => 'validate_page_count',
+            'pdf' => 'validate_pdf_path', // Dodano walidację dla pliku PDF
         ],
-        'add'       
+        'add'
     );
+
     handle_crud_actions('wydanie', [], [], 'delete');
+
     handle_crud_actions(
         'wydanie',
-        ['ID_ksiazki', 'ID_wydawnictwa', 'ISBN', 'data_wydania', 'numer_wydania', 'jezyk', 'ilosc_stron', 'czy_elektronicznie'],
+        ['ID_ksiazki', 'ID_wydawnictwa', 'ISBN', 'data_wydania', 'numer_wydania', 'jezyk', 'ilosc_stron', 'pdf'],
         [
             'ID_ksiazki' => function($params) {
                 $params['table'] = 'ksiazka';
@@ -631,12 +629,13 @@ function handle_wydanie_actions($action)
                 return validate_edition_number($params);
             },
             'jezyk' => 'validate_language',
-            'ilosc_stron' => 'validate_page_count'
+            'ilosc_stron' => 'validate_page_count',
+            'pdf' => 'validate_pdf_path', // Dodano walidację dla pliku PDF
         ],
         'edit'
-    );  
-}               
-
+    );
+}
+               
 function handle_rezerwacja_actions($action)
 {
     handle_crud_actions(

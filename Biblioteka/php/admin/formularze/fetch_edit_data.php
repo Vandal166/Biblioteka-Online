@@ -46,7 +46,7 @@ if (isset($_GET['editID']) && is_numeric($_GET['editID']) && isset($_GET['queryT
 
         'egzemplarz_edit' => "SELECT ID_wydania, czy_dostepny, stan FROM egzemplarz WHERE ID = ?",
 
-        'wydanie_edit' => "SELECT ID_ksiazki, ID_wydawnictwa, ISBN, data_wydania, numer_wydania, jezyk, ilosc_stron, czy_elektronicznie FROM wydanie WHERE ID = ?",
+        'wydanie_edit' => "SELECT ID_ksiazki, ID_wydawnictwa, ISBN, data_wydania, numer_wydania, jezyk, ilosc_stron, pdf FROM wydanie WHERE ID = ?",
 
         'rezerwacja_edit' => "SELECT ID_wydania, ID_czytelnika, data_rezerwacji, czy_wydana FROM rezerwacja WHERE ID = ?",
 

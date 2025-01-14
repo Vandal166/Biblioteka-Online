@@ -19,13 +19,21 @@
             <input type="text" id="jezyk" name="jezyk" value="<?php echo get_form_value('jezyk');?>" required>     
             <label for="ilosc_stron">Ilość stron:</label>
             <input type="number" id="ilosc_stron" name="ilosc_stron" value="<?php echo get_form_value('ilosc_stron');?>" required>       
-            <div class="checkbox-container">
-            <label for="czy_elektronicznie">Czy elektronicznie:</label>            
-            <input type="hidden" name="czy_elektronicznie" value="0">
-            <input type="checkbox" id="czy_elektronicznie" name="czy_elektronicznie" value="1" <?php echo get_form_value('czy_elektronicznie') ? 'checked' : ''; ?>>
+            <label for="pdf">Plik PDF:</label>
+            <input type="text" id="pdf" name="pdf" value="<?php echo get_form_value('pdf'); ?>"><br>
+
+            <div>
+                <label for="pdf-select">Wybierz plik PDF:</label>
+                <select id="pdf-select">
+                    <option value="">-- Wybierz plik PDF --</option>
+                </select>
             </div>
-                       
-            <button type="submitt">Dodaj</button>
+
+            <input type="file" id="file-input-pdf" name="file" accept=".pdf"></input>
+            <button type="button" class="select-pdf" id="select-pdf">Wybierz</button>
+            <button type="button" class="import-pdf" id="import-pdf">Importuj</button>
+
+            <button type="submit">Dodaj</button>
             <?php display_messages('add'); ?>
         </form>
     </div>
@@ -67,11 +75,18 @@
             <input type="text" id="new_jezyk" name="new_jezyk" value="<?php echo get_form_value('new_jezyk');?>" required>
             <label for="new_ilosc_stron">Ilość stron:</label>
             <input type="number" id="new_ilosc_stron" name="new_ilosc_stron" value="<?php echo get_form_value('new_ilosc_stron');?>" required>   
-            <div class="checkbox-container">
-            <label for="new_czy_elektronicznie">Czy elektronicznie:</label>            
-            <input type="hidden" name="new_czy_elektronicznie" value="0">
-            <input type="checkbox" id="new_czy_elektronicznie" name="new_czy_elektronicznie"  value="1" <?php echo get_form_value('new_czy_elektronicznie') ? 'checked' : ''; ?>>
+            <label for="new_pdf">Plik PDF:</label>
+            <input type="text" id="new_pdf" name="new_pdf" value="<?php echo get_form_value('new_pdf'); ?>"><br>
+            <div>
+                <label for="new_pdf-select">Wybierz plik PDF:</label>
+                <select id="new_pdf-select">
+                    <option value="">-- Wybierz plik PDF --</option>
+                </select>
             </div>
+
+            <input type="file" id="file-input-pdf" name="file" accept=".pdf"></input>
+            <button type="button" class="select-pdf" id="new_select-pdf">Wybierz</button>
+            <button type="button" class="import-pdf" id="new_import-pdf">Importuj</button>
             <button type="submit">Edytuj</button>
             <?php display_messages('edit'); ?>
         </form>
@@ -95,7 +110,7 @@
                             document.getElementById('new_numer_wydania').value = data.data.numer_wydania;
                             document.getElementById('new_jezyk').value = data.data.jezyk;
                             document.getElementById('new_ilosc_stron').value = data.data.ilosc_stron;
-                            document.getElementById('new_czy_elektronicznie').checked = data.data.czy_elektronicznie == 1;
+                            document.getElementById('new_pdf').value = data.data.pdf;
                         } else {
                             document.getElementById('new_ID_ksiazki').value = '';
                             document.getElementById('new_ID_wydawnictwa').value = '';
@@ -104,7 +119,7 @@
                             document.getElementById('new_numer_wydania').value = '';
                             document.getElementById('new_jezyk').value = '';
                             document.getElementById('new_ilosc_stron').value = '';
-                            document.getElementById('new_czy_elektronicznie').checked = false;
+                            document.getElementById('new_pdf').value = '';
                         }
                     });
             } else {
@@ -115,8 +130,10 @@
                 document.getElementById('new_numer_wydania').value = '';
                 document.getElementById('new_jezyk').value = '';
                 document.getElementById('new_ilosc_stron').value = '';
-                document.getElementById('new_czy_elektronicznie').checked = false;
+                document.getElementById('new_pdf').value = '';
             }
         });
     </script>
+
+    <script src="/Biblioteka/js/pdf_mgr.js" defer></script>
 </section>

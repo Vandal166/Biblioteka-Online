@@ -330,3 +330,49 @@ button.select-image:hover  {
 #file-input {
     display: none;
 }
+
+button.import-pdf {
+    width: 20%;
+    padding: 2px;
+    box-sizing: border-box;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+button.import-pdf {
+    margin-top: 5px;
+    background-color: #b3b3b3;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button.import-pdf:hover  {
+    background-color: #8f8f8f;
+}
+
+button.select-pdf {
+    width: 20%;
+    padding: 2px;
+    box-sizing: border-box;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+button.select-pdf {
+    margin-top: -10px;
+    background-color: #b3b3b3;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button.select-pdf:hover  {
+    background-color: #8f8f8f;
+}
+
+#file-input-pdf {
+    display: none;
+}
