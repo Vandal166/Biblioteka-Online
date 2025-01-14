@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id']))
         wydanie.numer_wydania AS wydanie_numer_wydania,
         wydanie.jezyk AS wydanie_jezyk,
         wydanie.ilosc_stron,
-        wydanie.czy_elektronicznie,
+        wydanie.pdf,
         egzemplarz.czy_dostepny,
         egzemplarz.stan
     FROM wydanie

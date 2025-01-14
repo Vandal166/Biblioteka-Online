@@ -18,7 +18,7 @@
                 <th>Numer wydania</th>
                 <th>Język</th>
                 <th>Ilość stron</th>
-                <th>Czy elektornicznie</th>
+                <th>pdf</th>
             </tr>
         </thead>";
     echo "<tbody>";
@@ -38,7 +38,7 @@
                     <td>" . $row["numer_wydania"] . "</td>                        
                     <td>" . $row["jezyk"] . "</td>
                     <td>" . $row["ilosc_stron"] . "</td>
-                    <td>" . ($row["czy_elektronicznie"] ? 'Tak' : 'Nie') . "</td>
+                    <td>" . $row["pdf"] . "</td>
                 </tr>";
         }
     } 
