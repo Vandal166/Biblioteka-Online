@@ -30,7 +30,7 @@
                     <td>" . $row["ID_wydania"] . "</td>
                     <td>" . $row["ID_czytelnika"] . "</td>
                     <td>" . $row["data_rezerwacji"] . "</td>
-                    <td>" . $row["czy_wydana"] . "</td>
+                    <td>" . ($row["czy_wydana"] ? 'Tak' : 'Nie') . "</td>
                 </tr>";
         }
     } 

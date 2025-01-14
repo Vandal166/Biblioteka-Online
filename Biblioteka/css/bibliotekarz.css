@@ -483,3 +483,14 @@ button.select-image:hover  {
 #file-input {
     display: none;
 }
+
+.book-details-container p {
+    display: table-cell;
+    margin: 0;
+    padding: 10px;
+    flex: 1 1 45%;  
+    font-size: 20px;
+}
+.book-details-container span {
+    display: block;
+}

@@ -27,7 +27,7 @@
             echo "<tr>
                     <td>" . $row["ID"] . "</td>
                     <td>" . $row["ID_wydania"] . "</td>
-                    <td>" . $row["czy_dostepny"] . "</td>
+                    <td>" . ($row["czy_dostepny"] ? 'Tak' : 'Nie') . "</td>
                     <td>" . $row["stan"] . "</td>
                 </tr>";
         }

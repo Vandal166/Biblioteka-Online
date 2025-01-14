@@ -1,6 +1,6 @@
 // Otwieranie modala i ładowanie danych książki
 function openInfoModal(bookID) {
-    fetch(`/Biblioteka/php/bibliotekarz/get_book.php?id=${bookID}`)
+    fetch(`/Biblioteka/php/bibliotekarz/book_mgmt/get_book.php?id=${bookID}`)
         .then(response => response.json())
         .then(data => {
             
@@ -15,7 +15,7 @@ function openInfoModal(bookID) {
             document.getElementById('book_edition').innerText = data.wydanie_numer_wydania || 'Brak danych';
             document.getElementById('book_language').innerText = data.wydanie_jezyk || 'Brak danych';
             document.getElementById('book_pages').innerText = data.ilosc_stron || 'Brak danych';
-            document.getElementById('book_ebook').innerText = data.pdf ? 'Tak' : 'Nie';
+            document.getElementById('book_ebook').innerText = data.czy_elektronicznie ? 'Tak' : 'Nie';
             document.getElementById('book_condition').innerText = data.stan || 'Brak danych';
             document.getElementById('book_availability').innerText = data.czy_dostepny !== null ? (data.czy_dostepny ? 'Dostępna' : 'Niedostępna') : 'Brak danych'; // czyli nie ma infa o dostepnosci w egzemlarzu
             const bookImage = document.getElementById('book_image');
@@ -51,7 +51,7 @@ function openAddBookModal() {
 
 // modal edycji
 function openEditModal(bookID) {
-    fetch(`/Biblioteka/php/bibliotekarz/get_book.php?id=${bookID}`)
+    fetch(`/Biblioteka/php/bibliotekarz/book_mgmt/get_book.php?id=${bookID}`)
         .then(response => response.json())
         .then(data => {
             
@@ -72,7 +72,7 @@ function openEditModal(bookID) {
             document.getElementById('edit_book_edition').value = data.wydanie_numer_wydania;
             document.getElementById('edit_book_language').value = data.wydanie_jezyk;
             document.getElementById('edit_book_pages').value = data.ilosc_stron;
-            document.getElementById('edit_book_ebook').checked = data.wydanie_pdf ? 1 : 0;
+            document.getElementById('edit_book_ebook').checked = data.wydanie_czy_elektronicznie ? 1 : 0;
 
             document.getElementById('editBookModal').style.display = 'block';
             document.getElementById('editBookForm').querySelector('.error-message').style.display = 'none';
@@ -84,7 +84,7 @@ function openEditModal(bookID) {
 // modal usuwania
 function openDeleteModal(bookID) {
 
-    fetch(`/Biblioteka/php/bibliotekarz/get_book.php?id=${bookID}`)
+    fetch(`/Biblioteka/php/bibliotekarz/book_mgmt/get_book.php?id=${bookID}`)
         .then(response => response.json())
         .then(data => {
             if (data.ksiazka_tytul != null) {
@@ -132,10 +132,10 @@ function saveBookChanges()
         wydanie_numer_wydania: document.getElementById('edit_book_edition').value,
         wydanie_jezyk: document.getElementById('edit_book_language').value,
         wydanie_ilosc_stron: document.getElementById('edit_book_pages').value,
-        wydanie_pdf: document.getElementById('edit_book_ebook').checked ? 1 : 0
+        wydanie_czy_elektronicznie: document.getElementById('edit_book_ebook').checked ? 1 : 0
     };
 
-    fetch('/Biblioteka/php/bibliotekarz/update_book.php', {
+    fetch('/Biblioteka/php/bibliotekarz/book_mgmt/update_book.php', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(data)
@@ -170,11 +170,11 @@ function addNewBook()
         wydanie_numer_wydania: document.getElementById('editionNumber').value,
         wydanie_jezyk: document.getElementById('language').value,
         wydanie_ilosc_stron: document.getElementById('pages').value,
-        wydanie_pdf: document.getElementById('isElectronic').checked ? 1 : 0,
+        wydanie_czy_elektronicznie: document.getElementById('isElectronic').checked ? 1 : 0,
         zdjecie: document.getElementById('zdjecie').value
     };
 
-    fetch('/Biblioteka/php/bibliotekarz/add_book.php', {
+    fetch('/Biblioteka/php/bibliotekarz/book_mgmt/add_book.php', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(data)
@@ -198,7 +198,7 @@ function addNewBook()
 function deleteBook() 
 {
     const bookID = window.currentBookID;
-    fetch(`/Biblioteka/php/bibliotekarz/delete_book.php?id=${bookID}`, { 
+    fetch(`/Biblioteka/php/bibliotekarz/book_mgmt/delete_book.php?id=${bookID}`, { 
         method: 'POST' 
     }).then(response => response.json())
         .then(data => {

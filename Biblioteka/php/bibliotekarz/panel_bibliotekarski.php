@@ -30,9 +30,9 @@
     </header>  
     <section id="panel">              
             <ul>          
-                <li><a href="/Biblioteka/php/bibliotekarz/manage_books.php?sort=tytul&order=ASC"><button>Zarządzaj Książkami</button></a></li>
-                <li><a href="/Biblioteka/php/bibliotekarz/manage_exemplars.php"><button>Zarządzaj Egzemplarzami</button></a></li>
-                <li><a href="/Biblioteka/php/bibliotekarz/manage_borrowings.php"><button>Zarządzaj Wypożyczeniami</button></a></li>
+                <li><a href="/Biblioteka/php/bibliotekarz/book_mgmt/manage_books.php?sort=tytul&order=ASC"><button>Zarządzaj Książkami</button></a></li>
+                <li><a href="/Biblioteka/php/bibliotekarz/exemplar_mgmt/manage_exemplars.php?sort=tytul&order=ASC"><button>Zarządzaj Egzemplarzami</button></a></li>
+                <li><a href="/Biblioteka/php/bibliotekarz/rent_mgmt/manage_rents.php"><button>Zarządzaj Wypożyczeniami</button></a></li>
                 <li><a href="/Biblioteka/php/bibliotekarz/manage_users.php"><button>Zarządzaj Czytelnikami</button></a></li>
                 <li><a href="/Biblioteka/php/bibliotekarz/reservation.php"><button>Rezerwacja Książek</button></a></li>
                 <li><a href="/Biblioteka/php/bibliotekarz/reports.php"><button>Raporty</button></a></li>
