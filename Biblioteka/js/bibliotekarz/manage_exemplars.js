@@ -15,7 +15,7 @@ function openInfoModal(bookID) {
             document.getElementById('book_edition').innerText = data.wydanie_numer_wydania || 'Brak danych';
             document.getElementById('book_language').innerText = data.wydanie_jezyk || 'Brak danych';
             document.getElementById('book_pages').innerText = data.ilosc_stron || 'Brak danych';
-            document.getElementById('book_ebook').innerText = data.czy_elektronicznie ? 'Tak' : 'Nie';
+            document.getElementById('book_ebook').value = data.wydanie_pdf || 'Brak danych';
             document.getElementById('book_condition').innerText = data.stan || 'Brak danych';
             document.getElementById('book_availability').innerText = data.czy_dostepny !== null ? (data.czy_dostepny ? 'Dostępna' : 'Niedostępna') : 'Brak danych'; // czyli nie ma infa o dostepnosci w egzemlarzu
             const bookImage = document.getElementById('book_image');
@@ -41,13 +41,6 @@ function openInfoModal(bookID) {
         })
         .catch(error => console.error('Błąd:', error));
 }
-
-//modal dodawania
-function openAddBookModal() {
-    document.getElementById('addBookModal').style.display = 'block';
-    // wylaczenie scrolla na stronie ale dozwolone w modalu
-    document.body.style.overflow = 'hidden';
-}            
 
 // modal edycji
 function openEditModal(bookID) {
@@ -130,25 +123,6 @@ function openDeleteModal(bookID) {
             }
         })
         .catch(error => console.error('Błąd:', error));
-}
-
-
-function closeModal() {
-    //zamkniecie i wyczyszczenie formularza
-    document.getElementById('infoBookModal').style.display = 'none';
-    document.getElementById('successPopup').style.display = 'none';
-    document.getElementById('addBookModal').style.display = 'none';
-    document.getElementById('deleteBookModal').style.display = 'none';
-    document.getElementById('editBookModal').style.display = 'none';
-    document.body.style.overflow = 'auto';
-}
-
-// Funkcja wyświetlająca globalny pop-up sukcesu
-function showGlobalSuccessMessage(message) {
-    const popup = document.getElementById('successPopup');
-    const messageContainer = document.getElementById('successPopupMessage');
-    messageContainer.textContent = message;
-    popup.style.display = 'flex';
 }
 
 // zapisanie zmian po edycji

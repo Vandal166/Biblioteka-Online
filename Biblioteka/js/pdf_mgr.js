@@ -21,13 +21,15 @@ document.querySelectorAll('.select-pdf').forEach(button => {
         const selectedFile = selectElement.value;
 
         if (!selectedFile) {
-            alert('Proszę wybrać plik PDF z listy.');
+            //alert('Proszę wybrać plik PDF z listy.');
+            console.error('Proszę wybrać plik PDF z listy.');
             return;
         }
 
         // Wstawienie wybranej ścieżki do pola tekstowego
         targetInput.value = selectedFile;
-        alert(`Wybrano plik: ${selectedFile}`);
+        //alert(`Wybrano plik: ${selectedFile}`);
+        console.log(`Wybrano plik: ${selectedFile}`);
     });
 });
 
@@ -56,14 +58,16 @@ document.querySelectorAll('.import-pdf').forEach(button => {
         // Nasłuchiwanie zmiany na polu input
         fileInput.onchange = async function () {
             if (fileInput.files.length === 0) {
-                alert('Proszę wybrać plik PDF do importu.');
+                //alert('Proszę wybrać plik PDF do importu.');
+                console.error('Proszę wybrać plik PDF do importu.');
                 return;
             }
 
             const file = fileInput.files[0];
 
             if (file.type !== 'application/pdf') {
-                alert('Wybrany plik musi być w formacie PDF.');
+                //alert('Wybrany plik musi być w formacie PDF.');
+                console.error('Wybrany plik musi być w formacie PDF.');
                 return;
             }
 
@@ -80,19 +84,22 @@ document.querySelectorAll('.import-pdf').forEach(button => {
 
                 if (result.success) {
                     targetInput.value = result.path;
-                    alert(`Plik PDF został przesłany pomyślnie: ${result.path}`);
+                    //alert(`Plik PDF został przesłany pomyślnie: ${result.path}`);
+                    console.log(`Plik PDF został przesłany pomyślnie: ${result.path}`);
                 } else {
-                    alert('Błąd podczas przesyłania pliku PDF: ' + result.message);
+                    // alert('Błąd podczas przesyłania pliku PDF: ' + result.message);
+                    console.error('Błąd podczas przesyłania pliku PDF:', result.message);
                 }
             } catch (error) {
                 console.error('Błąd podczas przesyłania pliku PDF:', error);
-                alert('Wystąpił błąd podczas przesyłania pliku PDF.');
+                //alert('Wystąpił błąd podczas przesyłania pliku PDF.');
+                
             }
         };
     });
 });
 
-document.getElementById('editID').addEventListener('input', function () 
+document.getElementById('editID')?.addEventListener('input', function () 
 {
     const id = this.value; // Pobranie wpisanego ID
 
@@ -138,11 +145,12 @@ async function loadPdfList(selectElementId) {
                 selectElement.appendChild(option);
             });
         } else {
-            alert('Błąd podczas pobierania listy plików PDF.');
+            //alert('Błąd podczas pobierania listy plików PDF.');
+            console.error('Błąd podczas pobierania listy plików PDF:', result.message);
         }
     } catch (error) {
         console.error('Błąd podczas pobierania listy plików PDF:', error);
-        alert('Wystąpił błąd podczas pobierania listy plików PDF, sprawdź konsolę.');
+       // alert('Wystąpił błąd podczas pobierania listy plików PDF, sprawdź konsolę.');
     }
 }
 

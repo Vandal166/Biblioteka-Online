@@ -44,16 +44,10 @@ if ($data) {
         
         // Aktualizacja wypozyczenia
         if (empty($data_oddania)) 
-        {
-            $stmt = $conn->prepare("UPDATE wypozyczenie SET termin_oddania = ?, data_oddania = NULL WHERE ID = ?");
-            $stmt->bind_param("si", $termin_zwrotu, $wypozyczenie_ID);
-        } 
-        else 
-        {
-            $stmt = $conn->prepare("UPDATE wypozyczenie SET termin_oddania = ?, data_oddania = ? WHERE ID = ?");
-            $stmt->bind_param("ssi", $termin_zwrotu, $data_oddania, $wypozyczenie_ID);
-
-        }
+            $data_oddania = null;   
+        
+        $stmt = $conn->prepare("UPDATE wypozyczenie SET termin_oddania = ?, data_oddania = ? WHERE ID = ?");
+        $stmt->bind_param("ssi", $termin_zwrotu, $data_oddania, $wypozyczenie_ID);
         $stmt->execute();
 
         $conn->commit();

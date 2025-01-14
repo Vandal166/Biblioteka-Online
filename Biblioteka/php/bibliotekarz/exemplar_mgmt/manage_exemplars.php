@@ -74,7 +74,7 @@ $result = mysqli_query($conn, $query);
                 <li><a href="/Biblioteka/php/bibliotekarz/book_mgmt/manage_books.php"><button>Zarządzaj Książkami</button></a></li>
                 <li><a href="/Biblioteka/php/bibliotekarz/exemplar_mgmt/manage_exemplars.php"><button disabled>Zarządzaj Egzemplarzami</button></a></li>
                 <li><a href="/Biblioteka/php/bibliotekarz/rent_mgmt/manage_rents.php"><button>Zarządzaj Wypożyczeniami</button></a></li>
-                <li><a href="/Biblioteka/php/bibliotekarz/manage_users.php"><button>Zarządzaj Czytelnikami</button></a></li>
+                <li><a href="/Biblioteka/php/bibliotekarz/reader_mgmt/manage_readers.php"><button>Zarządzaj Czytelnikami</button></a></li>
                 <li><a href="/Biblioteka/php/bibliotekarz/reservation.php"><button>Rezerwacja Książek</button></a></li>
                 <li><a href="/Biblioteka/php/bibliotekarz/reports.php"><button>Raporty</button></a></li>
             </ul>
@@ -268,6 +268,7 @@ $result = mysqli_query($conn, $query);
             <?php unset($_SESSION['success_message']); ?>
         <?php endif; ?>
 
+        
         fetch('php/bibliotekarz/exemplar_mgmt/fetch_wydanie_count.php')
         .then(response => response.json())
         .then(data => {
@@ -351,6 +352,9 @@ $result = mysqli_query($conn, $query);
     });     
     </script>
 
+    <!-- default skrypt -->
+    <script src="js/bibliotekarz/global.js" defer></script>
+    
     <!-- skrypt do modali(pop-up) -->
     
     <script src="js/bibliotekarz/manage_exemplars.js" defer></script>    

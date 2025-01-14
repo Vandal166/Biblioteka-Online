@@ -15,7 +15,23 @@ function openInfoModal(bookID) {
             document.getElementById('book_edition').innerText = data.wydanie_numer_wydania || 'Brak danych';
             document.getElementById('book_language').innerText = data.wydanie_jezyk || 'Brak danych';
             document.getElementById('book_pages').innerText = data.ilosc_stron || 'Brak danych';
-            document.getElementById('book_ebook').innerText = data.czy_elektronicznie ? 'Tak' : 'Nie';
+            const bookPdfElement = document.getElementById('book_pdf');
+            if (data.wydanie_pdf) {
+                bookPdfElement.innerText = 'Link do pliku PDF';
+
+                // Spr, czy ścieżka zaczyna się od "Biblioteka/"
+                if (!data.wydanie_pdf.startsWith('/'))
+                {
+                    data.wydanie_pdf = '/' + data.wydanie_pdf;
+                }
+                
+                bookPdfElement.href = data.wydanie_pdf;
+                bookPdfElement.style.pointerEvents = 'auto'; // Enable link functionality
+            } else {
+                bookPdfElement.innerText = 'Brak danych';
+                bookPdfElement.href = '#';
+                bookPdfElement.style.pointerEvents = 'none'; // Disable link functionality
+            }
             document.getElementById('book_condition').innerText = data.stan || 'Brak danych';
             document.getElementById('book_availability').innerText = data.czy_dostepny !== null ? (data.czy_dostepny ? 'Dostępna' : 'Niedostępna') : 'Brak danych'; // czyli nie ma infa o dostepnosci w egzemlarzu
             const bookImage = document.getElementById('book_image');
@@ -34,20 +50,14 @@ function openInfoModal(bookID) {
             } 
             else {
                 bookImage.style.display = 'none';
-            }
+            }            
+
             document.getElementById('infoBookModal').style.display = 'block';
             // wylaczenie scrolla na stronie ale dozwolone w modalu
             document.body.style.overflow = 'hidden';
         })
         .catch(error => console.error('Błąd:', error));
-}
-
-//modal dodawania
-function openAddBookModal() {
-    document.getElementById('addBookModal').style.display = 'block';
-    // wylaczenie scrolla na stronie ale dozwolone w modalu
-    document.body.style.overflow = 'hidden';
-}            
+}       
 
 // modal edycji
 function openEditModal(bookID) {
@@ -72,7 +82,7 @@ function openEditModal(bookID) {
             document.getElementById('edit_book_edition').value = data.wydanie_numer_wydania;
             document.getElementById('edit_book_language').value = data.wydanie_jezyk;
             document.getElementById('edit_book_pages').value = data.ilosc_stron;
-            document.getElementById('edit_book_ebook').checked = data.wydanie_czy_elektronicznie ? 1 : 0;
+            document.getElementById('new_pdf').value = data.wydanie_pdf;
 
             document.getElementById('editBookModal').style.display = 'block';
             document.getElementById('editBookForm').querySelector('.error-message').style.display = 'none';
@@ -98,25 +108,6 @@ function openDeleteModal(bookID) {
         .catch(error => console.error('Błąd:', error));
 }
 
-
-function closeModal() {
-    //zamkniecie i wyczyszczenie formularza
-    document.getElementById('infoBookModal').style.display = 'none';
-    document.getElementById('successPopup').style.display = 'none';
-    document.getElementById('addBookModal').style.display = 'none';
-    document.getElementById('deleteBookModal').style.display = 'none';
-    document.getElementById('editBookModal').style.display = 'none';
-    document.body.style.overflow = 'auto';
-}
-
-// Funkcja wyświetlająca globalny pop-up sukcesu
-function showGlobalSuccessMessage(message) {
-    const popup = document.getElementById('successPopup');
-    const messageContainer = document.getElementById('successPopupMessage');
-    messageContainer.textContent = message;
-    popup.style.display = 'flex';
-}
-
 // zapisanie zmian po edycji
 function saveBookChanges() 
 {    
@@ -132,7 +123,7 @@ function saveBookChanges()
         wydanie_numer_wydania: document.getElementById('edit_book_edition').value,
         wydanie_jezyk: document.getElementById('edit_book_language').value,
         wydanie_ilosc_stron: document.getElementById('edit_book_pages').value,
-        wydanie_czy_elektronicznie: document.getElementById('edit_book_ebook').checked ? 1 : 0
+        wydanie_pdf: document.getElementById('new_pdf').value
     };
 
     fetch('/Biblioteka/php/bibliotekarz/book_mgmt/update_book.php', {
@@ -170,7 +161,7 @@ function addNewBook()
         wydanie_numer_wydania: document.getElementById('editionNumber').value,
         wydanie_jezyk: document.getElementById('language').value,
         wydanie_ilosc_stron: document.getElementById('pages').value,
-        wydanie_czy_elektronicznie: document.getElementById('isElectronic').checked ? 1 : 0,
+        wydanie_pdf: document.getElementById('pdf').value,
         zdjecie: document.getElementById('zdjecie').value
     };
 

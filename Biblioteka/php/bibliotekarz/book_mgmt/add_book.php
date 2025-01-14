@@ -24,7 +24,7 @@ if ($data) {
     $numer_wydania = htmlspecialchars(trim($data['wydanie_numer_wydania']));
     $jezyk = htmlspecialchars(trim($data['wydanie_jezyk']));
     $ilosc_stron = intval($data['wydanie_ilosc_stron']);
-    $czy_elektronicznie = isset($data['wydanie_czy_elektronicznie']) && $data['wydanie_czy_elektronicznie'] == 1 ? 1 : 0;
+    $pdf = htmlspecialchars(trim($data['wydanie_pdf']));
     $zdjecie = htmlspecialchars(trim($data['zdjecie']));
 
     // walidajca
@@ -39,7 +39,7 @@ if ($data) {
         'edition_number' => $numer_wydania,
         'language' => $jezyk,
         'page_count' => $ilosc_stron,
-        'is_electronic' => $czy_elektronicznie,
+        'pdf_path' => $pdf,
         'image_path' => $zdjecie    
     ]);
 
@@ -51,15 +51,21 @@ if ($data) {
 
     $conn->begin_transaction();
     try {
-        // 1. Dodanie lub pobranie autora
-        $stmt = $conn->prepare("
-            INSERT INTO autor (imie, nazwisko) 
-            VALUES (?, ?) 
-            ON DUPLICATE KEY UPDATE ID=LAST_INSERT_ID(ID)
-        ");
+        // sprawdzanie czy autor istnieje, jesli tak to pobranie jego ID lub dodanie nowego
+        $stmt = $conn->prepare("SELECT ID FROM autor WHERE imie = ? AND nazwisko = ?");
         $stmt->bind_param('ss', $autor_imie, $autor_nazwisko);
         $stmt->execute();
-        $autor_id = $conn->insert_id;
+        $stmt->store_result();
+        if ($stmt->num_rows === 0) 
+        {
+            $stmt = $conn->prepare("INSERT INTO autor (imie, nazwisko) VALUES (?, ?)");
+            $stmt->bind_param('ss', $autor_imie, $autor_nazwisko);
+            $stmt->execute();
+            $autor_id = $conn->insert_id;
+        } else {
+            $stmt->bind_result($autor_id);
+            $stmt->fetch();
+        }
         
         // 2. spr gatunek
         $stmt = $conn->prepare("SELECT ID FROM gatunek WHERE ID = ?");
@@ -79,24 +85,46 @@ if ($data) {
             throw new Exception('Wydawnictwo nie istnieje!');
         }
         
-        // 4. Dodanie lub pobranie książki
-        $stmt = $conn->prepare("
-            INSERT INTO ksiazka (tytul, zdjecie) 
-            VALUES (?, ?) 
-            ON DUPLICATE KEY UPDATE ID=LAST_INSERT_ID(ID)
-        ");
-        $stmt->bind_param('ss', $tytul, $zdjecie);
+        // 4. sprawdzenie czy ksiazka o podanym tytule juz istnieje, jesli tak to pobranie jej ID else dodanie nowej
+        $stmt = $conn->prepare("SELECT ID FROM ksiazka WHERE tytul = ?");
+        $stmt->bind_param('s', $tytul);
         $stmt->execute();
-        $ksiazka_id = $conn->insert_id;
+        $stmt->store_result();
+
+        if ($stmt->num_rows === 0) 
+        {
+            $stmt = $conn->prepare("INSERT INTO ksiazka (tytul, zdjecie) VALUES (?, ?)");
+            $stmt->bind_param('ss', $tytul, $zdjecie);
+            $stmt->execute();
+            $ksiazka_id = $conn->insert_id;
+        } 
+        else 
+        {
+            $stmt->bind_result($ksiazka_id);
+            $stmt->fetch();
+        }
+
         
-        // 5. Dodanie wydania
+        // spr czy wydanie o isbn/nr_wydania juz istnieje
+        $stmt = $conn->prepare("SELECT ID FROM wydanie WHERE ISBN = ? OR numer_wydania = ?");
+        $stmt->bind_param('ss', $ISBN, $numer_wydania);
+        $stmt->execute();
+        $stmt->store_result();
+        if ($stmt->num_rows > 0) 
+        {
+            throw new Exception('Wydanie o podanym ISBN lub numerze już istnieje!');
+        }
+        
+        if(empty($pdf))
+            $pdf = null;
+
         $stmt = $conn->prepare("
-            INSERT INTO wydanie (ID_ksiazki, ID_wydawnictwa, ISBN, data_wydania, numer_wydania, jezyk, ilosc_stron, czy_elektronicznie)
+            INSERT INTO wydanie (ID_ksiazki, ID_wydawnictwa, ISBN, data_wydania, numer_wydania, jezyk, ilosc_stron, pdf)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             ON DUPLICATE KEY UPDATE ID=LAST_INSERT_ID(ID)
         ");
         $stmt->bind_param(
-            'iissssii',
+            'iissssis',
             $ksiazka_id,
             $wydawnictwo,
             $ISBN,
@@ -104,23 +132,35 @@ if ($data) {
             $numer_wydania,
             $jezyk,
             $ilosc_stron,
-            $czy_elektronicznie
+            $pdf
         );
         $stmt->execute();
         $wydanie_id = $conn->insert_id;
         
-        // 6. Powiązania
-        $stmt = $conn->prepare("
-            INSERT IGNORE INTO autor_ksiazki (ID_ksiazki, ID_autora) VALUES (?, ?)
-        ");
+        // spr czy ksiazka ma juz danego autora
+        $stmt = $conn->prepare("SELECT 1 FROM autor_ksiazki WHERE ID_ksiazki = ? AND ID_autora = ?");
         $stmt->bind_param('ii', $ksiazka_id, $autor_id);
         $stmt->execute();
+        $stmt->store_result();
+        if ($stmt->num_rows === 0) 
+        {
+            $stmt = $conn->prepare("INSERT INTO autor_ksiazki (ID_ksiazki, ID_autora) VALUES (?, ?)");
+            $stmt->bind_param('ii', $ksiazka_id, $autor_id);
+            $stmt->execute();
+        }
 
-        $stmt = $conn->prepare("
-            INSERT IGNORE INTO gatunek_ksiazki (ID_ksiazki, ID_gatunku) VALUES (?, ?)
-        ");
-        $stmt->bind_param('ii', $ksiazka_id, $gatunek);
+        // spr czy ksiazka ma juz dany gatunek
+        $stmt = $conn->prepare("SELECT 1 FROM gatunek_ksiazki WHERE ID_ksiazki = ?");
+        $stmt->bind_param('i', $ksiazka_id);
         $stmt->execute();
+        $stmt->store_result();
+        if ($stmt->num_rows === 0) 
+        {
+            $stmt = $conn->prepare("INSERT INTO gatunek_ksiazki (ID_ksiazki, ID_gatunku) VALUES (?, ?)");
+            $stmt->bind_param('ii', $ksiazka_id, $gatunek);
+            $stmt->execute();
+        }
+
 
         $conn->commit();
         $_SESSION['success_message'] = 'Dodano książkę: ' . $tytul;

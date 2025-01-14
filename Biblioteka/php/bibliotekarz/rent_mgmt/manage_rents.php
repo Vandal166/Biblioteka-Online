@@ -89,7 +89,7 @@ $result = mysqli_query($conn, $query);
                 <li><a href="/Biblioteka/php/bibliotekarz/book_mgmt/manage_books.php"><button>Zarządzaj Książkami</button></a></li>
                 <li><a href="/Biblioteka/php/bibliotekarz/exemplar_mgmt/manage_exemplars.php"><button>Zarządzaj Egzemplarzami</button></a></li>
                 <li><a href="/Biblioteka/php/bibliotekarz/rent_mgmt/manage_rents.php"><button disabled>Zarządzaj Wypożyczeniami</button></a></li>
-                <li><a href="/Biblioteka/php/bibliotekarz/manage_users.php"><button>Zarządzaj Czytelnikami</button></a></li>
+                <li><a href="/Biblioteka/php/bibliotekarz/reader_mgmt/manage_readers.php"><button>Zarządzaj Czytelnikami</button></a></li>
                 <li><a href="/Biblioteka/php/bibliotekarz/reservation.php"><button>Rezerwacja Książek</button></a></li>
                 <li><a href="/Biblioteka/php/bibliotekarz/reports.php"><button>Raporty</button></a></li>
             </ul>
@@ -172,12 +172,8 @@ $result = mysqli_query($conn, $query);
                             <input type="hidden" name="id" id="book_id">
                             <p><strong>Tytuł:</strong> <span id="book_title"></span></p>
                             <p><strong>Zdjęcie:</strong> <img id="book_image" src="" alt="Zdjęcie książki" style="max-width: 200px; max-height: 200px; display: none;"></p>
-                            <p><strong>Autor:</strong> <span id="book_author"></span></p>
-                            <!-- <p><strong>Gatunek:</strong> <span id="book_genre"></span></p> -->
-                            <!-- <p><strong>Wydawnictwo:</strong> <span id="book_publisher"></span></p> -->
-                            <!-- <p><strong>Kraj wydawnictwa:</strong> <span id="book_publisher_country"></span></p> -->
-                            <p><strong>ISBN:</strong> <span id="book_isbn"></span></p>
-                            <!-- <p><strong>Data wydania:</strong> <span id="book_release_date"></span></p> -->
+                            <p><strong>Autor:</strong> <span id="book_author"></span></p>                            
+                            <p><strong>ISBN:</strong> <span id="book_isbn"></span></p>                            
                             <p><strong>Numer wydania:</strong> <span id="book_edition"></span></p>
                             <p><strong>Język:</strong> <span id="book_language"></span></p>
                             <p><strong>Ilość stron:</strong> <span id="book_pages"></span></p>
@@ -187,7 +183,6 @@ $result = mysqli_query($conn, $query);
                             <p><strong>Data wypożyczenia:</strong> <span id="book_rent_date"></span></p>
                             <p><strong>Termin oddania:</strong> <span id="book_due_date"></span></p>
                             <p><strong>Data oddania:</strong> <span id="book_return_date"></span></p> <!-- can be null -->
-                            <!-- <p><strong>Elektroniczna:</strong> <span id="book_ebook"></span></p> -->
                             <p><strong>Stan egzemplarza:</strong> <span id="book_condition"></span></p>
                             <p><strong>Dostępność:</strong> <span id="book_availability"></span></p>
                             <button type="button" onclick="closeModal()">Zamknij</button>
@@ -294,7 +289,7 @@ $result = mysqli_query($conn, $query);
             showGlobalSuccessMessage("<?= htmlspecialchars($_SESSION['success_message']); ?>");
             <?php unset($_SESSION['success_message']); ?>
         <?php endif; ?>
-
+        
         fetch('php/bibliotekarz/rent_mgmt/fetch_czytelnik_count.php')
         .then(response => response.json())
         .then(data => {
@@ -372,6 +367,9 @@ $result = mysqli_query($conn, $query);
         .catch(error => console.error('Błąd:', error));
     });     
     </script>
+
+    <!-- default skrypt -->
+    <script src="js/bibliotekarz/global.js" defer></script>
 
     <!-- skrypt do modali(pop-up) -->
     
