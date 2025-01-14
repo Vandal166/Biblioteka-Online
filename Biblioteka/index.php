@@ -25,6 +25,10 @@
 
                 <li><a href="index.php">Strona Główna</a></li>
                 <li><a href="php/reservation.php">Rezerwacja Książek</a></li>
+
+                <?php if(isset($_SESSION['user_id']) && !isset($_SESSION['poziom_uprawnien'])): ?>
+                    <li><a href="php/user.php">Wyświetl profil</a></li>
+                <?php endif; ?>
                 
                 <?php if(isset($_SESSION['user_id'])): ?>
                     <!-- if użytkownik jest zalogowany, wyświetl "Wyloguj" -->

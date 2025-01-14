@@ -193,7 +193,8 @@ function validate_book_data($params)
         'page_count' => 'validate_page_count',
         'author_name' => 'validate_name',
         'author_surname' => 'validate_name',
-        'release_date' => 'validate_date'
+        'release_date' => 'validate_date',
+        'image_path' => 'validate_image_path'
     ];
 
     foreach ($validation_functions as $key => $function) {
@@ -265,6 +266,23 @@ function validate_image_path($params)
     if (!preg_match('/\.(jpg|jpeg|png)$/i', $path)) {
         return "Ścieżka musi wskazywać na plik w formacie JPG, JPEG lub PNG.";
     }
+    return null;
+}
+
+function validate_pdf_path($params)
+{
+    $path = $params['value'];
+
+    if (empty($path)) 
+    {
+        return null;
+    }
+
+    if (!preg_match('/\.pdf$/i', $path)) 
+    {
+        return "Ścieżka musi wskazywać na plik w formacie PDF.";
+    }
+
     return null;
 }
 

@@ -1,0 +1,53 @@
+body
+{
+    background-color: #deffdf;
+}
+
+#pages {
+    height: auto;
+    background-color: #deffdf;
+}
+
+#pages button {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    border-style: none;
+    background-color: #4CAF50;
+}
+
+#pages button:hover {
+    background-color: #45a049;
+    cursor: pointer;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    background-color: #deffdf;
+}
+
+#books {
+    background-color: #deffdf;
+}
+
+.book-item img {
+    width: 150px;
+    height: auto;
+    max-width: 50%;
+    border-radius: 10px;
+}
+
+
+.pagination {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.pagination button {
+    padding: 5px 10px;
+}
