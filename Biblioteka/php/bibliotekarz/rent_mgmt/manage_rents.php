@@ -289,13 +289,6 @@ $result = mysqli_query($conn, $query);
             showGlobalSuccessMessage("<?= htmlspecialchars($_SESSION['success_message']); ?>");
             <?php unset($_SESSION['success_message']); ?>
         <?php endif; ?>
-
-        // smooth scroll danych<td> po sortowaniu
-        const table = document.querySelector('.sortable'); 
-        table.addEventListener('click', function() 
-        {
-            table.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        });
         
         fetch('php/bibliotekarz/rent_mgmt/fetch_czytelnik_count.php')
         .then(response => response.json())
@@ -374,6 +367,9 @@ $result = mysqli_query($conn, $query);
         .catch(error => console.error('Błąd:', error));
     });     
     </script>
+
+    <!-- default skrypt -->
+    <script src="js/bibliotekarz/global.js" defer></script>
 
     <!-- skrypt do modali(pop-up) -->
     

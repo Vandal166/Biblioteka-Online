@@ -3,11 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
-<<<<<<< HEAD
--- Generation Time: Sty 09, 2025 at 06:12 PM
-=======
--- Generation Time: Sty 11, 2025 at 06:38 PM
->>>>>>> main
+-- Generation Time: Sty 14, 2025 at 10:49 AM
 -- Wersja serwera: 10.4.32-MariaDB
 -- Wersja PHP: 8.2.12
 
@@ -47,11 +43,8 @@ INSERT INTO `autor` (`ID`, `imie`, `nazwisko`) VALUES
 (61, 'Aleksandra', 'Wiśniewska'),
 (62, 'Piotr', 'Zieliński'),
 (63, 'Anna', 'Kamińska'),
-<<<<<<< HEAD
-(64, 'Piotr', 'Zie');
-=======
+(64, 'Piotr', 'Zie'),
 (155, 'Opiopoipiopiop', 'Opiopoipiopiop');
->>>>>>> main
 
 -- --------------------------------------------------------
 
@@ -72,17 +65,13 @@ CREATE TABLE `autor_ksiazki` (
 INSERT INTO `autor_ksiazki` (`ID`, `ID_ksiazki`, `ID_autora`) VALUES
 (10, 24, 59),
 (11, 26, 62),
-<<<<<<< HEAD
 (12, 26, 64),
 (15, 34, 59),
 (45, 70, 59),
-(46, 69, 59);
-=======
-(15, 34, 59),
-(45, 70, 59),
 (46, 69, 59),
-(47, 72, 155);
->>>>>>> main
+(47, 73, 59),
+(48, 73, 60),
+(49, 72, 155);
 
 -- --------------------------------------------------------
 
@@ -113,7 +102,8 @@ INSERT INTO `czytelnik` (`ID`, `imie`, `nazwisko`, `nr_karty`, `telefon`, `email
 (30, 'Erg', 'Gere', '3483212614', '345345353', 'egrerg@onet.pl', 'gerger', '$2y$10$SEGSREtuv76h3Hg7SctEguBoXwNHf85SFkRb2X66dXbDp08PJv7oS'),
 (32, 'Gerger', 'Egrerg', '4117686075', '345345352', 'egrerg2@onet.pl', 'gerger2', '$2y$10$.5q44BGQHgC0qamITZ6EP.tW5FTidLbnSUc0X2wle00/bn.HQf3gW'),
 (33, 'Test', 'Test', '7446174120', '345232422', 'kamilroma8@gmail.com', 'kamil', '$2y$10$0T/NGoMEcs9IRAeqw6B7DeOvJjTvOrdJMHy28t2cUW2P/hRMnvT8C'),
-(34, 'Rthrth', 'Erg', '3695423881', '453343634', 'rthrtyjrtjy2o@onet.pl', 'rtjrty234', '$2y$10$8j0m.YhjVYSy/GJWHBjWSe.XmOeveB5ynrvpYqqeRKIxle1nGl69e');
+(34, 'Rthrth', 'Erg', '3695423881', '453343634', 'rthrtyjrtjy2o@onet.pl', 'rtjrty234', '$2y$10$8j0m.YhjVYSy/GJWHBjWSe.XmOeveB5ynrvpYqqeRKIxle1nGl69e'),
+(35, 'Użytkownik', 'Biblioteki', '4084259264', '921456712', 'user@lib.com', 'User', '$2y$10$b9A7XftkWiQlSkxPK176Oe7TQIa1E4anM/5NUbh.zKYegEx7yG7mO');
 
 -- --------------------------------------------------------
 
@@ -133,21 +123,17 @@ CREATE TABLE `egzemplarz` (
 --
 
 INSERT INTO `egzemplarz` (`ID`, `ID_wydania`, `czy_dostepny`, `stan`) VALUES
+(3, 1, 1, 'dobry'),
 (18, 3, 1, 'gr'),
 (19, 4, 1, 'gr'),
-(20, 8, 1, 'blbsdsd'),
+(20, 8, 0, 'hrt'),
 (21, 26, 1, 'hrt'),
-<<<<<<< HEAD
 (23, 5, 0, 'test'),
-(24, 1, 0, 'rtgrt');
-=======
-(23, 8, 1, 'test'),
+(24, 1, 0, 'rtgrt'),
 (27, 46, 0, 'blbylbylf'),
 (28, 44, 1, 'lol'),
 (29, 45, 0, 'yhyh'),
 (34, 46, 0, 'yh');
->>>>>>> main
-
 -- --------------------------------------------------------
 
 --
@@ -192,12 +178,8 @@ INSERT INTO `gatunek_ksiazki` (`ID`, `ID_ksiazki`, `ID_gatunku`) VALUES
 (12, 34, 1),
 (13, 27, 3),
 (25, 69, 2),
-<<<<<<< HEAD
-(26, 70, 1);
-=======
 (26, 70, 1),
 (27, 72, 3);
->>>>>>> main
 
 -- --------------------------------------------------------
 
@@ -222,12 +204,14 @@ INSERT INTO `ksiazka` (`ID`, `tytul`, `zdjecie`) VALUES
 (27, 'Wszechświat: Początek i koniec..', 'Biblioteka/images/677d977214c90-Afrotitan.png'),
 (34, 'Dziady :C', 'Biblioteka/images/677d904301b57-Kjermejt.jpg'),
 (69, 'gererh', 'Biblioteka/images/677eca5baa173-2.png'),
-<<<<<<< HEAD
-(70, 'ghtrr', 'Biblioteka/images/677eca5baa173-2.png');
-=======
 (70, 'ghtrr', 'Biblioteka/images/677eca5baa173-2.png'),
-(72, 'opiopoipiopiop', 'Biblioteka/images/677d965748586-Shock.jpg');
->>>>>>> main
+(71, 'opiopoipiopiop', 'Biblioteka/images/677d965748586-Shock.jpg'),
+(72, 'Nowa książka', ''),
+(73, 'La testo de fiesta', ''),
+(74, 'Nowa strona test test', ''),
+(75, 'A', ''),
+(76, 'B', ''),
+(77, 'C', 'Biblioteka/images/677d965748586-Shock.jpg');
 
 -- --------------------------------------------------------
 
@@ -290,7 +274,14 @@ CREATE TABLE `rezerwacja` (
 --
 
 INSERT INTO `rezerwacja` (`ID`, `ID_wydania`, `ID_czytelnika`, `data_rezerwacji`, `czy_wydana`) VALUES
-(2, 3, 10, '2024-12-08', 0);
+(1, 1, 9, '2024-11-27', 1),
+(2, 3, 10, '2024-12-08', 0),
+(15, 1, 9, '2025-01-08', 1),
+(25, 1, 35, '2025-01-14', 0),
+(26, 3, 35, '2025-01-14', 0),
+(27, 47, 35, '2025-01-14', 0),
+(28, 45, 35, '2025-01-14', 0),
+(30, 46, 35, '2025-01-14', 0);
 
 -- --------------------------------------------------------
 
@@ -307,28 +298,28 @@ CREATE TABLE `wydanie` (
   `numer_wydania` varchar(20) NOT NULL,
   `jezyk` varchar(50) NOT NULL,
   `ilosc_stron` varchar(4) NOT NULL,
-  `pdf` tinyint(1) NOT NULL DEFAULT 0
+  `pdf` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `wydanie`
 --
 
-<<<<<<< HEAD
 INSERT INTO `wydanie` (`ID`, `ID_ksiazki`, `ID_wydawnictwa`, `ISBN`, `data_wydania`, `numer_wydania`, `jezyk`, `ilosc_stron`, `pdf`) VALUES
-(1, 24, 1, '3245353453453', '2024-12-12', '23423452452523534531', 'polski', '255', 1),
-=======
-INSERT INTO `wydanie` (`ID`, `ID_ksiazki`, `ID_wydawnictwa`, `ISBN`, `data_wydania`, `numer_wydania`, `jezyk`, `ilosc_stron`, `czy_elektronicznie`) VALUES
->>>>>>> main
-(3, 24, 1, '1231234234522', '2024-12-06', '32453453535345332111', 'ertgh', '4353', 0),
-(4, 24, 1, '3333333333333', '2024-12-20', '43444444444444444444', 'regerg', '15', 1),
-(5, 24, 1, '2342423423422', '2025-01-06', '34444443242342342341', 'erghe', '643', 1),
-(8, 26, 1, '3245253452342', '2025-01-12', '43444444444444444412', 'rthrht', '352', 1),
-(26, 24, 1, '3453634623436', '2025-01-01', '43645457454745745222', 'rthrth', '234', 1),
-(31, 24, 1, '3453453632342', '3454-03-31', '45635234241234143333', 'rtegrhrt', '3453', 1),
-(44, 69, 3, '3456457456353', '2025-01-24', '78678678456345345234', 'jtyktyuj', '456', 0),
-(45, 70, 1, '4536457568568', '2025-01-10', '85678566546346345345', 'trhrt', '56', 0),
-(46, 34, 3, '5475686767542', '2025-01-03', '54756856834535363463', 'guwno', '3', 0);
+(1, 24, 1, '3245353453453', '2024-12-12', '23423452452523534531', 'polski', '255', 'Biblioteka/books/asdninoidasinodsadnas.pdf'),
+(3, 24, 1, '1231234234522', '2024-12-06', '32453453535345332111', 'ertgh', '4353', 'Biblioteka/books/6782e0508f187-python_lista_6.pdf'),
+(4, 24, 1, '3333333333333', '2024-12-20', '43444444444444444444', 'regerg', '15', '1'),
+(5, 24, 1, '2342423423422', '2025-01-06', '34444443242342342341', 'erghe', '643', '1'),
+(8, 26, 1, '3245253452342', '2025-01-12', '43234645234242423343', 'rthrht', '352', '1'),
+(26, 24, 1, '3453634623436', '2025-01-01', '43645457454745745222', 'rthrth', '234', '1'),
+(31, 24, 1, '3453453632342', '3454-03-31', '45635234241234143333', 'rtegrhrt', '3453', '1'),
+(44, 69, 3, '3456457456353', '2025-01-24', '78678678456345345234', 'jtyktyuj', '456', '0'),
+(45, 70, 1, '4536457568568', '2025-01-10', '85678566546346345345', 'trhrt', '56', '0'),
+(46, 34, 3, '5475686767542', '2025-01-03', '54756856834535363463', 'guwno', '3', '0'),
+(47, 24, 1, '1111111111111', '2025-01-21', '11111111111111111111', 'Mlloojinini', '1234', '0'),
+(48, 24, 1, '9876543212345', '2025-02-07', '22222222222222222222', 'Makao', '12', '0'),
+(49, 24, 2, '1234321234543', '2025-01-06', '12212334356667889000', 'NNNNN', '32', NULL),
+(50, 24, 1, '7527852372357', '2024-12-16', '23569256796923475625', 'JKJJGYH', '14', NULL);
 
 -- --------------------------------------------------------
 
@@ -372,10 +363,9 @@ CREATE TABLE `wypozyczenie` (
 --
 
 INSERT INTO `wypozyczenie` (`ID`, `ID_czytelnika`, `ID_egzemplarza`, `ID_pracownika`, `data_wypozyczenia`, `termin_oddania`, `data_oddania`) VALUES
-(17, 9, 18, 30, '2025-01-29', '2025-01-31', NULL),
-(18, 33, 21, 30, '2025-01-18', '2025-01-18', '2025-01-11'),
-(19, 14, 21, 30, '2025-01-05', '2025-01-03', NULL),
-(20, 10, 27, 30, '2025-01-16', '2025-01-12', NULL);
+(2, 9, 3, 4, '2024-12-06', '2024-12-03', '2024-12-04'),
+(8, 9, 3, 4, '2025-01-02', '2025-02-06', '2025-01-27'),
+(9, 9, 3, 4, '2025-01-02', '2025-02-06', '2025-01-28');
 
 --
 -- Indeksy dla zrzutów tabel
@@ -488,37 +478,25 @@ ALTER TABLE `wypozyczenie`
 -- AUTO_INCREMENT for table `autor`
 --
 ALTER TABLE `autor`
-<<<<<<< HEAD
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=155;
-=======
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=156;
->>>>>>> main
 
 --
 -- AUTO_INCREMENT for table `autor_ksiazki`
 --
 ALTER TABLE `autor_ksiazki`
-<<<<<<< HEAD
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
-=======
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
->>>>>>> main
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
 -- AUTO_INCREMENT for table `czytelnik`
 --
 ALTER TABLE `czytelnik`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT for table `egzemplarz`
 --
 ALTER TABLE `egzemplarz`
-<<<<<<< HEAD
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
-=======
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
->>>>>>> main
 
 --
 -- AUTO_INCREMENT for table `gatunek`
@@ -530,21 +508,13 @@ ALTER TABLE `gatunek`
 -- AUTO_INCREMENT for table `gatunek_ksiazki`
 --
 ALTER TABLE `gatunek_ksiazki`
-<<<<<<< HEAD
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
-=======
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
->>>>>>> main
 
 --
 -- AUTO_INCREMENT for table `ksiazka`
 --
 ALTER TABLE `ksiazka`
-<<<<<<< HEAD
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
-=======
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
->>>>>>> main
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78;
 
 --
 -- AUTO_INCREMENT for table `pracownik`
@@ -562,17 +532,13 @@ ALTER TABLE `reset_hasla`
 -- AUTO_INCREMENT for table `rezerwacja`
 --
 ALTER TABLE `rezerwacja`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `wydanie`
 --
 ALTER TABLE `wydanie`
-<<<<<<< HEAD
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
-=======
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
->>>>>>> main
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- AUTO_INCREMENT for table `wydawnictwo`
@@ -584,7 +550,7 @@ ALTER TABLE `wydawnictwo`
 -- AUTO_INCREMENT for table `wypozyczenie`
 --
 ALTER TABLE `wypozyczenie`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- Constraints for dumped tables

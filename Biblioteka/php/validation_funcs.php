@@ -27,17 +27,15 @@ function validate_user_data($user_data)
 
 function check_user_data($user_data, $conn)
 {
-    $error = check_if_exists(['conn' => $conn, 'table' => 'czytelnik', 'column' => 'telefon', 'value' => $user_data['telefon'], 'no_log' => true]);
-    if ($error) 
-        return 'Podany numer telefonu jest już zajęty!';
-
-    $error = check_if_exists(['conn' => $conn, 'table' => 'czytelnik', 'column' => 'login', 'value' => $user_data['login'], 'no_log' => true]);
-    if ($error) 
-        return 'Podany login jest już zajęty!';
-
-    $error = check_if_exists(['conn' => $conn, 'table' => 'czytelnik', 'column' => 'email', 'value' => $user_data['email'], 'no_log' => true]);
-    if ($error) 
-        return 'Podany email jest już zajęty!';
+    $fields_to_check = ['telefon', 'login', 'email'];
+    foreach ($fields_to_check as $field) {
+        if (isset($user_data[$field])) {
+            $error = check_if_exists(['conn' => $conn, 'table' => 'czytelnik', 'column' => $field, 'value' => $user_data[$field], 'no_log' => true]);
+            if ($error) {
+                return 'Podany ' . $field . ' jest już zajęty!';
+            }
+        }
+    }
 
     return null; // Brak błędów
 }
@@ -194,7 +192,8 @@ function validate_book_data($params)
         'author_name' => 'validate_name',
         'author_surname' => 'validate_name',
         'release_date' => 'validate_date',
-        'image_path' => 'validate_image_path'
+        'image_path' => 'validate_image_path',
+        'pdf_path' => 'validate_pdf_path'
     ];
 
     foreach ($validation_functions as $key => $function) {

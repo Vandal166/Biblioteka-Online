@@ -11,8 +11,6 @@ if (!isset($_SESSION['poziom_uprawnien']) || $_SESSION['poziom_uprawnien'] !== '
 
 require_once(BASE_PATH . 'php/helpers.php');
 
-//TODO: nie ma opcji do dodawania autorow, gatunkow, wydawnictw.
-
 // pobranie danych czytelnika dla wyswietlenia w tabeli
 
 $query = "SELECT 
@@ -64,7 +62,6 @@ $result = mysqli_query($conn, $query);
                 <li><a href="/Biblioteka/php/bibliotekarz/reader_mgmt/manage_readers.php"><button disabled>Zarządzaj Czytelnikami</button></a></li>
                 <li><a href="/Biblioteka/php/bibliotekarz/reservation.php"><button>Rezerwacja Książek</button></a></li>
                 <li><a href="/Biblioteka/php/bibliotekarz/reports.php"><button>Raporty</button></a></li>
-                <!-- TODO: ? <li><a href=""><button>Autorzy/Gatunek/Wydawnictwo</button></a></li> -->
             </ul>
     </section>   
         
@@ -98,9 +95,7 @@ $result = mysqli_query($conn, $query);
                 </tbody>
             </table>
         </section>
-        <div class="add-book-container">
-            <button class="add-book-button" onclick="openAddBookModal()">+</button>
-        </div>
+        
 
         <!-- Pop-up Sukcesu -->       
         <div id="successPopup" class="popup" style="display: none;">
@@ -114,9 +109,8 @@ $result = mysqli_query($conn, $query);
         <div id="deleteBookModal" class="popup" style="display: none;">
             <div class="popup-content">
                 <span class="close-btn" onclick="closeModal()">&times;</span>
-                <h2 style="font-size: 18px;">Czy na pewno chcesz usunąć wypożyczenie czytelnika:</h2>
-                <p id="deleteBookReader" style="font-size: 16px; display: inline;"></p>
-                <i><h2 id="deleteBookTitle" style="font-size: 18px; display: inline;"></h2></i>
+                <h2 style="font-size: 18px;">Czy na pewno chcesz usunąć czytelnika:</h2>
+                <h2 id="deleteBookReader" style="font-size: 18px; display: inline;"></h2>
 
                 <div class="popup-buttons">
                     <button onclick="deleteBook()">Tak</button>
@@ -140,9 +134,9 @@ $result = mysqli_query($conn, $query);
                             <p><strong>Numer karty:</strong> <span id="reader_card_number"></span></p>
                             <p><strong>Email:</strong> <span id="reader_email"></span></p>
                             <p><strong>Telefon:</strong> <span id="reader_phone"></span></p>
-                            <!-- TODO: przycisk do zobaczenia wypożyczeń/rezerwacji? -->
-                            <div id="rentingDetailsButtonContainer"></div> 
-                                                        
+                            
+                            <div id="rentingDetailsButtonContainer"></div> <!-- przycisk Szczegoly wpozyczenia/rezerwacji -->
+                                                                                    
                             <!-- Modal to display reader renting details -->
                             <div id="readerRentingDetailsModal" class="modal">
                                 <div class="modal-content">
@@ -153,7 +147,6 @@ $result = mysqli_query($conn, $query);
                                 </div>
                             </div>
                             
-                            //TODO: fix
                             <button type="button" onclick="closeModal()">Zamknij</button>
                         </form>
                     </div>
@@ -162,93 +155,29 @@ $result = mysqli_query($conn, $query);
                 <div id="editBookModal" class="modal">
                     <div class="modal-content">
                         <span class="close-btn" onclick="closeModal()">&times;</span>
-                        <h2>Edytuj Wypożyczenie</h2>
+                        <h2>Edytuj Czytelnika</h2>
                         <form id="editBookForm">
-                        <input type="hidden" name="id" id="edit_renting_id">
+                            <input type="hidden" name="id" id="edit_reader_id">
                         
-                        <div class="reader-details-container" id="editModalReaderDetails">
-                            <p><strong>Imię:</strong> <span id="edit_reader_name"></span></p>
-                            <p><strong>Nazwisko:</strong> <span id="edit_reader_surname"></span></p>
-                            <p><strong>Numer karty:</strong> <span id="edit_reader_card_number"></span></p>
-                            <p><strong>Email:</strong> <span id="edit_reader_email"></span></p>
-                        </div>
-
-                        <i style="text-align: center; font-size: 30px;"><label id="edit_book_title" ></label></i>
-                        <div class="book-details-container" id="editModalDetails">
-                            <p><strong>Zdjęcie:</strong> <img id="edit_book_image" src="" alt="Zdjęcie książki" style="max-width: 200px; max-height: 200px; display: none;"></p>
-                            <p><strong>Autor:</strong> <span id="edit_book_author"></span></p>
-                            <p><strong>Gatunek:</strong> <span id="edit_book_genre"></span></p>                        
-                            <p><strong>ISBN:</strong> <span id="edit_book_isbn"></span></p>
-                            <p><strong>Data wydania:</strong> <span id="edit_book_release_date"></span></p>
-                            <p><strong>Język:</strong> <span id="edit_book_language"></span></p>
-                            <p><strong>Ilość stron:</strong> <span id="edit_book_pages"></span></p>
-                        </div>
-                            
-                            <hr style="border: 0; height: 1.5px; background: linear-gradient(to right, #fff, #000, #fff); margin: 20px 0;">
-
-                            <label for="edit_due_date">Termin zwrotu:</label>
-                            <input type="date" id="edit_due_date" name="edit_due_date" required>
-                            <label for="edit_return_date">Data zwrotu:</label>
-                            <input type="date" id="edit_return_date" name="edit_return_date">
-
+                            <label for="edit_reader_name">Imię:</label>
+                            <input type="text" id="edit_reader_name" name="edit_reader_name" required>
+                            <label for="edit_reader_surname">Nazwisko:</label>
+                            <input type="text" id="edit_reader_surname" name="edit_reader_surname" required>
+                            <label for="edit_card_number">Numer karty:</label>
+                            <input type="text" id="edit_card_number" name="edit_card_number" required readonly>
+                            <!-- Przycisk do wygenerowania nowego nr_karty -->
+                            <button type="button" onclick="generate_card_number()">Generuj nowy numer karty</button>
+                            <label for="edit_reader_email">Email:</label>
+                            <input type="email" id="edit_reader_email" name="edit_reader_email" required>
+                            <label for="edit_reader_phone">Telefon:</label>
+                            <input type="text" id="edit_reader_phone" name="edit_reader_phone" required>
+                        
                             <div class="error-message" style="color: red; text-align: center"></div>
                             <button type="button" onclick="saveBookChanges()">Zapisz</button>
                         </form>
                     </div>
                 </div>
 
-                <!-- Modal do dodawania egz -->
-                <div id="addBookModal" class="modal">
-                    <div class="modal-content">
-                        <span class="close-btn" onclick="closeModal()">&times;</span>
-                        <h2>Dodaj nowe wypożyczenie</h2>
-                        <form id="addBookForm">
-                            
-                            <!-- dynamiczne fetchowanie danych po podaniu nr_karty(bibliotekarz moze zobaczyc nr_karty w 'Zarzadzaniu czytelnikiem')-->
-                            <label for="cardNumber" style="padding-left: 10px;font-size: 20px;">Czytelnik wypożyczający:</label>
-                            <select id="cardNumSelect" name="cardNumber" style="display: none;" required>
-                                <option value="" selected disabled>-- Wybierz czytelnika --</option>
-                            </select>
-                            <input type="text" id="cardNumInput" name="cardNumber" placeholder="Wpisz numer karty czytelnika" maxlength="10" required>
-                            <div class="reader-details-container" id="addModalReaderDetails" style="display: none;">
-                                <p><strong>Imię:</strong> <span id="add_reader_name"></span></p>
-                                <p><strong>Nazwisko:</strong> <span id="add_reader_surname"></span></p>
-                                <p><strong>Numer karty:</strong> <span id="add_reader_card_number"></span></p>
-                                <p><strong>Email:</strong> <span id="add_reader_email"></span></p>
-                            </div>
-
-                            <label for="exemplarID" style="padding-left: 10px;font-size: 20px;">Egzemplarz wypożyczany:</label>
-                            <select id="exemplarSelect" name="exemplarID" style="display: none;" required>
-                                <option value="" selected disabled>-- Wybierz egzemplarz --</option>
-                            </select>
-                            <input type="text" id="exemplarInput" name="exemplarID" placeholder="Wpisz numer wydania" maxlength="20" required>
-
-                            <i style="text-align: center; font-size: 30px;"><label id="add_book_title" ></label></i>
-                            <div class="book-details-container" id="addModalDetails" style="display: none;">
-                                <p><strong>Zdjęcie:</strong> <img id="add_book_image" src="" alt="Zdjęcie książki" style="max-width: 200px; max-height: 200px; display: none;"></p>
-                                <p><strong>Autor:</strong> <span id="add_book_author"></span></p>
-                                <p><strong>Gatunek:</strong> <span id="add_book_genre"></span></p>                        
-                                <p><strong>ISBN:</strong> <span id="add_book_isbn"></span></p>
-                                <p><strong>Data wydania:</strong> <span id="add_book_release_date"></span></p>
-                                <p><strong>Język:</strong> <span id="add_book_language"></span></p>
-                                <p><strong>Ilość stron:</strong> <span id="add_book_pages"></span></p>
-                            </div>
-
-                            <!-- dodawanie -->
-                            <hr style="border: 0; height: 1.5px; background: linear-gradient(to right, #fff, #000, #fff); margin: 20px 0;">
-                            <!-- current ID of pracownik(bibliotekarz) ktory nadaje wypozyczenie -->
-                            <input type="hidden" name="add_librarian_ID" id="add_librarian_ID" value="<?php echo $_SESSION['user_id']; ?>">
-
-                            <label for="add_rent_date">Data wypożyczenia:</label>
-                            <input type="date" id="add_rent_date" name="add_rent_date" required>
-                            <label for="add_due_date">Termin oddania:</label>
-                            <input type="date" id="add_due_date" name="add_due_date" required>
-
-                            <div class="error-message" style="color: red; text-align: center"></div>
-                            <button type="button" onclick="addNewRenting()">Dodaj wypożyczenie</button>
-                        </form>
-                    </div>
-                </div>
             </div>
         </section>
     <script>      
@@ -257,17 +186,12 @@ $result = mysqli_query($conn, $query);
         <?php if (isset($_SESSION['success_message'])): ?>
             showGlobalSuccessMessage("<?= htmlspecialchars($_SESSION['success_message']); ?>");
             <?php unset($_SESSION['success_message']); ?>
-        <?php endif; ?>
-        // smooth scroll danych<td> po sortowaniu
-        const table = document.querySelector('.sortable'); 
-        table.addEventListener('click', function() 
-        {
-            table.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        });
-        
+        <?php endif; ?>        
     });     
     </script>
-
+    <!-- default skrypt -->
+    <script src="js/bibliotekarz/global.js" defer></script>
+    
     <!-- skrypt do modali(pop-up) -->
     <script src="js/bibliotekarz/manage_readers.js" defer></script>    
 

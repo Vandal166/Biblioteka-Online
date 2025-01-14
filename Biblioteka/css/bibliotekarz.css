@@ -289,7 +289,8 @@ body
 }
 
 .podsekcja input[type="text"]#ISBN, input[type="text"]#numer_wydania, input[type="text"]#editionNumber,
-input[type="text"]#new_ISBN, input[type="text"]#new_numer_wydania, input[type="text"]#edit_book_isbn, input[type="text"]#edit_book_edition, input[type="text"]#bookISBN {    
+input[type="text"]#new_ISBN, input[type="text"]#new_numer_wydania, input[type="text"]#edit_book_isbn, input[type="text"]#edit_book_edition, input[type="text"]#bookISBN,
+input[type="text"]#edit_card_number, input[type="text"]#edit_reader_phone {    
     letter-spacing: 4px;
     padding-right: 10px;
 }
@@ -354,6 +355,8 @@ input[type="text"]#new_ISBN, input[type="text"]#new_numer_wydania, input[type="t
 }
 
 .close-btn {
+    position: sticky;
+    top: 0;
     float: right;
     font-size: 28px;
     cursor: pointer;
@@ -396,8 +399,8 @@ input[type="text"]#new_ISBN, input[type="text"]#new_numer_wydania, input[type="t
 }
 
 .popup-content .close-btn {
-    position: absolute;
-    top: -5px;
+    position: sticky;
+    top: 0;
     right: 8px;
     cursor: pointer;
 }

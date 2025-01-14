@@ -268,12 +268,6 @@ $result = mysqli_query($conn, $query);
             <?php unset($_SESSION['success_message']); ?>
         <?php endif; ?>
 
-        // smooth scroll danych<td> po sortowaniu
-        const table = document.querySelector('.sortable'); 
-        table.addEventListener('click', function() 
-        {
-            table.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        });
         
         fetch('php/bibliotekarz/exemplar_mgmt/fetch_wydanie_count.php')
         .then(response => response.json())
@@ -358,6 +352,9 @@ $result = mysqli_query($conn, $query);
     });     
     </script>
 
+    <!-- default skrypt -->
+    <script src="js/bibliotekarz/global.js" defer></script>
+    
     <!-- skrypt do modali(pop-up) -->
     
     <script src="js/bibliotekarz/manage_exemplars.js" defer></script>    

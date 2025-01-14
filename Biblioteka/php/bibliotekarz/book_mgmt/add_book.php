@@ -24,7 +24,7 @@ if ($data) {
     $numer_wydania = htmlspecialchars(trim($data['wydanie_numer_wydania']));
     $jezyk = htmlspecialchars(trim($data['wydanie_jezyk']));
     $ilosc_stron = intval($data['wydanie_ilosc_stron']);
-    $czy_elektronicznie = isset($data['wydanie_czy_elektronicznie']) && $data['wydanie_czy_elektronicznie'] == 1 ? 1 : 0;
+    $pdf = htmlspecialchars(trim($data['wydanie_pdf']));
     $zdjecie = htmlspecialchars(trim($data['zdjecie']));
 
     // walidajca
@@ -39,7 +39,7 @@ if ($data) {
         'edition_number' => $numer_wydania,
         'language' => $jezyk,
         'page_count' => $ilosc_stron,
-        'is_electronic' => $czy_elektronicznie,
+        'pdf_path' => $pdf,
         'image_path' => $zdjecie    
     ]);
 
@@ -115,13 +115,16 @@ if ($data) {
             throw new Exception('Wydanie o podanym ISBN lub numerze już istnieje!');
         }
         
+        if(empty($pdf))
+            $pdf = null;
+
         $stmt = $conn->prepare("
-            INSERT INTO wydanie (ID_ksiazki, ID_wydawnictwa, ISBN, data_wydania, numer_wydania, jezyk, ilosc_stron, czy_elektronicznie)
+            INSERT INTO wydanie (ID_ksiazki, ID_wydawnictwa, ISBN, data_wydania, numer_wydania, jezyk, ilosc_stron, pdf)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             ON DUPLICATE KEY UPDATE ID=LAST_INSERT_ID(ID)
         ");
         $stmt->bind_param(
-            'iissssii',
+            'iissssis',
             $ksiazka_id,
             $wydawnictwo,
             $ISBN,
@@ -129,7 +132,7 @@ if ($data) {
             $numer_wydania,
             $jezyk,
             $ilosc_stron,
-            $czy_elektronicznie
+            $pdf
         );
         $stmt->execute();
         $wydanie_id = $conn->insert_id;

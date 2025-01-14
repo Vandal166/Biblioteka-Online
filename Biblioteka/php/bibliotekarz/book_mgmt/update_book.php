@@ -25,8 +25,8 @@ if ($data) {
     $numer_wydania = htmlspecialchars(trim($data['wydanie_numer_wydania']));
     $jezyk = htmlspecialchars(trim($data['wydanie_jezyk']));
     $ilosc_stron = intval($data['wydanie_ilosc_stron']);
-    $czy_elektronicznie = isset($data['wydanie_czy_elektronicznie']) && $data['wydanie_czy_elektronicznie'] == 1 ? 1 : 0;
-    
+    $pdf = htmlspecialchars(trim($data['wydanie_pdf']));
+
     // walidajca
     $error = validate_book_data([
         'title' => $tytul,      
@@ -37,7 +37,8 @@ if ($data) {
         'release_date' => $data_wydania,
         'edition_number' => $numer_wydania,
         'language' => $jezyk,
-        'page_count' => $ilosc_stron
+        'page_count' => $ilosc_stron,
+        'pdf_path' => $pdf
     ]);
     
     if ($error) 
@@ -133,10 +134,14 @@ if ($data) {
         // Aktualizacja wydania
         $stmt = $conn->prepare("
             UPDATE wydanie
-            SET ISBN = ?, data_wydania = ?, numer_wydania = ?, jezyk = ?, ilosc_stron = ?, czy_elektronicznie = ?
+            SET ISBN = ?, data_wydania = ?, numer_wydania = ?, jezyk = ?, ilosc_stron = ?, pdf = ?
             WHERE ID = ?
         ");
-        $stmt->bind_param("sssssii", $ISBN, $data_wydania, $numer_wydania, $jezyk, $ilosc_stron, $czy_elektronicznie, $wydanie_id);
+        
+        if(empty($pdf))
+            $pdf = null;
+        
+        $stmt->bind_param("ssssssi", $ISBN, $data_wydania, $numer_wydania, $jezyk, $ilosc_stron, $pdf, $wydanie_id);
         $stmt->execute();
 
         $conn->commit();

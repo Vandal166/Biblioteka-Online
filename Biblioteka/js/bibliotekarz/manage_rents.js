@@ -18,7 +18,7 @@ function openInfoModal(bookID) {
             document.getElementById('book_librarian').innerText = `${data.pracownik_imie || ''} ${data.pracownik_nazwisko || ''}`;
             document.getElementById('book_rent_date').innerText = data.data_wypozyczenia || 'Brak danych';
             document.getElementById('book_due_date').innerText = data.termin_oddania || 'Brak danych';
-            document.getElementById('book_return_date').innerText = data.data_oddania || 'Brak danych';
+            document.getElementById('book_return_date').innerText = data.data_oddania || 'Nie oddano';
             
             document.getElementById('book_condition').innerText = data.stan || 'Brak danych';
             document.getElementById('book_availability').innerText = data.czy_dostepny !== null ? (data.czy_dostepny ? 'Dostępna' : 'Niedostępna') : 'Brak danych'; // czyli nie ma infa o dostepnosci w egzemlarzu
@@ -45,14 +45,7 @@ function openInfoModal(bookID) {
         })
         .catch(error => console.error('Błąd:', error));
 }
-
-//modal dodawania
-function openAddBookModal() {
-    document.getElementById('addBookModal').style.display = 'block';
-    // wylaczenie scrolla na stronie ale dozwolone w modalu
-    document.body.style.overflow = 'hidden';
-}            
-
+         
 // modal edycji
 function openEditModal(bookID) {
     fetch(`/Biblioteka/php/bibliotekarz/rent_mgmt/get_rented.php?id=${bookID}`)
@@ -116,25 +109,6 @@ function openDeleteModal(bookID) {
             }
         })
         .catch(error => console.error('Błąd:', error));
-}
-
-
-function closeModal() {
-    //zamkniecie i wyczyszczenie formularza
-    document.getElementById('infoBookModal').style.display = 'none';
-    document.getElementById('successPopup').style.display = 'none';
-    document.getElementById('addBookModal').style.display = 'none';
-    document.getElementById('deleteBookModal').style.display = 'none';
-    document.getElementById('editBookModal').style.display = 'none';
-    document.body.style.overflow = 'auto';
-}
-
-// Funkcja wyświetlająca globalny pop-up sukcesu
-function showGlobalSuccessMessage(message) {
-    const popup = document.getElementById('successPopup');
-    const messageContainer = document.getElementById('successPopupMessage');
-    messageContainer.textContent = message;
-    popup.style.display = 'flex';
 }
 
 // zapisanie zmian po edycji

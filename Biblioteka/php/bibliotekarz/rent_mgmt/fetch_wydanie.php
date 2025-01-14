@@ -22,7 +22,7 @@ if (isset($_GET['editionNumber']))
             wydanie.numer_wydania, 
             wydanie.jezyk, 
             wydanie.ilosc_stron, 
-            wydanie.czy_elektronicznie, 
+            wydanie.pdf, 
             ksiazka.tytul, 
             ksiazka.zdjecie,
             autor.imie AS autor_imie, 

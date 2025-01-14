@@ -26,7 +26,7 @@ $query = "SELECT
         wydanie.numer_wydania,
         wydanie.jezyk,
         wydanie.ilosc_stron,
-        wydanie.czy_elektronicznie,
+        wydanie.pdf,
         egzemplarz.czy_dostepny,
         egzemplarz.stan
     FROM wydanie
@@ -163,7 +163,7 @@ $result = mysqli_query($conn, $query);
                             <p><strong>Numer wydania:</strong> <span id="book_edition"></span></p>
                             <p><strong>Język:</strong> <span id="book_language"></span></p>
                             <p><strong>Ilość stron:</strong> <span id="book_pages"></span></p>
-                            <p><strong>Elektroniczna:</strong> <span id="book_ebook"></span></p>
+                            <p><strong>PDF:</strong> <a id="book_pdf" href="#" target="_blank"></a></p>
                             <p><strong>Stan egzemplarza:</strong> <span id="book_condition"></span></p>
                             <p><strong>Dostępność:</strong> <span id="book_availability"></span></p>
                             <button type="button" onclick="closeModal()">Zamknij</button>
@@ -214,12 +214,21 @@ $result = mysqli_query($conn, $query);
                             <label>Nowy Język: <input id="edit_book_language" /></label>
                             <label>Nowa Ilość stron: <input id="edit_book_pages" maxlength="4"/></label>
 
-                            <div class="checkbox-container">
-                                <label for="edit_book_ebook">Czy elektronicznie:</label>            
-                                <input type="hidden" name="edit_book_ebook" value="0">
-                                <input type="checkbox" id="edit_book_ebook" name="edit_book_ebook" value="1">
-                            </div>
+                            <label for="new_pdf">Nowy PDF:</label>
+                            <input type="text" id="new_pdf" name="new_pdf">
+                            <div>
+                                <label for="new_pdf-select">Wybierz PDF:</label>
+                                <select class="override-style" id="new_pdf-select">
+                                    <option value="" disabled selected>-- Wybierz plik PDF --</option>
+                                </select>
                             
+                                <input type="file" id="file-input-pdf" name="file" accept=".pdf" style="display: none;"></input>
+                                <button type="button" class="select-pdf override-style" id="new_select-pdf">Wybierz</button>
+                            
+                                <input type="file" id="file-input-pdf" name="file" accept=".pdf" style="display: none;"></input>
+                                <button type="button" class="import-pdf override-style" id="new_import-pdf">Importuj</button>
+                            </div>
+
                             <div class="error-message" style="color: red; text-align: center"></div>
                             <button type="button" onclick="saveBookChanges()">Zapisz</button>
                         </form>
@@ -291,12 +300,6 @@ $result = mysqli_query($conn, $query);
                             <label for="pages">Ilość stron:</label>
                             <input type="text" id="pages" name="pages" maxlength="4" required>
                             
-                            <div class="checkbox-container">
-                                <label for="isElectronic">Czy elektronicznie:</label>            
-                                <input type="hidden" name="isElectronic" value="0">
-                                <input type="checkbox" id="isElectronic" name="isElectronic" value="1">
-                            </div>
-                            
                             <label for="zdjecie">Zdjęcie:</label>
                             <input type="text" id="zdjecie" name="zdjecie"><br>
 
@@ -312,6 +315,21 @@ $result = mysqli_query($conn, $query);
                                 <input type="file" id="file-input" name="file" accept=".png, .jpg, .jpeg"></input>
                                 <button type="button" class="import-image override-style" id="import-1">Importuj</button>
                             </div>
+
+                            <label for="pdf">PDF:</label>
+                            <input type="text" id="pdf" name="pdf"><br>
+
+                            <div>
+                                <label for="pdf-select">Wybierz PDF:</label>
+                                <select class="override-style" id="pdf-select">
+                                    <option value="" disabled selected>-- Wybierz plik PDF --</option>
+                                </select>
+                            
+                                <input type="file" id="file-input-pdf" name="file" accept=".pdf" style="display: none;"></input>
+                                <button type="button" class="select-pdf override-style" id="select-pdf">Wybierz</button>
+                            
+                                <input type="file" id="file-input-pdf" name="file" accept=".pdf" style="display: none;"></input>
+                                <button type="button" class="import-pdf override-style" id="import-pdf">Importuj</button>
                                            
                             <div class="error-message" style="color: red; text-align: center"></div>
                             <button type="button" onclick="addNewBook()">Dodaj książkę</button>
@@ -323,26 +341,24 @@ $result = mysqli_query($conn, $query);
     <script>      
     // nasłuchiwanie na załadowanie strony
     document.addEventListener('DOMContentLoaded', () => {
-        <?php if (isset($_SESSION['success_message'])): ?>
-            showGlobalSuccessMessage("<?= htmlspecialchars($_SESSION['success_message']); ?>");
-            <?php unset($_SESSION['success_message']); ?>
-        <?php endif; ?>
+       
         loadImageList('image-select-add');
         loadImageList('image-select-edit');
-        // smooth scroll danych<td> po sortowaniu
-        const table = document.querySelector('.sortable'); 
-        table.addEventListener('click', function() 
-        {
-            table.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        });
+        
     });            
     </script>
 
+    <!-- default skrypt -->
+    <script src="js/bibliotekarz/global.js" defer></script>
+    
     <!-- skrypt do modali(pop-up) -->
     <script src="js/bibliotekarz/manage_books.js" defer></script>    
 
     <!-- skrypt do ladowania zdjec -->
     <script src="js/image_mgr.js" defer></script>
+
+    <!-- skrypt do pdf -->
+    <script src="js/pdf_mgr.js" defer></script>
 
     <footer>
         <p>&copy; 2024 Biblioteka Online | Wszystkie prawa zastrzeżone</p>
