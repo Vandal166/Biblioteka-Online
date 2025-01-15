@@ -17,7 +17,8 @@ if (isset($_GET['cardNumber']))
             czytelnik.imie AS czytelnik_imie,
             czytelnik.nazwisko AS czytelnik_nazwisko,
             czytelnik.nr_karty AS czytelnik_nr_karty,
-            czytelnik.email AS czytelnik_email
+            czytelnik.email AS czytelnik_email,
+            czytelnik.telefon AS czytelnik_telefon
         FROM czytelnik
         WHERE czytelnik.nr_karty = ? LIMIT 1";
     

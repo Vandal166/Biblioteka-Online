@@ -72,7 +72,7 @@ $result = mysqli_query($conn, $query);
         <nav>
             <ul>
                 <li><a href="/Biblioteka/index.php">Strona Główna</a></li>
-                <li><a href="/Biblioteka/php/reservation.php">Rezerwacja Książek</a></li>
+                <li><a href="php/books.php">Przeglądaj Książki</a></li>
                 <?php if(isset($_SESSION['user_id'])): ?>
                     <!-- if użytkownik jest zalogowany, wyświetl "Wyloguj" -->
                     <li><a href="/Biblioteka/php/logout.php" id="logoutBtn">Wyloguj się</a></li>
@@ -90,8 +90,7 @@ $result = mysqli_query($conn, $query);
                 <li><a href="/Biblioteka/php/bibliotekarz/exemplar_mgmt/manage_exemplars.php"><button>Zarządzaj Egzemplarzami</button></a></li>
                 <li><a href="/Biblioteka/php/bibliotekarz/rent_mgmt/manage_rents.php"><button disabled>Zarządzaj Wypożyczeniami</button></a></li>
                 <li><a href="/Biblioteka/php/bibliotekarz/reader_mgmt/manage_readers.php"><button>Zarządzaj Czytelnikami</button></a></li>
-                <li><a href="/Biblioteka/php/bibliotekarz/reservation.php"><button>Rezerwacja Książek</button></a></li>
-                <li><a href="/Biblioteka/php/bibliotekarz/reports.php"><button>Raporty</button></a></li>
+                <li><a href="/Biblioteka/php/bibliotekarz/reservation_mgmt/manage_reservations.php"><button>Rezerwacja Książek</button></a></li>
             </ul>
     </section>   
         
@@ -328,7 +327,7 @@ $result = mysqli_query($conn, $query);
         })
         .catch(error => console.error('Błąd:', error));
 
-         fetch('php/bibliotekarz/rent_mgmt/fetch_wydanie_count.php')
+        fetch('php/bibliotekarz/rent_mgmt/fetch_wydanie_count.php')
         .then(response => response.json())
         .then(data => {
             if (data.count <= 15) // jesli jest mniej niz 15 wydan w bazie to wyswietlamy selecta, inaczej input  

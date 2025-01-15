@@ -18,18 +18,18 @@ document.addEventListener("DOMContentLoaded", () =>
 
     // Funkcja do renderowania książek w gridzie
     function renderBooks(books) {
-        booksContainer.innerHTML = books
-            .map(book => `
-                <div class="book-item">
-                    <img src="${book.zdjecie}" alt="${book.tytul}" 
-                         style="width: 100%; height: auto;" 
-                         onclick="openEditionModal(${book.id}, '${book.tytul}')"
-                         onerror="this.onerror=null; this.src='/Biblioteka/images/error.jpg';">
-                    <h3>${book.tytul}</h3>
-                    <p>Autorzy: ${book.autorzy}</p>
-                </div>
-            `)
-            .join("");
+    booksContainer.innerHTML = books
+        .map(book => `
+            <div class="book-item">
+                <img src="${book.zdjecie}" alt="${book.tytul}" 
+                     style="width: 100%; height: auto;" 
+                     onclick="handleBookClick(${book.id}, '${book.tytul}')"
+                     onerror="this.onerror=null; this.src='/Biblioteka/images/error.jpg';">
+                <h3>${book.tytul}</h3>
+                <p>Autorzy: ${book.autorzy}</p>
+            </div>
+        `)
+        .join("");
     }
     
     
@@ -110,6 +110,9 @@ function openEditionModal(bookID, bookTitle) {
         .catch(error => console.error("Błąd:", error));
 }
 
+function handleBookClick(bookID, bookTitle) {
+    window.location.href = `/Biblioteka/php/books.php?bookID=${bookID}&bookTitle=${encodeURIComponent(bookTitle)}`;
+}
 
 function reserveEdition(editionID) {
     fetch(`/Biblioteka/php/reserve.php`, {

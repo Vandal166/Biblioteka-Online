@@ -15,8 +15,7 @@
 .modal-content 
 {
     background: white;
-    margin-left: 26%;
-    margin-top: 5%;
+    margin: 5% auto;
     padding: 20px;
     border-radius: 8px;
     max-height: 80%;
@@ -27,17 +26,44 @@
     position: relative;
 }
 
+.modal-content #modalBookTitle
+{
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+    font-family: 'Georgia', serif;
+    font-style: italic;
+}
 .modal-content .close 
 {
-    position: absolute;
-    top: 10px;
-    right: 10px;
+    position: sticky;
+    top: 0;
+    float: right;
     cursor: pointer;
-    font-size: 20px;
+    font-size: 26px;
 }
 
 .edition-list li 
 {
     margin-bottom: 10px;
     list-style: none;
+}
+
+.edition-list button
+{
+    display: inline-block;
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+.edition-list button:hover 
+{
+    cursor: pointer;
+    background-color: #45a049;
 }

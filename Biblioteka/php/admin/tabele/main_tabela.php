@@ -30,7 +30,7 @@ if(!$tabela)
         <nav>
             <ul>
                 <li><a href="/Biblioteka/index.php">Strona Główna</a></li>
-                <li><a href="/Biblioteka/php/reservation.php">Rezerwacja Książek</a></li>
+                <li><a href="php/books.php">Przeglądaj Książki</a></li>
                 <?php if(isset($_SESSION['user_id'])): ?>
                     <!-- if użytkownik jest zalogowany, wyświetl "Wyloguj" -->
                     <li><a href="/Biblioteka/php/logout.php" id="logoutBtn">Wyloguj się</a></li>

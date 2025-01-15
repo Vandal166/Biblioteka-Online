@@ -26,8 +26,7 @@
                 <?php endif; ?>
 
                 <li><a href="../index.php">Strona Główna</a></li>
-                <li><a href="../php/reservation.php">Rezerwacja Książek</a></li>
-
+        
                 <?php if(isset($_SESSION['user_id']) && !isset($_SESSION['poziom_uprawnien'])): ?>
                     <li><a href="../php/user.php">Wyświetl profil</a></li>
                 <?php endif; ?>
@@ -68,6 +67,30 @@
     <footer>
         <p>&copy; 2024 Biblioteka Online | Wszystkie prawa zastrzeżone</p>
     </footer>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const bookID = urlParams.get('bookID');
+            const bookTitle = urlParams.get('bookTitle');
+
+            if (bookID && bookTitle) {
+                openEditionModal(bookID, bookTitle);
+            }
+        });
+
+        // Event listener dla ESC key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeEditionModal();
+            }
+        });
+
+        // Event listener dla klikania poza modal
+        document.addEventListener('click', function(event) {
+            closeEditionModal();
+        
+        });
+    </script>
     
     <script src="../js/script.js"></script>
     <script src="../js/books.js"></script>

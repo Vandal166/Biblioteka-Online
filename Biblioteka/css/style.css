@@ -118,3 +118,47 @@ input[readonly] {
     padding: 8px;
     border-radius: 4px;
 }
+
+#featured-books {
+    text-align: center;
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+.book-carousel {
+    position: relative;
+    max-width: 90%;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+.carousel-track {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.book-item {
+    flex: 0 0 auto;
+    width: 300px;
+    margin: 10px;
+    text-align: center;
+    font-family: 'Georgia', serif;
+    font-size: 1em;
+    font-weight: bold;
+    font-style: italic;
+}
+
+.book-item img {
+    width: 100%; 
+    height: 300px; 
+    object-fit: cover; 
+    border-radius: 5px;
+    box-shadow: 0 9px 8px rgba(0, 0, 0, 0.5);
+    cursor: pointer; 
+    transition: border 0.3s ease; 
+}
+
+.book-item img:hover {
+    border: 3px solid #4CAF50; 
+}
+

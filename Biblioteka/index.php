@@ -24,7 +24,6 @@
                 <?php endif; ?>
 
                 <li><a href="index.php">Strona Główna</a></li>
-                <li><a href="php/reservation.php">Rezerwacja Książek</a></li>
 
                 <?php if(isset($_SESSION['user_id']) && !isset($_SESSION['poziom_uprawnien'])): ?>
                     <li><a href="php/user.php">Wyświetl profil</a></li>
@@ -52,21 +51,60 @@
 
         <p>Znajdź i wypożycz książki online z naszej szerokiej oferty!</p>
     </section>
+   
 
     <!-- Sekcja książek -->
     <section id="books">
         <h2>Nasze książki</h2>
         <p>Przeglądaj naszą bazę książek i zarezerwuj interesujący Cię egzemplarz!</p>
         <a href="php/books.php" class="btn">Przeglądaj książki</a>
-        <!--TODO: dodac cos w stylu slide-show książek z bazy danych, wyswietlaloby zdjecie do klinkiecia z tytulem NICE -->
     </section>
 
-    <!-- Sekcja rezerwacji -->
-    <section id="reservation">
-        <h2>Rezerwacja Książek</h2>
-        <p>Rezerwuj książki, które chcesz wypożyczyć, a my zajmiemy się resztą!</p>
-        <a href="php/reservation.php" class="btn">Zarezerwuj teraz</a>
-    </section>
+<section id="featured-books">
+    <h2>Polecane książki</h2>
+    <div class="book-carousel">
+        <div class="carousel-track">
+            <?php
+            require_once('php/db_connection.php');
+            $query = "SELECT ID, tytul, zdjecie FROM ksiazka ORDER BY RAND() LIMIT 10";
+            $result = $conn->query($query);
+            while ($book = $result->fetch_assoc()) {
+                if ($book['zdjecie'] && !str_starts_with($book['zdjecie'], '/')) {
+                    $book['zdjecie'] = '/' . $book['zdjecie'];
+                }
+                if ($book['zdjecie']) {
+                    echo "<div class='book-item'>
+                        <img src='{$book['zdjecie']}' alt='{$book['tytul']}' loading='lazy' onclick=\"handleBookClick({$book['ID']}, '{$book['tytul']}')\">
+                        <h3>{$book['tytul']}</h3>
+                    </div>";
+                }
+            }
+            ?>
+        </div>
+    </div>
+</section>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+    const track = document.querySelector('.carousel-track');
+    const items = document.querySelectorAll('.book-item');
+    const itemWidth = items[0].offsetWidth + 20; // width + margin
+    const totalItems = items.length;
+    let currentIndex = 0;
+
+    const updateCarousel = () => {
+        track.style.transform = `translateX(-${currentIndex * itemWidth}px)`;
+    };
+
+    const autoSlide = () => {
+        currentIndex = (currentIndex + 1) % 4; // Zapętlenie indeksu po osiągnięciu 3
+        updateCarousel();
+    };
+
+    // automatyczne przesuwanie co 3 sekundy
+    setInterval(autoSlide, 3000);
+});
+
+    </script>
     
     <!-- Sekcja o nas -->
     <section id="about">
@@ -79,6 +117,7 @@
         <p>&copy; 2024 Biblioteka Online | Wszystkie prawa zastrzeżone</p>
     </footer>
     
-    <script src="js/script.js"></script>
+    <script src="js/slideshow.js"></script>
+    <script src="js/books.js"></script>
 </body>
 </html>

@@ -17,7 +17,7 @@
         <nav>
             <ul>
                 <li><a href="/Biblioteka/index.php">Strona Główna</a></li>
-                <li><a href="/Biblioteka/php/reservation.php">Rezerwacja Książek</a></li>
+                <li><a href="php/books.php">Przeglądaj Książki</a></li>
                 <?php if(isset($_SESSION['user_id'])): ?>
                     <!-- if użytkownik jest zalogowany, wyświetl "Wyloguj" -->
                     <li><a href="/Biblioteka/php/logout.php" id="logoutBtn">Wyloguj się</a></li>
@@ -34,8 +34,7 @@
                 <li><a href="/Biblioteka/php/bibliotekarz/exemplar_mgmt/manage_exemplars.php?sort=tytul&order=ASC"><button>Zarządzaj Egzemplarzami</button></a></li>
                 <li><a href="/Biblioteka/php/bibliotekarz/rent_mgmt/manage_rents.php"><button>Zarządzaj Wypożyczeniami</button></a></li>
                 <li><a href="/Biblioteka/php/bibliotekarz/manage_users.php"><button>Zarządzaj Czytelnikami</button></a></li>
-                <li><a href="/Biblioteka/php/bibliotekarz/reservation.php"><button>Rezerwacja Książek</button></a></li>
-                <li><a href="/Biblioteka/php/bibliotekarz/reports.php"><button>Raporty</button></a></li>
+                <li><a href="/Biblioteka/php/bibliotekarz/reservation_mgmt/manage_reservations.php"><button>Rezerwacja Książek</button></a></li>
             </ul>
     </section>   
     
