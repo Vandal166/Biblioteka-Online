@@ -14,8 +14,10 @@ $sql = "
         wydanie.data_wydania,
         wydanie.ilosc_stron,
         wydanie.pdf,
+        wydawnictwo.nazwa,
         (SELECT id FROM rezerwacja WHERE rezerwacja.ID_wydania = wydanie.id AND rezerwacja.ID_czytelnika = ?) AS reservation_id
     FROM wydanie
+    JOIN wydawnictwo ON wydanie.ID_wydawnictwa = wydawnictwo.id
     WHERE wydanie.ID_ksiazki = ?
 ";
 
