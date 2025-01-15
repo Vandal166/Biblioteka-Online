@@ -95,7 +95,7 @@ function openEditionModal(bookID, bookTitle) {
 
                 li.innerHTML = `
                     <p>
-                        Wydanie: ${edition.numer_wydania} (${edition.jezyk}, ${edition.ilosc_stron} stron, ${edition.data_wydania}) 
+                        Wydanie: ${edition.nazwa} (${edition.jezyk}, ${edition.ilosc_stron} stron, ${edition.data_wydania}) 
                     </p>
                     <div>${pdfLink}</div>
                     <div>${reserveButton}</div>
