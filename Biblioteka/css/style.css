@@ -139,7 +139,7 @@ input[readonly] {
 
 .book-item {
     flex: 0 0 auto;
-    width: 300px;
+    /* width: 300px; */
     margin: 10px;
     text-align: center;
     font-family: 'Georgia', serif;
@@ -155,10 +155,40 @@ input[readonly] {
     border-radius: 5px;
     box-shadow: 0 9px 8px rgba(0, 0, 0, 0.5);
     cursor: pointer; 
-    transition: border 0.3s ease; 
+    /* transition: border 0.3s ease;  */
+    transition: transform 0.2s ease-in;
 }
 
 .book-item img:hover {
-    border: 3px solid #4CAF50; 
+    /* border: 3px solid #4CAF50;  */
+    transform: scale(1.1);
 }
 
+#search {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+#search input[type="text"] {
+    width: 300px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px 0 0 5px;
+    outline: none;
+}
+
+#search button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#search button:hover {
+    background-color: #45a049;
+}

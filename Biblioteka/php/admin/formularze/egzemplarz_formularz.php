@@ -12,7 +12,7 @@
             <input type="checkbox" id="czy_dostepny" name="czy_dostepny" value="1" <?php echo get_form_value('czy_dostepny') ? 'checked' : ''; ?>>
             </div>
             <label for="stan">Stan:</label>
-            <input type="text" id="stan" name="stan" value="<?php echo get_form_value('stan');?>" required>
+            <input type="text" id="stan" name="stan" value="<?php echo get_form_value('stan');?>">
             <button type="submit">Dodaj</button>
             <?php display_messages('add'); ?>
         </form>

@@ -2,14 +2,17 @@ document.addEventListener("DOMContentLoaded", () =>
 {
     const booksContainer = document.getElementById("books");
     const paginationContainer = document.getElementById("pagination");
+    const searchForm = document.getElementById("search");
+    const searchInput = document.getElementById("searchInput");
     const itemsPerPage = 12; // Liczba książek na stronę
 
     let currentPage = 1;
+    let currentSearch = '';
 
     // Funkcja do pobierania książek z API
-    async function fetchBooks(page = 1) 
+    async function fetchBooks(page = 1, search = '') 
     {
-        const response = await fetch(`booksAPI.php?page=${page}`);
+        const response = await fetch(`booksAPI.php?page=${page}&search=${encodeURIComponent(search)}`);
         const data = await response.json();
 
         renderBooks(data.books);
@@ -18,20 +21,19 @@ document.addEventListener("DOMContentLoaded", () =>
 
     // Funkcja do renderowania książek w gridzie
     function renderBooks(books) {
-    booksContainer.innerHTML = books
-        .map(book => `
-            <div class="book-item">
-                <img src="${book.zdjecie}" alt="${book.tytul}" 
-                     style="width: 100%; height: auto;" 
-                     onclick="handleBookClick(${book.id}, '${book.tytul}')"
-                     onerror="this.onerror=null; this.src='/Biblioteka/images/error.jpg';">
-                <h3>${book.tytul}</h3>
-                <p>Autorzy: ${book.autorzy}</p>
-            </div>
-        `)
-        .join("");
+        booksContainer.innerHTML = books
+            .map(book => `
+                <div class="book-item">
+                    <img src="${book.zdjecie}" alt="${book.tytul}" 
+                         style="width: 100%; height: auto;" 
+                         onclick="handleBookClick(${book.id}, '${book.tytul}')"
+                         onerror="this.onerror=null; this.src='/Biblioteka/images/error.jpg';">
+                    <h3>${book.tytul}</h3>
+                    <p>Autorzy: ${book.autorzy}</p>
+                </div>
+            `)
+            .join("");
     }
-    
     
     // Funkcja do renderowania przycisków paginacji
     function renderPagination(totalPages, currentPage) 
@@ -44,11 +46,18 @@ document.addEventListener("DOMContentLoaded", () =>
             button.classList.toggle("active", i === currentPage);
             button.addEventListener("click", () => 
             {
-                fetchBooks(i);
+                fetchBooks(i, currentSearch);
             });
             paginationContainer.appendChild(button);
         }
     }
+
+    // Obsługa wyszukiwania
+    searchForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        currentSearch = searchInput.value;
+        fetchBooks(1, currentSearch);
+    });
 
     // Wczytanie początkowej strony
     fetchBooks(currentPage);
