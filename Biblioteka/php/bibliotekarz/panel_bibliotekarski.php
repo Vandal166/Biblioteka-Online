@@ -36,7 +36,7 @@
                 <li><a href="/Biblioteka/php/bibliotekarz/book_mgmt/manage_books.php?sort=tytul&order=ASC"><button>Zarządzaj Książkami</button></a></li>
                 <li><a href="/Biblioteka/php/bibliotekarz/exemplar_mgmt/manage_exemplars.php?sort=tytul&order=ASC"><button>Zarządzaj Egzemplarzami</button></a></li>
                 <li><a href="/Biblioteka/php/bibliotekarz/rent_mgmt/manage_rents.php"><button>Zarządzaj Wypożyczeniami</button></a></li>
-                <li><a href="/Biblioteka/php/bibliotekarz/manage_users.php"><button>Zarządzaj Czytelnikami</button></a></li>
+                <li><a href="/Biblioteka/php/bibliotekarz/reader_mgmt/manage_readers.php"><button>Zarządzaj Czytelnikami</button></a></li>
                 <li><a href="/Biblioteka/php/bibliotekarz/reservation_mgmt/manage_reservations.php"><button>Rezerwacja Książek</button></a></li>
             </ul>
     </section>   
