@@ -108,6 +108,21 @@ function handle_crud_actions($table, $fields, $validations, $action, $primaryKey
                 $stmt->close();
 
                 if ($count === 1) {
+                    if($table == 'pracownik')
+                    {
+                        $sql = "SELECT poziom_uprawnien FROM pracownik WHERE ID = ?";
+                        $stmt = $conn->prepare($sql);
+                        $stmt->bind_param("i", $ID);
+                        $stmt->execute();
+                        $stmt->bind_result($poziom_uprawnien);
+                        $stmt->fetch();
+                        $stmt->close();
+                        if($poziom_uprawnien == 'administrator')
+                        {
+                            set_message('error', 'delete', "Nie można usunąć administratora.");
+                            return;
+                        }
+                    }
                     $deleteSql = "DELETE FROM $table WHERE $primaryKey = ?";
                     $stmt = $conn->prepare($deleteSql);
                     $stmt->bind_param("i", $ID);
