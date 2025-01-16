@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 16, 2025 at 11:28 AM
+-- Generation Time: Jan 16, 2025 at 10:12 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -38,16 +38,13 @@ CREATE TABLE `autor` (
 --
 
 INSERT INTO `autor` (`ID`, `imie`, `nazwisko`) VALUES
-(156, 'John', 'Tolkien'),
-(157, 'George', 'Orwell'),
-(158, 'George', 'Martin'),
-(159, 'Joanne', 'Rowling'),
-(160, 'Bolesław', 'Prus'),
-(161, 'Antoine', 'Saintexupery'),
-(162, 'Andrzej', 'Sapkowski'),
-(163, 'Michail', 'Bulhakow'),
-(164, 'William', 'Shakespeare'),
-(165, 'Fiodor', 'Dostojewski');
+(59, 'Maria', 'Nowak'),
+(60, 'Jan', 'Kowalski'),
+(61, 'Aleksandra', 'Wiśniewska'),
+(62, 'Piotr', 'Zieliński'),
+(63, 'Anna', 'Kamińska'),
+(64, 'Piotr', 'Zie'),
+(155, 'Opiopoipiopiop', 'Opiopoipiopiop');
 
 -- --------------------------------------------------------
 
@@ -66,20 +63,16 @@ CREATE TABLE `autor_ksiazki` (
 --
 
 INSERT INTO `autor_ksiazki` (`ID`, `ID_ksiazki`, `ID_autora`) VALUES
-(51, 79, 156),
-(52, 80, 156),
-(53, 85, 156),
-(54, 81, 157),
-(55, 82, 158),
-(56, 83, 159),
-(57, 84, 159),
-(58, 86, 160),
-(59, 91, 161),
-(60, 88, 162),
-(61, 92, 162),
-(62, 87, 163),
-(63, 89, 164),
-(64, 90, 165);
+(10, 24, 59),
+(11, 26, 62),
+(12, 26, 64),
+(15, 34, 59),
+(45, 70, 59),
+(46, 69, 59),
+(47, 73, 59),
+(48, 73, 60),
+(49, 72, 155),
+(50, 78, 59);
 
 -- --------------------------------------------------------
 
@@ -104,8 +97,13 @@ CREATE TABLE `czytelnik` (
 
 INSERT INTO `czytelnik` (`ID`, `imie`, `nazwisko`, `nr_karty`, `telefon`, `email`, `login`, `haslo`) VALUES
 (9, 'Katarzyna', 'Kaczmarek', '3459226504', '574869291', 'kat.kaczme@example.com', 'katczm12453', '$2y$10$eoifk2QlyMeF6VIdZA232uDzjN1.rtDDmLzHW9OskwZfjN75stJGK'),
-(35, 'Użytkownik', 'Biblioteki', '4084259264', '921456712', 'user@lib.com', 'User', '$2y$10$b9A7XftkWiQlSkxPK176Oe7TQIa1E4anM/5NUbh.zKYegEx7yG7mO'),
-(36, 'Kamil', 'Rom', '5735947398', '446234232', 'kamilroma8@gmail.com', 'kam16', '$2y$10$Sxht8309FQLjdV2DS84.huqjxn.513qWfWzQDCLSbeMB1Dkr4P6/u');
+(10, 'Adam', 'Wiśniewski', '4581483908', '123585933', 'adam.wisn@onet.pl', 'admwis', '$2y$10$iC1V0IMwaAEXoGiLmvwT/.exG33hx96lXBu3Bfd7sNYqngMM9SL4i'),
+(14, 'Hertgerht', 'Wefwf', '8428017327', '231423421', 'rtgrhft@onet.pl', 'erkghek32', '$2y$10$W68Gm1N27AkPNlE/F0Pop.A3hRP8Q2iS0DHToN7/qVYwfaKUhCfcy'),
+(25, 'Greeg', 'Herthrt', '7015471562', '234534634', 'ehrjrtj@onet.pl', 'ethjrtrtjwe12', '$2y$10$gwv6aX1oM4K/Wm2BnLZR/u5XlDqg/lWnAJl/4pjji.ZiI5U3NUt3O'),
+(32, 'Gerger', 'Egrerg', '4117686075', '345345352', 'egrerg2@onet.pl', 'gerger2', '$2y$10$.5q44BGQHgC0qamITZ6EP.tW5FTidLbnSUc0X2wle00/bn.HQf3gW'),
+(33, 'Test', 'Test', '7446174120', '345232422', 'kamilroma8@gmail.com', 'kamil', '$2y$10$0T/NGoMEcs9IRAeqw6B7DeOvJjTvOrdJMHy28t2cUW2P/hRMnvT8C'),
+(34, 'Rthrth', 'Erg', '3695423881', '453343634', 'rthrtyjrtjy2o@onet.pl', 'rtjrty234', '$2y$10$8j0m.YhjVYSy/GJWHBjWSe.XmOeveB5ynrvpYqqeRKIxle1nGl69e'),
+(35, 'Użytkownik', 'Biblioteki', '4084259264', '921456712', 'user@lib.com', 'User', '$2y$10$b9A7XftkWiQlSkxPK176Oe7TQIa1E4anM/5NUbh.zKYegEx7yG7mO');
 
 -- --------------------------------------------------------
 
@@ -125,20 +123,17 @@ CREATE TABLE `egzemplarz` (
 --
 
 INSERT INTO `egzemplarz` (`ID`, `ID_wydania`, `czy_dostepny`, `stan`) VALUES
-(35, 54, 1, 'dobry'),
-(36, 56, 1, 'dobry'),
-(37, 57, 1, 'zły'),
-(38, 55, 0, ''),
-(39, 58, 1, 'dobry'),
-(40, 59, 1, 'zły'),
-(41, 60, 0, 'zły'),
-(42, 61, 1, 'średni'),
-(43, 62, 1, 'średni'),
-(44, 63, 1, 'dobry'),
-(45, 64, 1, 'dobry'),
-(46, 65, 1, 'zły'),
-(47, 66, 1, 'zły'),
-(48, 67, 1, 'dobry');
+(3, 1, 1, 'dobry'),
+(18, 3, 1, 'gr'),
+(19, 4, 1, 'gr'),
+(20, 8, 0, 'hrt'),
+(21, 26, 1, 'hrt'),
+(23, 5, 0, 'test'),
+(24, 1, 0, 'rtgrt'),
+(27, 46, 0, 'blbylbylf'),
+(28, 44, 1, 'lol'),
+(29, 45, 0, 'yhyh'),
+(34, 46, 0, 'yh');
 
 -- --------------------------------------------------------
 
@@ -178,20 +173,15 @@ CREATE TABLE `gatunek_ksiazki` (
 --
 
 INSERT INTO `gatunek_ksiazki` (`ID`, `ID_ksiazki`, `ID_gatunku`) VALUES
-(29, 79, 2),
-(30, 80, 2),
-(31, 81, 3),
-(32, 82, 1),
-(33, 83, 1),
-(34, 84, 1),
-(35, 85, 4),
-(36, 86, 3),
-(37, 87, 2),
-(38, 88, 1),
-(39, 89, 1),
-(40, 90, 1),
-(41, 91, 2),
-(42, 92, 3);
+(1, 24, 1),
+(10, 27, 4),
+(11, 26, 3),
+(12, 34, 1),
+(13, 27, 3),
+(25, 69, 2),
+(26, 70, 1),
+(27, 72, 3),
+(28, 78, 3);
 
 -- --------------------------------------------------------
 
@@ -210,20 +200,21 @@ CREATE TABLE `ksiazka` (
 --
 
 INSERT INTO `ksiazka` (`ID`, `tytul`, `zdjecie`) VALUES
-(79, 'Drużyna Pierścienia', 'Biblioteka/images/6788cf6e4e71d-druzyna_pierscienia.jpg'),
-(80, 'Dwie Wieże', 'Biblioteka/images/6788cf8c85375-dwie_wieze.jpg'),
-(81, 'Folwark Zwierzęcy', 'Biblioteka/images/6788cfe61ff65-folwark_zwierzecy.jpg'),
-(82, 'Gra o Tron', 'Biblioteka/images/6788cff8a5b13-gra_o_tron.jpg'),
-(83, 'Harry Potter i Czara Ognia', 'Biblioteka/images/6788d019d35c0-harry-potter-i-czara-ognia.jpg'),
-(84, 'Harry Potter i Kamień Filozoficzny', 'Biblioteka/images/6788d032dd9c1-harry-potter-i-kamien-filozoficzny.jpg'),
-(85, 'Hobbit czyli tam i z powrotem', 'Biblioteka/images/6788d042be346-hobbit-czyli-tam-i-z-powrotem.jpg'),
-(86, 'Lalka', 'Biblioteka/images/6788d04d5c2b1-lalka.jpg'),
-(87, 'Mistrz i Małgorzata', 'Biblioteka/images/6788d05cefad4-mistrz_i_malgorzata.jpg'),
-(88, 'Pani Jeziora', 'Biblioteka/images/6788d069686de-pani_jeziora.jpg'),
-(89, 'Romeo i Julia', 'Biblioteka/images/6788d077de139-romeo_i_julia.jpg'),
-(90, 'Zbrodnia i Kara', 'Biblioteka/images/6788d09f21166-zbrodnia_i_kara.jpg'),
-(91, 'Mały Książe', 'Biblioteka/images/6788d0e83c1e0-maly-ksiaze.jpg'),
-(92, 'Miecz Przeznaczenia', 'Biblioteka/images/6788d30e53f01-miecz_przeznaczenia_wiedzmin.jpg');
+(24, 'Oczami kota– tajemnice nocy', 'Biblioteka/images/677d9adb74d10-Chad_Soldier_TF2.jpg'),
+(25, 'Matematyka w praktyce', 'Biblioteka/images/677d904301b57-Kjermejt.jpg'),
+(26, 'Dzień, który zmienił wszystko', 'Biblioteka/images/677d925558f3d-Sipper.png'),
+(27, 'Wszechświat: Początek i koniec..', 'Biblioteka/images/677d977214c90-Afrotitan.png'),
+(34, 'Dziady :C', 'Biblioteka/images/677d904301b57-Kjermejt.jpg'),
+(69, 'gererh', 'Biblioteka/images/677d965748586-Shock.jpg'),
+(70, 'ghtrr', 'Biblioteka/images/677eca5baa173-2.png'),
+(71, 'opiopoipiopiop', 'Biblioteka/images/677d965748586-Shock.jpg'),
+(72, 'Nowa książka', ''),
+(73, 'La testo de fiesta', ''),
+(74, 'Nowa strona test test', ''),
+(75, 'A', ''),
+(76, 'B', ''),
+(77, 'C', 'Biblioteka/images/677d965748586-Shock.jpg'),
+(78, 'Dziady', 'Biblioteka/images/error.jpg');
 
 -- --------------------------------------------------------
 
@@ -249,6 +240,7 @@ INSERT INTO `pracownik` (`ID`, `imie`, `nazwisko`, `poziom_uprawnien`, `email`, 
 (1, 'Kamil', 'Wojtas', 'administrator', 'fajnyMail@mail.com', 'AdminW', '$2y$10$iQr7B5doUiH5ev7EbcNzR.tCQ9A.q1EAbi776IqltG6/xAybtSh2i'),
 (3, 'Jan', 'Kowalski', 'bibliotekarz', 'fajnyMail2@mail.com', 'BibliW', '$2y$10$iQr7B5doUiH5ev7EbcNzR.tCQ9A.q1EAbi776IqltG6/xAybtSh2i'),
 (4, 'Kamil', 'Rom', 'administrator', 'admin01@gmail.com', 'admin01', '$2y$10$f7KF.OrH80iYWr9IHNapbuBO95MovN1gqNJNIj9fEjkJfyIIiM.lC'),
+(5, 'Rgeger', 'Erge', 'uzytkownik', 'greghr@onert.pl', 'ergeherth', '$2y$10$rawQeHuh4YD0IW31T0WAPe3Kpyl2JT9/WpcDPhggqJfQHgmTOc6kS'),
 (30, 'Biblio', 'Tekarz', 'bibliotekarz', 'bib@onet.pl', 'biblio', '$2y$10$yM4L.se53IPQuI6KpGL8kOFVXkULr6VkwMp6eOo3n69mBy28kPk1G');
 
 -- --------------------------------------------------------
@@ -285,10 +277,14 @@ CREATE TABLE `rezerwacja` (
 --
 
 INSERT INTO `rezerwacja` (`ID`, `ID_wydania`, `ID_czytelnika`, `data_rezerwacji`, `czy_wydana`) VALUES
-(39, 56, 35, '2025-01-21', 0),
-(40, 60, 35, '2025-01-17', 0),
-(41, 54, 35, '2025-01-16', 0),
-(43, 55, 36, '2025-01-16', 0);
+(1, 1, 9, '2024-11-27', 1),
+(2, 3, 10, '2024-12-08', 0),
+(15, 1, 9, '2025-01-08', 1),
+(26, 3, 35, '2025-01-14', 0),
+(30, 46, 35, '2025-01-14', 0),
+(33, 1, 35, '2025-01-15', 0),
+(34, 45, 9, '2025-01-03', 0),
+(38, 1, 10, '2025-01-31', 0);
 
 -- --------------------------------------------------------
 
@@ -313,20 +309,21 @@ CREATE TABLE `wydanie` (
 --
 
 INSERT INTO `wydanie` (`ID`, `ID_ksiazki`, `ID_wydawnictwa`, `ISBN`, `data_wydania`, `numer_wydania`, `jezyk`, `ilosc_stron`, `pdf`) VALUES
-(54, 79, 27, '4673453846836', '2025-01-10', '48345375634635834853', 'Polski', '233', 'Biblioteka/books/6782e0508f187-python_lista_6.pdf'),
-(55, 80, 28, '7435382348568', '2025-01-10', '43736738543634693465', 'Polski', '400', 'Biblioteka/books/6786557548677-CSS-XML.pdf'),
-(56, 81, 29, '8435375348636', '2025-01-14', '85465474453886346734', 'Polski', '2100', 'Biblioteka/books/67865663c9779-w1_full.pdf'),
-(57, 82, 30, '4364376843583', '2024-12-02', '23472735374638638686', 'Polski', '433', 'Biblioteka/books/67865663c9779-w1_full.pdf'),
-(58, 83, 31, '6846835436835', '2024-12-22', '48638463583453858343', 'Polski', '122', 'Biblioteka/books/6786557548677-CSS-XML.pdf'),
-(59, 84, 32, '9546328429612', '2024-03-02', '32123573256274886346', 'Polski', '812', 'Biblioteka/books/6786557548677-CSS-XML.pdf'),
-(60, 85, 33, '5421854385347', '2024-05-02', '84583672834824661126', 'Polski', '738', 'Biblioteka/books/67865663c9779-w1_full.pdf'),
-(61, 86, 34, '8454357358284', '2023-01-02', '43882347328525329492', 'Polski', '432', 'Biblioteka/books/6782e0508f187-python_lista_6.pdf'),
-(62, 87, 35, '7435234285752', '2023-01-07', '74353782343284824327', 'Angielski', '853', 'Biblioteka/books/6786557548677-CSS-XML.pdf'),
-(63, 88, 36, '7453756283428', '2023-06-01', '27365325732855238428', 'Polski', '287', 'Biblioteka/books/6786557548677-CSS-XML.pdf'),
-(64, 89, 36, '4353646528349', '2020-03-12', '73573482348285634574', 'Polski', '490', 'Biblioteka/books/6782e0508f187-python_lista_6.pdf'),
-(65, 90, 27, '5643452424643', '2020-04-01', '43632341823885238525', 'Polski', '357', 'Biblioteka/books/6782e0508f187-python_lista_6.pdf'),
-(66, 91, 29, '7547326485864', '2020-06-04', '32646572482384573453', 'Polski', '1020', 'Biblioteka/books/67865663c9779-w1_full.pdf'),
-(67, 92, 32, '5468823458439', '2021-12-05', '58387234823496435234', 'Polski', '4302', 'Biblioteka/books/67865663c9779-w1_full.pdf');
+(1, 24, 1, '3245353453453', '2024-12-12', '23423452452523534531', 'polski', '255', 'Biblioteka/books/asdninoidasinodsadnas.pdf'),
+(3, 24, 1, '1231234234522', '2024-12-06', '32453453535345332111', 'ertgh', '4353', 'Biblioteka/books/6782e0508f187-python_lista_6.pdf'),
+(4, 24, 1, '3333333333333', '2024-12-20', '43444444444444444444', 'regerg', '15', '0'),
+(5, 24, 1, '2342423423422', '2025-01-06', '34444443242342342341', 'erghe', '643', '1'),
+(8, 26, 1, '3245253452342', '2025-01-12', '43234645234242423343', 'rthrht', '352', '1'),
+(26, 24, 1, '3453634623436', '2025-01-01', '43645457454745745222', 'rthrth', '234', '1'),
+(31, 24, 1, '3453453632342', '3454-03-31', '45635234241234143333', 'rtegrhrt', '3453', '1'),
+(44, 69, 3, '3456457456353', '2025-01-24', '78678678456345345234', 'jtyktyuj', '456', '0'),
+(45, 70, 1, '4536457568568', '2025-01-10', '85678566546346345345', 'trhrt', '56', '0'),
+(46, 34, 3, '5475686767542', '2025-01-03', '54756856834535363463', 'guwno', '3', '0'),
+(47, 24, 1, '1111111111111', '2025-01-21', '11111111111111111111', 'Mlloojinini', '1234', '0'),
+(48, 24, 1, '9876543212345', '2025-02-07', '22222222222222222222', 'Makao', '12', '0'),
+(49, 24, 2, '1234321234543', '2025-01-06', '12212334356667889000', 'NNNNN', '32', NULL),
+(50, 24, 1, '7527852372357', '2024-12-16', '23569256796923475625', 'JKJJGYH', '14', NULL),
+(53, 69, 2, '5757575757575', '2025-01-17', '57757575757577557575', 'vbvb', '2', 'Biblioteka/books/67865663c9779-w1_full.pdf');
 
 -- --------------------------------------------------------
 
@@ -345,16 +342,9 @@ CREATE TABLE `wydawnictwo` (
 --
 
 INSERT INTO `wydawnictwo` (`ID`, `nazwa`, `kraj`) VALUES
-(27, 'PWN', 'Polska'),
-(28, 'Agora', 'Polska'),
-(29, 'Znak', 'Polska'),
-(30, 'WAB', 'Polska'),
-(31, 'NowaEra', 'Polska'),
-(32, 'Czarne', 'Polska'),
-(33, 'Alfa', 'Polska'),
-(34, 'UMCS', 'Polska'),
-(35, 'Okultura', 'Polska'),
-(36, 'Marpress', 'Polska');
+(1, 'test', 'test'),
+(2, 'WSiP', 'Polska'),
+(3, 'PolSmr', 'Francja');
 
 -- --------------------------------------------------------
 
@@ -377,11 +367,12 @@ CREATE TABLE `wypozyczenie` (
 --
 
 INSERT INTO `wypozyczenie` (`ID`, `ID_czytelnika`, `ID_egzemplarza`, `ID_pracownika`, `data_wypozyczenia`, `termin_oddania`, `data_oddania`) VALUES
-(17, 35, 35, 30, '2025-01-16', '2025-01-31', NULL),
-(18, 9, 42, 30, '2025-01-11', '2025-01-23', NULL),
-(19, 9, 38, 30, '2025-01-24', '2025-01-22', NULL),
-(20, 35, 44, 30, '2025-01-17', '2025-01-23', NULL),
-(21, 35, 41, 30, '2025-01-26', '2025-02-08', NULL);
+(2, 9, 3, 4, '2024-12-06', '2024-12-03', '2025-01-16'),
+(8, 9, 3, 4, '2025-01-02', '2025-02-06', NULL),
+(9, 9, 3, 4, '2025-01-02', '2025-02-06', '2222-02-22'),
+(14, 35, 3, 30, '3223-02-12', '2222-04-04', NULL),
+(15, 33, 27, 30, '1212-12-22', '2233-03-23', NULL),
+(16, 25, 3, 30, '2025-01-25', '2025-01-08', NULL);
 
 --
 -- Indexes for dumped tables
@@ -494,25 +485,25 @@ ALTER TABLE `wypozyczenie`
 -- AUTO_INCREMENT for table `autor`
 --
 ALTER TABLE `autor`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=166;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=156;
 
 --
 -- AUTO_INCREMENT for table `autor_ksiazki`
 --
 ALTER TABLE `autor_ksiazki`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- AUTO_INCREMENT for table `czytelnik`
 --
 ALTER TABLE `czytelnik`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT for table `egzemplarz`
 --
 ALTER TABLE `egzemplarz`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `gatunek`
@@ -524,13 +515,13 @@ ALTER TABLE `gatunek`
 -- AUTO_INCREMENT for table `gatunek_ksiazki`
 --
 ALTER TABLE `gatunek_ksiazki`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `ksiazka`
 --
 ALTER TABLE `ksiazka`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=93;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=79;
 
 --
 -- AUTO_INCREMENT for table `pracownik`
@@ -542,31 +533,31 @@ ALTER TABLE `pracownik`
 -- AUTO_INCREMENT for table `reset_hasla`
 --
 ALTER TABLE `reset_hasla`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `rezerwacja`
 --
 ALTER TABLE `rezerwacja`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT for table `wydanie`
 --
 ALTER TABLE `wydanie`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
 -- AUTO_INCREMENT for table `wydawnictwo`
 --
 ALTER TABLE `wydawnictwo`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `wypozyczenie`
 --
 ALTER TABLE `wypozyczenie`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- Constraints for dumped tables

@@ -42,6 +42,20 @@
         </nav>
     </header>   
 
+    <header>
+        <nav>
+            <ul>
+                <!-- wyszukiwanie po tutule -->
+                <section id="search">
+                    <form action="" method="GET">
+                        <input type="text" name="search" id="searchInput" placeholder="Wyszukaj książkę po tytule">
+                        <button type="submit">Szukaj</button>
+                    </form>
+                </section>
+            </ul>
+        </nav>
+    </header>
+
     <div id="books" class="grid-container">
         <!-- Książki będą tutaj wczytywane -->
     </div>

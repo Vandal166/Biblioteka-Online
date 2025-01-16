@@ -11,6 +11,9 @@ $itemsPerPage = 12; // Ilość książek na stronę (3x4)
 $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
 $offset = ($page - 1) * $itemsPerPage;
 
+// Parametr wyszukiwania
+$search = isset($_GET['search']) ? $conn->real_escape_string($_GET['search']) : '';
+
 // URL bazowy dla obrazów
 $baseUrl = 'http://localhost/';
 
@@ -24,6 +27,7 @@ $sql = "
     FROM ksiazka
     LEFT JOIN autor_ksiazki ON ksiazka.id = autor_ksiazki.ID_ksiazki
     LEFT JOIN autor ON autor_ksiazki.ID_autora = autor.id
+    WHERE ksiazka.tytul LIKE '%$search%'
     GROUP BY ksiazka.id
     LIMIT $itemsPerPage OFFSET $offset
 ";
@@ -31,7 +35,7 @@ $sql = "
 $result = $conn->query($sql);
 
 // Pobranie liczby wszystkich książek
-$totalBooks = $conn->query("SELECT COUNT(*) as total FROM ksiazka")->fetch_assoc()['total'];
+$totalBooks = $conn->query("SELECT COUNT(*) as total FROM ksiazka WHERE tytul LIKE '%$search%'")->fetch_assoc()['total'];
 $totalPages = ceil($totalBooks / $itemsPerPage);
 
 $books = [];

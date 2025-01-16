@@ -52,7 +52,7 @@ $stmt->close();
     <nav>
         <ul>
             <li><a href="../index.php">Strona Główna</a></li>
-            <li><a href="php/books.php">Przeglądaj Książki</a></li>
+            <li><a href="../php/books.php">Przeglądaj Książki</a></li>
             <li><a href="../php/logout.php" id="logoutBtn">Wyloguj się</a></li>
         </ul>
     </nav>

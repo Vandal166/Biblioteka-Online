@@ -1,6 +1,9 @@
 <?php
     session_start();
-     
+     if (!isset($_SESSION['poziom_uprawnien']) || $_SESSION['poziom_uprawnien'] !== 'bibliotekarz') {
+    header("Location: /Biblioteka/index.php"); // Brak dostępu
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="pl">
